@@ -1,0 +1,31 @@
+.cs-pointer {
+  cursor: pointer;
+}
+
+.flash-message {
+  position: relative;
+  .success {
+    background-color: #d6e7fe;
+    color: blue;
+  }
+  .warning {
+    background-color: #f5e3cd;
+    color: #fd9426;
+  }
+  .cover {
+    position: fixed;
+    top: 100px;
+    right: 2%;
+    border: 1px solid;
+    padding: 10px 30px;
+    z-index: 999;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    @extend %transition;
+    &.active {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

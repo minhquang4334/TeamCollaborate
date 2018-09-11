@@ -1,0 +1,260 @@
+
+// Body
+$body-bg: #f8fafc;
+
+// Typography
+$font-family-sans-serif: "Nunito", sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Colors
+$color-01: #0771ef;
+$color-02: #595ad3;
+$color-03: #fc1a1c;
+$color-04: #fc4c82;
+$color-05: #53d769;
+$color-06: #157efb;
+$color-07: #fc3159;
+$color-08: #fecb2f;
+$color-09: #fd9426;
+$color-10: #1f1f21;
+$color-11: #bdbec2;
+$color-12: #8e8e8e;
+$color-13: #c7c7cc;
+$color-14: #ededed;
+$color-15: #e9eff4;
+$color-16: #f4f8f9;
+$color-17: #fff;
+
+
+.right-0 {
+  left: auto;
+  right: 0;
+}
+
+.min-w300 {
+  min-width: 300px;
+}
+
+.min-w250 {
+  min-width: 250px;
+}
+
+.min-w140 {
+  min-width: 160px;
+}
+
+.max-w300 {
+  max-width: 300px;
+}
+
+.max-w70 {
+  max-width: 70px;
+}
+
+.max-w100 {
+  max-width: 100px;
+}
+
+.max-h300 {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.margin-0 {
+  margin: 0 !important;
+}
+
+.margin-bottom-35 {
+  margin-bottom: 35px;
+}
+
+.margin-b5 {
+  margin-bottom: 5px;
+}
+
+.margin-b30 {
+  margin-bottom: 30px;
+}
+
+.margin-left-15 {
+  margin-left: 15px;
+}
+
+.margin-left-10 {
+  margin-left: 10px;
+}
+
+.margin-l30 {
+  margin-left: 30px;
+}
+
+.margin-right-20 {
+  margin-right: 20px;
+}
+
+.margin-right-10 {
+  margin-right: 10px;
+}
+
+.margin-right-35 {
+  margin-right: 35px;
+}
+
+.margin-r40 {
+  margin-right: 40px;
+}
+
+.margin-r30 {
+  margin-right: 30px;
+}
+
+.margin-r10 {
+  margin-right: 10px;
+}
+
+.margin-b10 {
+  margin-bottom: 10px;
+}
+
+.padding-t10 {
+  padding-top: 10px;
+}
+
+.margin-left-right-10 {
+  margin: 0 10px;
+}
+
+.main-content {
+  padding-top: 90px !important;
+}
+
+.margin-t200-imp {
+  margin-top: 200px !important;
+}
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.margin-top-25 {
+  margin-top: 25px;
+}
+
+.padding-r0 {
+  padding-right: 0;
+}
+
+.padding-l0 {
+  padding-left: 0;
+}
+
+.padding-20 {
+  padding: 20px;
+}
+
+.padding-l20 {
+  padding-left: 20px;
+}
+
+.padding-r20 {
+  padding-right: 20px;
+}
+
+.padding-t20 {
+  padding-top: 20px;
+}
+
+.padding-30 {
+  padding: 30px;
+}
+
+.padding-15 {
+  padding: 15px;
+}
+
+.padding-r15 {
+  padding-right: 15px;
+}
+
+.padding-b15 {
+  padding-bottom: 15px;
+}
+
+.padding-b30 {
+  padding-bottom: 30px;
+}
+
+.padding-r30 {
+  padding-right: 30px;
+}
+
+.padding-t30 {
+  padding-top: 30px;
+}
+
+.padding-t62 {
+  padding-top: 62px !important;
+}
+
+.padding-l15 {
+  padding-left: 15px;
+}
+
+.padding-l30 {
+  padding-left: 30px;
+}
+
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+
+.margin-bottom-200 {
+  margin-bottom: 200px;
+}
+
+.width-90-per {
+  width: 90%;
+}
+
+.custom-input-01 {
+  input {
+    padding: 5px 10px;
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
+.help.is-danger {
+  color: #ff3860;
+  padding: 4px;
+  text-align: left;
+  margin-top: -15px;
+  margin-bottom: 10px;
+}
+
+.custom-checkbox-01 {
+  label {
+    position: relative;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+}
+
+input[type="checkbox"]:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus {
+  outline: none;
+}
+
