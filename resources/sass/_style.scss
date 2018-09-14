@@ -22,7 +22,6 @@
     border-radius: 5px;
     opacity: 0;
     visibility: hidden;
-    @extend %transition;
     &.active {
       opacity: 1;
       visibility: visible;
