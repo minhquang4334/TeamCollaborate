@@ -21,7 +21,7 @@ let routes = [
     path: '/testLayout', name: 'testLayout', component: testLayout
   },
   {
-    path: '/homeIndex', name: 'homeIndex', component: homeIndex
+    path: '/home', name: 'homeIndex', component: homeIndex
   }
 ]
 

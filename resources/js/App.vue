@@ -3,7 +3,7 @@
         <router-view :key="$route.fullPath">
             <example-component/>
         </router-view>
-        abc
+
     </div>
 </template>
 <script>

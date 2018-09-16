@@ -21,3 +21,6 @@
         </nav>
     </div>
 </template>
+<script>
+
+</script>
