@@ -7,8 +7,8 @@
     </div>
 </template>
 <script>
-    import header from "header.vue"
-    import container from "container.vue"
+    import header from "./Header.vue"
+    import container from "./Container.vue"
     export default {
         comments:{
             header,
