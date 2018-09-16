@@ -11,6 +11,10 @@
 
     <link rel="shortcut icon" href="{{ config('blog.default_icon') }}">
 
+    <link rel="stylesheet" href="css/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="images/favicon.png"/>
+
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <script>
         window.Laravel = {
@@ -24,7 +28,10 @@
 </head>
 <body>
     <div id="app"></div>
-
+    
     <script src="{{ mix('js/app.js') }}"></script>
+    <script src="js/off-canvas.js"></script>
+    <script src="js/misc.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
