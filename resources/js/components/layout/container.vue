@@ -6,7 +6,6 @@
             <div class="content-wrapper">
             </div>
 
-            <footer/>
         </div>
         <!-- row-offcanvas ends -->
 
