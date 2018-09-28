@@ -2,6 +2,12 @@
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
+// Fonts Awesome
+@import '~@fortawesome/fontawesome-free-webfonts/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free-webfonts/scss/fa-brands';
+@import '~@fortawesome/fontawesome-free-webfonts/scss/fa-regular';
+@import '~@fortawesome/fontawesome-free-webfonts/scss/fa-solid';
+
 // Variables
 @import 'variables';
 
@@ -9,9 +15,14 @@
 @import '~bootstrap/scss/bootstrap';
 
 // Style
+@import "channel";
 @import "style";
-
+html, body{
+    height: 100%;
+    overflow: hidden;
+}
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+

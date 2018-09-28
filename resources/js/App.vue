@@ -1,10 +1,12 @@
 <template>
-    <router-view :key="$route.fullPath">
-        <example-component/>
-    </router-view>
+    <div>
+        <router-view :key="$route.fullPath">
+            <example-component/>
+        </router-view>
+    </div>
 </template>
 <script>
-    import ExampleComponent from "./components/ExampleComponent.vue"
+    import ExampleComponent from "./components/Test.vue"
     export default {
         components: {
           ExampleComponent
