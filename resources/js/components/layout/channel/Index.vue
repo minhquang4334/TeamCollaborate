@@ -7,6 +7,18 @@
                     <div class="text-muted mb-2">Channels are where your members communicate.
                         They're best when organized around a topic - #leads, for example</div>
                     <form>
+                        <div class="form-group can-toggle demo-rebrand-2">
+                            <input
+                                id="ispublic"
+                                type="checkbox"
+                                v-model="toggle"
+                                true-value="public"
+                                false-value="private"
+                            >
+                            <label for="ispublic">
+                                <div class="can-toggle__switch" data-checked="public" data-unchecked="private"></div>
+                            </label>
+                        </div>
                         <div class="form-group">
                             <label for="exampleInputName">Name</label>
                             <input id="name" class="form-control" v-model="name" type="text" name="name" placeholder="# e.g leads">
@@ -24,11 +36,23 @@
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
+                    <div class="card-body cs-pointer text-info" @click="toHome">
+                        <font-awesome-icon icon="coffee"></font-awesome-icon>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-
+    export default {
+        name: 'App',
+        methods: {
+            toHome() {
+                this.$router.push({
+                    name: "homeIndex"
+                })
+            }
+        }
+    }
 </script>
