@@ -5,7 +5,6 @@
 
             <div class="content-wrapper">
             </div>
-
         </div>
         <!-- row-offcanvas ends -->
 
