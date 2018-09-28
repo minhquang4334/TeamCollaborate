@@ -37,7 +37,7 @@
                         <button type="submit" class="btn btn-p  rimary">Submit</button>
                     </form>
                     <div class="card-body cs-pointer text-info" @click="toHome">
-                        <font-awesome-icon icon="coffee"></font-awesome-icon>
+                        <font-awesome-icon icon="coffee">Back</font-awesome-icon>
                     </div>
                 </div>
             </div>
