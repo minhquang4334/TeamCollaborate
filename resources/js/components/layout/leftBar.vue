@@ -3,7 +3,7 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
                 <li class="nav-item nav-category">
-                    <span class="nav-link">GENERAL</span>
+                    <span class="nav-link">Channel</span>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="index.html">
@@ -21,3 +21,6 @@
         </nav>
     </div>
 </template>
+<script>
+
+</script>

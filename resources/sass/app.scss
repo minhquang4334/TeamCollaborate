@@ -15,9 +15,14 @@
 @import '~bootstrap/scss/bootstrap';
 
 // Style
+@import "channel";
 @import "style";
-
+html, body{
+    height: 100%;
+    overflow: hidden;
+}
 .navbar-laravel {
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+

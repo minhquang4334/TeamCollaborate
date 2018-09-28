@@ -1,17 +1,15 @@
 <template>
     <div class="container-scroller">
-        <!-- partial:partials/_navbar.html -->
-        <header/>
+        <headBar/>
         <container/>
-        <!-- page-body-wrapper ends -->
     </div>
 </template>
 <script>
-    import header from "./Header.vue"
-    import container from "./Container.vue"
+    import headBar from "./header.vue"
+    import container from "./container.vue"
     export default {
-        comments:{
-            header,
+        components:{
+            headBar,
             container
         }
     }
