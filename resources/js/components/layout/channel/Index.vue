@@ -22,7 +22,7 @@
                             <input id="invites" class="form-control" v-model="invites" type="text" name="invites" placeholder="# Search by name">
                             <small id="nameHelp" class="form-text text-muted">Select up to 1000 people to add this channel</small>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-p  rimary">Submit</button>
                     </form>
                 </div>
             </div>
