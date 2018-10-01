@@ -117,7 +117,6 @@
                         </a>
                     </div>
                 </li>
-
                 <li class="nav-item lang-dropdown d-none d-sm-block">
                     <a class="nav-link" href="#">
                         <p class="mb-0">English <i class="flag-icon flag-icon-gb"></i></p>
