@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
             $table->boolean('is_teacher')->nullable();
             $table->boolean('is_bachelor')->default(1);
             $table->tinyInteger('grade')->default(1);
+            $table->tinyInteger('role')->default(0)->comment('0: normal user, 1: admin user');
             $table->text('about_me')->nullable();
             $table->softDeletes();
             $table->rememberToken();
