@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -70,8 +70,8 @@ class User extends Authenticatable
     public static function selectUserStatus()
     {
         return [
-            self::ACTIVE => 'Active',
             'all' => 'All',
+            self::ACTIVE => 'Active',
             self::BLOCK => 'Blocked'
         ];
     }
@@ -85,4 +85,35 @@ class User extends Authenticatable
             return null;
         }
     }
+
+    public function channels() {
+        return $this->belongsToMany(Channel::class, 'participations',
+            'user_id', 'channel_id');
+    }
+
+    public function files() {
+        return $this->hasMany(File::class, 'creator');
+    }
+
+    public function reacts() {
+        return $this->hasMany(React::class, 'user_id');
+    }
+
+    public function invites() {
+        return $this->hasMany(Invite::class, 'user_id');
+    }
+
+    public function posts() {
+        return $this->hasMany(Post::class, 'creator');
+    }
+
+    public function unreads() {
+        return $this->hasMany(Unread::class, 'user_id');
+    }
+
+    public function friends() {
+        return $this->belongsToMany(User::class,'contacts',
+            'user_first_id', 'user_second_id');
+    }
+
 }

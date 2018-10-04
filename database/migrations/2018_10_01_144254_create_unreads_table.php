@@ -16,9 +16,8 @@ class CreateUnreadsTable extends Migration
         Schema::create('unreads', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->string('facebook_id');
-            $table->string('access_token')->nullable();
-            $table->string('refresh_token')->nullable();
+            $table->integer('post_id');
+            $table->integer('channel_id');
             $table->timestamps();
         });
     }
