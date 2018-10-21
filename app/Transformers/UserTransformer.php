@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Transformers;
+use App\model\User;
+use League\Fractal\TransformerAbstract;
+
+class UserTransformer extends TransformerAbstract {
+
+    public function transform(User $user) {
+        return [
+            'name' => $user->name,
+            'email' => $user->email,
+            'password' => $user->password,
+            'gender' => $user->gender,
+            'phone_number' => $user->phone_number,
+            'address' => $user->address,
+            'job' => $user->job,
+            'japanese_level' => $user->japanese_level,
+            'japanese_certificate' => $user->japanese_certificate,
+            'about_me' => $user->about_me,
+            'facebook_url' => $user->facebook_url,
+            'avatar' => $user->avatar,
+            'email_verified_at' => $user->email_verified_at,
+            'google_id' => $user->google_id,
+            'status' => $user->status,
+            'university' => $user->university,
+            'is_bachelor' => $user->is_bachelor,
+            'is_teacher' => $user->is_teacher,
+            'grade' => $user->grade,
+            'role' => $user->role,
+            'is_admin' => $user->is_admin,
+        ];
+    }
+}

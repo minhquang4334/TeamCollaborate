@@ -35,6 +35,7 @@ class CreateUsersTable extends Migration
             $table->tinyInteger('grade')->default(1);
             $table->tinyInteger('role')->default(0)->comment('0: normal user, 1: admin user');
             $table->text('about_me')->nullable();
+            $table->boolean('is_admin')->default(0)->comment('0 if user is not admin');
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

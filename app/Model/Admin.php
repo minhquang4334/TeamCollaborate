@@ -2,29 +2,22 @@
 
 namespace App\model;
 
+use App\Scopes\AdminScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Admin extends Model
+class Admin extends AbstractUser
 {
     //
+    protected $table = 'users';
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'email', 'password',
-    ];
+    public static function boot()
+    {
+        parent::boot();
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+        static::addGlobalScope(new AdminScope());
+    }
+
+
 }
