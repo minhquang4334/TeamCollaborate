@@ -15,14 +15,14 @@ class OAuthController extends Controller
 
     public function redirectToProvider()
     {
-        return Socialite::driver('facebook')->stateless()->redirect();
+        return Socialite::driver('google')->stateless()->redirect();
     }
 
     public function handleProviderCallback(Request $request)
     {
-        $socialUser = Socialite::driver('facebook')->stateless()->user();
+        $socialUser = Socialite::driver('google')->stateless()->user();
 
-        $socialAccount = SocialAccount::where('facebook_id', $socialUser->getId())->first();
+        $socialAccount = SocialAccount::where('google_id', $socialUser->getId())->first();
         if ($socialAccount) {
             if ($socialAccount->user()->where('status', User::ACTIVE)->where('deleted_at', null)->first()) {
                 $socialAccount->update([
@@ -39,14 +39,14 @@ class OAuthController extends Controller
                 $user = $this->createUser($socialUser);
 
                 $user->socialAccount()->create([
-                    'facebook_id' => $socialUser->getId(),
+                    'google_id' => $socialUser->getId(),
                     'access_token' => $socialUser->token,
                     'refresh_token' => $socialUser->refreshToken,
                 ]);
             } elseif (User::where('email', $socialUser->getEmail())->where('status', User::ACTIVE)
                 ->where('deleted_at', null)->first()) {
                 $user->socialAccount()->create([
-                    'facebook_id' => $socialUser->getId(),
+                    'google_id' => $socialUser->getId(),
                     'access_token' => $socialUser->token,
                     'refresh_token' => $socialUser->refreshToken,
                 ]);
