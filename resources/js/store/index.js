@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Auth from './modules/auth'
+import auth from './modules/auth.js'
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
+  modules : {
+    auth
+  },
   state: {
     isLogin: false,
     accessKey: null,
@@ -18,7 +21,7 @@ const store = new Vuex.Store({
     accountId: null,
     settingPrefs: {},
     emailContract: null,
-    emailInviteCustomer: null
+    emailInviteCustomer: null,
   },
 
   getters: {},
@@ -35,9 +38,6 @@ const store = new Vuex.Store({
       state.kpi_paginate = 1;
       state.settingPrefs = {};
     },
-    modules : {
-      Auth
-    }
   },
   actions: {},
 });

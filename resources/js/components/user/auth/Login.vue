@@ -6,8 +6,8 @@
                     <img src="/images/logo_header.png">
                 </div>
                 <div class="login-box-body">
-                    <p class="green-strong">VÀO LỚP HỌC CỦA HAPOJC</p>
-                    <p>Tham gia lớp học của HapoJC qua facebook để nhận được nhiều ưu đãi hơn</p>
+                    <p class="green-strong">Team Collaborate</p>
+                    <p>Join with us</p>
                     <transition name="fade">
                         <div class="alert alert-danger" v-if="timeout">
                             Request Timeout! Đăng nhập thất bại.
@@ -68,7 +68,7 @@
       loginByFB: function () {
         this.loggingIn = true;
 
-        let FBAuthPopup = window.open(this.urlLoginFB, 'Facebook Auth', 'height=600,width=450');
+        let FBAuthPopup = window.open('http://' + this.urlLoginFB, 'Facebook Auth', 'height=600,width=450');
         let self = this;
         let INTERVAL = 500;
         let LOGIN_TIME_LIMIT = 5 * 60 * 1000;
@@ -79,7 +79,7 @@
           if (FBAuthPopup.closed) {
             let token = window.localStorage.getItem('token');
             if (token) {
-              self.$store.dispatch('auth/saveToken', {token});
+              self.$store.dispatch('auth/saveToken', {token}).then();
 
               self.$store.dispatch('auth/fetchUser')
                 .then(() => {

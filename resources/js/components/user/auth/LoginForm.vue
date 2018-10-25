@@ -1,17 +1,17 @@
 <template>
     <form @submit.prevent="login" @keydown="clearErrors($event)" class="form-login">
-        <div :class="{ 'form-group': true, 'has-error': form.errors.has('login-failed') }">
+        <div class="form-group">
             <has-error :form="form" field="login-failed"></has-error>
         </div>
 
-        <div :class="{ 'form-group': true, 'has-feedback': true, 'has-error': form.errors.has('email') }">
+        <div class="form-group">
             <input v-model="form.email" type="text" name="email" title="Email" class="form-control"
                    placeholder="Email">
             <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             <has-error :form="form" field="email"></has-error>
         </div>
 
-        <div :class="{ 'form-group': true, 'has-feedback': true, 'has-error': form.errors.has('password') }">
+        <div class="form-group">
             <input v-model="form.password" type="password" name="password" title="Password" class="form-control"
                    placeholder="Mật khẩu">
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="col-md-6 col-xs-5 btn-login">
-                <button :disabled="loggingIn" type="submit" class=" registration ">Đăng nhập
+                <button :disabled="loggingIn" type="submit" class="registration ">Đăng nhập
                 </button>
             </div>
         </div>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+  import Form from 'vue-form'
 
   export default {
     data() {

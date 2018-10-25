@@ -6,6 +6,7 @@ use App\Model\SocialAccount;
 use App\Model\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -24,6 +25,7 @@ class OAuthController extends Controller
 
         $socialAccount = SocialAccount::where('google_id', $socialUser->getId())->first();
         if ($socialAccount) {
+//            dd(1);
             if ($socialAccount->user()->where('status', User::ACTIVE)->where('deleted_at', null)->first()) {
                 $socialAccount->update([
                     'access_token' => $socialUser->token,
@@ -31,9 +33,10 @@ class OAuthController extends Controller
                 ]);
                 $user = $socialAccount->user;
             } else {
-                return view('user.fb-login-popup', ['token' => null]);
+                return view('login-gg-popup', ['token' => $socialUser->token]);
             }
         } else {
+//            dd(2);
             $user = User::where('email', $socialUser->getEmail())->first();
             if (!$user) {
                 $user = $this->createUser($socialUser);
@@ -45,19 +48,20 @@ class OAuthController extends Controller
                 ]);
             } elseif (User::where('email', $socialUser->getEmail())->where('status', User::ACTIVE)
                 ->where('deleted_at', null)->first()) {
+//                dd(3);
                 $user->socialAccount()->create([
                     'google_id' => $socialUser->getId(),
                     'access_token' => $socialUser->token,
                     'refresh_token' => $socialUser->refreshToken,
                 ]);
             } else {
-                return view('user.fb-login-popup', ['token' => null]);
+                return view('login-gg-popup', ['token' => $socialUser->token]);
             }
         }
 
         $token = $this->guard()->login($user);
 
-        return view('user.fb-login-popup', ['token' => $token]);
+        return view('login-gg-popup', ['token' => $token]);
     }
 
     public function createUser($socialUser)
@@ -65,7 +69,8 @@ class OAuthController extends Controller
         return User::create([
             'name' => $socialUser->getName(),
             'email' => $socialUser->getEmail(),
-            'avatar' => $socialUser->getAvatar()
+            'avatar' => $socialUser->getAvatar(),
+            'password' => Hash::make(str_random(8)),
         ]);
     }
 }

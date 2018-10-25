@@ -5,6 +5,7 @@ import Test from "../components/Test.vue"
 import TestLayout from "../components/testLayout.vue"
 import HomeIndex from "../components/layout/index.vue"
 import Channel from "../components/layout/channel/Index.vue"
+import Login from "../components/user/auth/Login.vue"
 import store from '../store/index'
 
 Vue.use(VueRouter)
@@ -20,6 +21,9 @@ let routes = [
   },
   {
     path: '/testLayout', name: 'testLayout', component: TestLayout
+  },
+  {
+    path: '/login', name: 'login', component: Login
   },
   {
     path: '/home', name: 'homeIndex', component: HomeIndex

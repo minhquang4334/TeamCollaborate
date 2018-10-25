@@ -8,6 +8,7 @@
                     <div class="card-body cs-pointer text-info" @click="toTest">
                         I'm an example component. Click me to view test site
                     </div>
+                    <a @click="toLogin">To Login</a>
                 </div>
             </div>
         </div>
@@ -26,6 +27,12 @@
         toTest() {
           this.$router.push({
             name: "test"
+          })
+        },
+
+        toLogin() {
+          this.$router.push({
+            name: "login"
           })
         }
       }
