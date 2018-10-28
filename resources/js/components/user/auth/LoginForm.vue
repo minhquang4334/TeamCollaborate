@@ -17,13 +17,11 @@
             <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             <has-error :form="form" field="password"></has-error>
         </div>
-        <div class="row">
-            <div class="col-md-6 col-xs-7 remember-me">
-                <div class="checkbox icheck">
-                    <label>
-                        <input v-model="remember" type="checkbox"> Duy trì đăng nhập
-                    </label>
-                </div>
+        <div class="row margin-top-25">
+            <div class="col-md-6 col-xs-7 remember-me d-inline-block">
+                <label class="float-left full-with">
+                    <input v-model="remember" type="checkbox"> <span class="margin-left-10">Ghi nhớ </span>
+                </label>
             </div>
             <div class="col-md-6 col-xs-5 btn-login">
                 <button :disabled="loggingIn" type="submit" class="registration ">Đăng nhập
