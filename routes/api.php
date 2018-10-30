@@ -13,6 +13,19 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['namespace' => 'User', 'prefix' => 'user'], function () {
+    Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function () {
+        Route::get('redirect-homepage', 'AuthController@redirectHomepage');
+        Route::get('login-facebook', 'AuthController@loginFacebook');
+    });
+    Route::group(['middleware' => 'guest:api'], function () {
+        Route::post('login', 'AuthController@login');
+        Route::post('register', 'RegisterController@register');
+        Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail');
+        Route::post('password/reset', 'ResetPasswordController@reset');
+    });
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('logout', 'AuthController@logout');
+        Route::get('me', 'AuthController@me');
+    });
 });

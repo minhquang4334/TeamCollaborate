@@ -86,7 +86,7 @@ class AuthController extends Controller
 
     public function redirectHomepage()
     {
-        $urlHomepage = route('homepage.index');
+        $urlHomepage = route('home');
         return response()->json([
             'urlHomepage' => $urlHomepage
         ], self::CODE_GET_SUCCESS);

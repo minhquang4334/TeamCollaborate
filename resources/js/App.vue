@@ -1,19 +1,19 @@
 <template>
     <div>
-        <router-view :key="$route.fullPath">
-            <example-component/>
+        <router-view>
+            <home/>
         </router-view>
     </div>
 </template>
 <script>
-    import ExampleComponent from "./components/Test.vue"
+    import Home from "./components/layout/index.vue"
     export default {
         components: {
-          ExampleComponent
+          Home
         },
 
         created() {
-          console.log(this.$route.fullPath)
+
         }
     }
 </script>
