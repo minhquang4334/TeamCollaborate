@@ -15,7 +15,6 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('google_id')->unique();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone_number', 20)->nullable();
@@ -24,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('avatar');
             $table->tinyInteger('status')->default(0)->comment('0: normal, 1: online, 2: sleep, 3:offline');
-            $table->tinyInteger('gender')->comment('0: male, 1: female, 2:others');
+            $table->tinyInteger('gender')->nullable()->comment('0: male, 1: female, 2:others');
             $table->date('birthday')->nullable();
             $table->tinyInteger('japanese_level')->nullable();
             $table->text('japanese_certificate')->nullable();

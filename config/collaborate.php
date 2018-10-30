@@ -35,16 +35,6 @@ return [
         'open' => env('GOOGLE_OPEN') ?: false
     ],
 
-    // Article Page
-    'article' => [
-        'title'       => 'Minh Quang đại đế',
-        'description' => 'http://example.com',
-        'number'      => 5,
-        'sort'        => 'desc',
-        'sortColumn'  => 'published_at',
-        'numberInNav' => 4
-    ],
-
     // Discussion Page
     'discussion' => [
         'number' => 20,

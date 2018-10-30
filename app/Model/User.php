@@ -29,6 +29,11 @@ class User extends AbstractUser
     const N4 = 4;
     const N5 = 5;
 
+    public static function boot()
+    {
+        parent::boot();
+    }
+
     public static function selectGender()
     {
         return [
@@ -66,6 +71,26 @@ class User extends AbstractUser
         } else {
             return null;
         }
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    public function socialAccount()
+    {
+        return $this->hasOne(SocialAccount::class);
     }
 
 }

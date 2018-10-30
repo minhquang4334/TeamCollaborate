@@ -1,0 +1,87 @@
+import Axios from 'axios'
+
+const types = {
+  LOGOUT: 'LOGOUT',
+  SAVE_TOKEN: 'SAVE_TOKEN',
+  FETCH_USER: 'FETCH_USER',
+  FETCH_USER_SUCCESS: 'FETCH_USER_SUCCESS',
+  FETCH_USER_FAILURE: 'FETCH_USER_FAILURE'
+};
+
+const emptyUser = {
+  id: null,
+  about_me: null,
+  address: null,
+  avatar: null,
+  birthday: null,
+  email: null,
+  facebook_url: null,
+  favorite_quote: null,
+  gender: null,
+  japanese_certificate: null,
+  japanese_level: null,
+  job: null,
+  name: null,
+  phone_number: null,
+  is_teacher: null
+};
+
+const auth = {
+  state: {
+    user: emptyUser,
+    token: window.localStorage.getItem('token') ? window.localStorage.getItem('token') : null
+  },
+  mutations: {
+    [types.SAVE_TOKEN](state, {token}) {
+      state.token = token;
+      window.localStorage.setItem('token', token);
+    },
+    [types.FETCH_USER_SUCCESS](state, {user}) {
+      state.user = user;
+    },
+    [types.FETCH_USER_FAILURE](state) {
+      state.token = null;
+    },
+    [types.LOGOUT](state) {
+      state.user = emptyUser;
+      state.token = null;
+      window.localStorage.removeItem('token');
+    }
+  },
+  actions: {
+    saveToken({commit}, {token}) {
+      commit(types.SAVE_TOKEN, {token});
+    },
+
+    fetchUser({commit, state}) {
+      return new Promise((resolve, reject) => {
+        Axios.get(`/api/user/auth/me`, {params: {token: state.token}})
+          .then(({data}) => {
+            commit(types.FETCH_USER_SUCCESS, {user: data});
+            resolve();
+          })
+          .catch(() => {
+            commit(types.FETCH_USER_FAILURE);
+            reject();
+          });
+      });
+
+    },
+
+    logout({commit, state}) {
+      return new Promise((resolve, reject) => {
+        Axios.post(`/api/user/auth/logout`, {token: state.token})
+          .then(() => {
+            commit(types.LOGOUT);
+            resolve();
+          })
+          .catch(() => {
+            reject();
+          })
+      });
+    }
+  },
+  namespaced: true,
+};
+
+export default auth;

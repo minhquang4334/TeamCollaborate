@@ -4,9 +4,9 @@ import store from '../store'
 export function get(url) {
   return axios({
     method: 'GET',
-    url: process.env.HOST + url,
+    url:  url,
     headers: {
-      'X-Authorization': "Bearer " + store.state.accessKey,
+      'X-Authorization': "Bearer " + store.state.auth.token,
     },
     withCredentials: false,
   })
@@ -16,7 +16,7 @@ export function post_for_login(url, payload) {
   return axios({
     method: 'POST',
     data: payload,
-    url: process.env.HOST + url,
+    url:  url,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -28,11 +28,11 @@ export function post_for_login(url, payload) {
 export function post(url, payload) {
   return axios({
     method: 'POST',
-    url: process.env.HOST + url,
+    url:  url,
     data: payload,
     headers: {
       'Content-Type': 'application/json',
-      'X-Authorization': "Bearer " + store.state.accessKey,
+      'X-Authorization': "Bearer " + store.state.auth.token,
     },
     withCredentials: false,
   })
@@ -49,20 +49,20 @@ export function patch(url, payload) {
 export function put(url, payload) {
   return axios({
     method: 'PUT',
-    url: process.env.HOST + url,
+    url:  url,
     data: payload,
     headers: {
       'Content-Type': 'application/json',
-      'X-Authorization': "Bearer " + store.state.accessKey,
+      'X-Authorization': "Bearer " + store.state.auth.token,
     },
   })
 }
 export function del(url) {
   return axios({
     method: 'DELETE',
-    url: process.env.HOST + url,
+    url:  url,
     headers: {
-      'X-Authorization': "Bearer " + store.state.accessKey,
+      'X-Authorization': "Bearer " + store.state.auth.token,
       'Content-Type': 'application/json',
     },
     withCredentials: false,
@@ -72,7 +72,7 @@ export function del(url) {
 export function XMLpost(url, formData){
   return new Promise((resolve, reject) => {
     let client = new XMLHttpRequest();
-    client.open('POST', process.env.HOST + url, true);
+    client.open('POST',  url, true);
 
     client.onreadystatechange = function () {
       if (this.readyState !== 4) {
@@ -84,7 +84,7 @@ export function XMLpost(url, formData){
         reject(this); // data = this.responseText
       }
     };
-    client.setRequestHeader('X-Authorization', 'Bearer ' + store.state.accessKey);
+    client.setRequestHeader('X-Authorization', 'Bearer ' + store.state.auth.token);
     client.send(formData);
   });
 }
