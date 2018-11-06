@@ -30,7 +30,7 @@ Route::group(['namespace' => 'User', 'prefix' => 'user'], function () {
             Route::post('password/reset', 'ResetPasswordController@reset')->name('password.reset');
         });
         Route::group(['middleware' => 'jwt.auth'], function () {
-            Route::post('logout', 'AuthController@logout')->middleware('verified');
+            Route::post('logout', 'AuthController@logout');
             Route::get('me', 'AuthController@me');
 
         });
