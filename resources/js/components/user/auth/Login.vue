@@ -1,9 +1,9 @@
 <template>
     <div class="container-fluid login-homepage-form">
         <div class="container">
-            <div class="content-login col-md-4 col-md-offset-4 col-sm-8 col-sm-offset-2">
+            <div class="content-login col-md-4 m-auto col-sm-8 ">
                 <div class="logo-left">
-                    <img src="/images/logo_header.png">
+                    <img src="/images/logo.jpg" class="size-img">
                 </div>
                 <div class="login-box-body">
                     <p class="green-strong">Team Collaborate</p>
@@ -12,23 +12,22 @@
                         <div class="alert alert-danger" v-if="timeout">
                             Request Timeout! Đăng nhập thất bại.
                         </div>
-                        <div class="alert alert-danger" v-if="isLoginFbFail">
+                        <div class="alert alert-danger" v-show="isLoginFbFail">
                             {{ errorLoginFbFail }}
                         </div>
                     </transition>
 
                     <login-form :logging-in="loggingIn"/>
-
-                    <div class="social-auth-links text-center connect-facebook text-center">
+                    <div class="social-auth-links text-center connect-facebook height-auto margin-top-20">
                         <p class="clearfix text-or text-center margin-top-40">Hoặc</p>
                         <a href="#" @click.prevent="loginByFB"
                            :disabled="loggingIn"
                            @disableLoginBtns="loggingIn = true"
                            @enableLoginBtns="loggingIn = false"
-                           class="facebook"
+                           class="facebook float-right"
                         >
-                            <i class="fa fa-facebook"></i>
-                            KẾT NỐI QUA FACEBOOK</a>
+                            <i class="fab fa-google-plus-g"></i>
+                            KẾT NỐI QUA GOOGLE</a>
                     </div>
                     <div class="row margin-top-40 form-login">
                         <div class="row">
@@ -37,8 +36,6 @@
                             </div>
                         </div>
                     </div>
-                    <a class="go-homepage center-block" :href="urlHomepage"><i class="ti-arrow-left"></i>Quay
-                        lại trang chủ</a>
                 </div>
             </div>
         </div>
@@ -73,7 +70,7 @@
         let INTERVAL = 500;
         let LOGIN_TIME_LIMIT = 5 * 60 * 1000;
         let loginTime = 0;
-
+        let timeLoginFails = 0;
         let loginInterval = setInterval(function () {
           loginTime += INTERVAL;
           if (FBAuthPopup.closed) {
@@ -92,10 +89,17 @@
                   self.loggingIn = false;
                 });
             } else {
+              if(!self.isLoginFbFail) {
+                timeLoginFails = loginTime;
+              }
               self.isLoginFbFail = true;
-              self.errorLoginFbFail = 'Tài khoản của bạn không được phép hoạt động. ' +
+              self.errorLoginFbFail = 'Có vấn đề khi đăng nhập bằng tài khoản Google của bạn. ' +
                 'Vui lòng liên hệ quản trị viên để biết thêm chi tiết';
             }
+          }
+          if (timeLoginFails > 0 && (loginTime - timeLoginFails) > 3000 && self.isLoginFbFail) {
+            self.isLoginFbFail = false;
+            clearInterval(loginInterval);
           }
           if (loginTime > LOGIN_TIME_LIMIT) {
             clearInterval(loginInterval);
@@ -139,3 +143,13 @@
     }
   }
 </script>
+<style scoped>
+    .size-img {
+        max-height: 100px;
+        max-width: 100px;
+    }
+
+    .height-auto{
+        height: 120px;
+    }
+</style>
