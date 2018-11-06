@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid login-homepage-form">
+    <div class="login-homepage-form">
         <div class="container">
             <div class="content-login col-md-4 m-auto col-sm-8 ">
                 <div class="logo-left">
@@ -18,24 +18,30 @@
                     </transition>
 
                     <login-form :logging-in="loggingIn" @setLogin="loggingIn = !loggingIn"/>
-                    <div class="social-auth-links text-center connect-facebook height-auto margin-top-20">
-                        <p class="clearfix text-or text-center margin-top-40">Hoặc</p>
-                        <a href="#" @click.prevent="loginByFB"
-                           :disabled="loggingIn"
-                           @disableLoginBtns="loggingIn = true"
-                           @enableLoginBtns="loggingIn = false"
-                           class="facebook float-right"
-                        >
-                            <i class="fab fa-google-plus-g"></i>
-                            KẾT NỐI QUA GOOGLE</a>
-                    </div>
                     <div class="row margin-top-40 form-login">
                         <div class="row">
-                            <div class="col-xs-12 button-left text-center">
+                            <div class="col-xs-12 button-left text-center margin-left-10">
                                 <router-link :to="{ name: 'forgot_password' }">Quên mật khẩu</router-link>
                             </div>
                         </div>
                     </div>
+                    <div class="social-auth-links text-center connect-facebook height-auto margin-top-20">
+                        <p class="clearfix text-or text-center margin-top-20">Hoặc</p>
+                        <a @click.prevent="register()" href="#"
+                           class="register float-right"
+                        >
+                            Đăng ký tài khoản mới</a>
+
+                        <a href="#" @click.prevent="loginByFB"
+                           :disabled="loggingIn"
+                           @disableLoginBtns="loggingIn = true"
+                           @enableLoginBtns="loggingIn = false"
+                           class="facebook float-right margin-bottom-20"
+                        >
+                            <i class="fab fa-google-plus-g"></i>
+                            KẾT NỐI QUA GOOGLE</a>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -122,6 +128,12 @@
           .then((res) => {
             this.urlLoginFB = res.data.urlLoginFB
           })
+      },
+
+      register() {
+        this.$router.push({
+          name: 'register'
+        })
       }
 
     },

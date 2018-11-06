@@ -31,13 +31,15 @@
 
 .login-homepage-form {
   min-height: 100vh !important;
-  background: url("/images/Rectangle 18.png") no-repeat;
+  background: url("/images/yasuo.png") no-repeat;
+  background-size: cover;
   display: flex;
   align-items: center;
   .content-login {
-    padding: 65px 45px;
+    padding: 45px 35px;
     border-radius: 10px;
     background-color: #FFFFFF;
+    opacity: 0.86;
     .logo-left {
       padding: 0 10px 0 0px;
       img {
@@ -143,6 +145,14 @@
     text-transform: uppercase;
     border-radius: 5px;
   }
+  .register {
+    border: none;
+    background: linear-gradient(270deg, $color-01 0%, $color-03 100%);
+    box-shadow: 0 2px 0 0 rgba(51, 153, 2, 0.5);
+    text-transform: uppercase;
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
   .go-homepage {
     i {
       margin-right: 10px;
@@ -163,4 +173,8 @@
 
 .cursor {
   cursor: none;
+}
+
+.link-color {
+  color: #00a7d0 !important;
 }

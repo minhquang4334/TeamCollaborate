@@ -5,6 +5,8 @@ return [
     // Mail Notification
     'mail_notification' => env('MAIL_NOTIFICATION') ?: false,
 
+    'collaborate_title' => 'Team Collaborate',
+
     // Default Avatar
     'default_avatar' => env('DEFAULT_AVATAR') ?: '/images/icon.jpg',
 

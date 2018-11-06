@@ -8,6 +8,7 @@ use App\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -20,8 +21,10 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-
-        if ($token = $this->guard()->attempt(['email' => $request->email, 'password' => $request->password, 'status' => User::ACTIVE, 'deleted_at' => null])) {
+        //dd($request->all());
+       // dd($this->guard()->attempt(['email' => $request->email, 'password' => $request->password]));
+        $credentials = $request->only('email', 'password');
+        if ($token = JWTAuth::attempt($credentials)) {
             return $this->respondWithToken($token);
         }
 

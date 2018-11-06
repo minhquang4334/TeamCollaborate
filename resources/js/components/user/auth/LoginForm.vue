@@ -61,7 +61,7 @@
 
               self.$store.dispatch('auth/fetchUser')
                 .then(() => {
-                  self.$router.push({name: 'home'});
+                  self.$router.push({name: 'homeIndex'});
                 })
                 .catch(() => {
                   self.$emit('enableLoginBtns');

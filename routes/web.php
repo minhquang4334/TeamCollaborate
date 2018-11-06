@@ -15,10 +15,13 @@
 Route::get('/', function () {
     return view('layouts.index');
 })->name('home');
+
+
 Route::group(['namespace' => 'User\Auth'], function () {
     Route::get('user/auth/facebook-login', 'OAuthController@redirectToProvider');
     Route::get('oauth/facebook/callback', 'OAuthController@handleProviderCallback');
-    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm');
+    Route::get('#/password/reset/{token}', 'ResetPasswordController@showResetForm')->name('user.rs_pwd_form');
+
 });
 
 Route::get('{path}', function () {
