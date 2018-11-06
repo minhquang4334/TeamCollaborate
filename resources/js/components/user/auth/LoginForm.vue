@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import Form from 'vue-form'
+  import Form from 'vform'
 
   export default {
     data() {
@@ -48,6 +48,7 @@
     methods: {
       login() {
         let self = this;
+        console.log(this.form);
         this.$emit('disableLoginBtns');
         this.form.post(`api/user/auth/login`)
           .then(({data}) => {

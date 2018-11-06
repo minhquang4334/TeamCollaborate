@@ -15,6 +15,8 @@ import Multiselect from 'vue-multiselect'
 import vClickOutside from 'v-click-outside'
 import Datepicker from "vue-datepicker"
 import Notifications from 'vue-notification'
+import {HasError, AlertError, AlertSuccess} from 'vform'
+
 
 
 
@@ -32,6 +34,10 @@ window.jQuery = require('jquery');
 Vue.component('multiselect', Multiselect);
 Vue.component('datepicker', Datepicker);
 Vue.component('vClickOutside', vClickOutside);
+
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
+Vue.component(AlertSuccess.name, AlertSuccess);
 
 Vue.use(VueRouter);
 Vue.use(vClickOutside);
