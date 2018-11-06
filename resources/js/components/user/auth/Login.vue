@@ -17,7 +17,7 @@
                         </div>
                     </transition>
 
-                    <login-form :logging-in="loggingIn"/>
+                    <login-form :logging-in="loggingIn" @setLogin="loggingIn = !loggingIn"/>
                     <div class="social-auth-links text-center connect-facebook height-auto margin-top-20">
                         <p class="clearfix text-or text-center margin-top-40">Hoặc</p>
                         <a href="#" @click.prevent="loginByFB"
@@ -95,11 +95,13 @@
               self.isLoginFbFail = true;
               self.errorLoginFbFail = 'Có vấn đề khi đăng nhập bằng tài khoản Google của bạn. ' +
                 'Vui lòng liên hệ quản trị viên để biết thêm chi tiết';
+              self.loggingIn = false;
             }
           }
           if (timeLoginFails > 0 && (loginTime - timeLoginFails) > 3000 && self.isLoginFbFail) {
             self.isLoginFbFail = false;
             clearInterval(loginInterval);
+            self.loggingIn = false;
           }
           if (loginTime > LOGIN_TIME_LIMIT) {
             clearInterval(loginInterval);
@@ -121,6 +123,7 @@
             this.urlLoginFB = res.data.urlLoginFB
           })
       }
+
     },
     created: function () {
       this.redirectHomepage()

@@ -17,15 +17,16 @@ Route::group(['namespace' => 'User', 'prefix' => 'user'], function () {
     Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function () {
         Route::get('redirect-homepage', 'AuthController@redirectHomepage');
         Route::get('login-facebook', 'AuthController@loginFacebook');
+        Route::group(['middleware' => 'guest:api'], function () {
+            Route::post('login', 'AuthController@login');
+            Route::post('register', 'RegisterController@register');
+            Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail');
+            Route::post('password/reset', 'ResetPasswordController@reset');
+        });
+        Route::group(['middleware' => 'user:api'], function () {
+            Route::post('logout', 'AuthController@logout');
+            Route::get('me', 'AuthController@me');
+        });
     });
-    Route::group(['middleware' => 'guest:api'], function () {
-        Route::post('login', 'AuthController@login');
-        Route::post('register', 'RegisterController@register');
-        Route::post('password/email', 'ForgotPasswordController@sendResetLinkEmail');
-        Route::post('password/reset', 'ResetPasswordController@reset');
-    });
-    Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('logout', 'AuthController@logout');
-        Route::get('me', 'AuthController@me');
-    });
+
 });
