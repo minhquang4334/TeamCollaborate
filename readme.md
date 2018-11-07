@@ -68,3 +68,28 @@ npm run production
 ```shell
 php artisan collaborate:install
 ```
+
+### 4. Generate JWT
+
+```shell
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+php artisan jwt:secret
+```
+
+### Fix your .env for send mail and login by Google
+
+`example`
+```shell 
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=*****@gmail.com
+MAIL_PASSWORD=*****
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=*****@gmail.com
+MAIL_FROM_NAME=ASTEAMK60
+
+GG_CLIENT_ID=*******
+GG_CLIENT_SECRET=*****
+GG_REDIRECT_URL=http://localhost:8000/oauth/google/callback
+```
