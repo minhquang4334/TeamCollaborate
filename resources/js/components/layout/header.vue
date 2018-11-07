@@ -8,6 +8,9 @@
         <div class="navbar-menu-wrapper d-flex align-items-center">
             <p class="page-name d-none d-lg-block">Hi, Dave Mattew</p>
             <ul class="navbar-nav ml-lg-auto">
+                <li>
+                    <a @click="logout()" class="cursor-pointer">Logout</a>
+                </li>
                 <li class="nav-item">
                     <form class="mt-2 mt-md-0 d-none d-lg-block search-input">
                         <div class="input-group">
@@ -138,5 +141,16 @@
     </nav>
 </template>
 <script>
+    import {get} from '../../helper/request.js'
+    export default {
+      methods: {
+        logout: function () {
+          this.$store.dispatch('auth/logout')
+            .then(() => {
+              this.$router.push({ name: 'login' });
+            });
+        },
 
+      },
+    }
 </script>

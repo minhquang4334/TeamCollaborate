@@ -21,7 +21,7 @@ abstract class AbstractUser extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password', 'gender', 'phone_number',
         'address', 'job', 'japanese_level', 'japanese_certificate',
-        'about_me', 'facebook_url', 'avatar', 'email_verified_at', 'google_id', 'status',
+        'about_me', 'facebook_url', 'avatar', 'google_id', 'status',
         'university', 'is_bachelor',  'is_teacher', 'grade', 'role', 'is_admin'
     ];
 

@@ -6,7 +6,7 @@ export function get(url) {
     method: 'GET',
     url:  url,
     headers: {
-      'X-Authorization': "Bearer " + store.state.auth.token,
+      'Authorization': "Bearer " + store.state.auth.token,
     },
     withCredentials: false,
   })
@@ -32,7 +32,7 @@ export function post(url, payload) {
     data: payload,
     headers: {
       'Content-Type': 'application/json',
-      'X-Authorization': "Bearer " + store.state.auth.token,
+      'Authorization': "Bearer " + store.state.auth.token,
     },
     withCredentials: false,
   })
@@ -53,7 +53,7 @@ export function put(url, payload) {
     data: payload,
     headers: {
       'Content-Type': 'application/json',
-      'X-Authorization': "Bearer " + store.state.auth.token,
+      'Authorization': "Bearer " + store.state.auth.token,
     },
   })
 }
@@ -62,7 +62,7 @@ export function del(url) {
     method: 'DELETE',
     url:  url,
     headers: {
-      'X-Authorization': "Bearer " + store.state.auth.token,
+      'Authorization': "Bearer " + store.state.auth.token,
       'Content-Type': 'application/json',
     },
     withCredentials: false,
@@ -84,7 +84,7 @@ export function XMLpost(url, formData){
         reject(this); // data = this.responseText
       }
     };
-    client.setRequestHeader('X-Authorization', 'Bearer ' + store.state.auth.token);
+    client.setRequestHeader('Authorization', 'Bearer ' + store.state.auth.token);
     client.send(formData);
   });
 }

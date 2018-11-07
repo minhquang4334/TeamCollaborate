@@ -6,6 +6,7 @@ use App\Model\SocialAccount;
 use App\Model\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -25,7 +26,6 @@ class OAuthController extends Controller
 
         $socialAccount = SocialAccount::where('google_id', $socialUser->getId())->first();
         if ($socialAccount) {
-//            dd(1);
             if ($socialAccount->user()->where('status', User::ACTIVE)->where('deleted_at', null)->first()) {
                 $socialAccount->update([
                     'access_token' => $socialUser->token,
@@ -33,10 +33,9 @@ class OAuthController extends Controller
                 ]);
                 $user = $socialAccount->user;
             } else {
-                return view('login-gg-popup', ['token' => $socialUser->token]);
+                return view('login-gg-popup', ['token' => null]);
             }
         } else {
-//            dd(2);
             $user = User::where('email', $socialUser->getEmail())->first();
             if (!$user) {
                 $user = $this->createUser($socialUser);
@@ -48,7 +47,6 @@ class OAuthController extends Controller
                 ]);
             } elseif (User::where('email', $socialUser->getEmail())->where('status', User::ACTIVE)
                 ->where('deleted_at', null)->first()) {
-//                dd(3);
                 $user->socialAccount()->create([
                     'google_id' => $socialUser->getId(),
                     'access_token' => $socialUser->token,
@@ -59,8 +57,7 @@ class OAuthController extends Controller
             }
         }
 
-        $token = $this->guard()->login($user);
-
+        $token = Auth::guard('api')->login($user);
         return view('login-gg-popup', ['token' => $token]);
     }
 
