@@ -9,15 +9,16 @@ use Illuminate\Notifications\Notifiable;
 class Admin extends AbstractUser
 {
     //
-    protected $table = 'users';
+    protected $table = 'admins';
     use Notifiable;
+
+    protected $fillable = [
+        'username', 'password', 'status'
+    ];
 
     public static function boot()
     {
         parent::boot();
-
-        static::addGlobalScope(new AdminScope());
     }
-
 
 }

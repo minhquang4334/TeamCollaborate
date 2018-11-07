@@ -1,0 +1,136 @@
+@font-face {
+  font-family: Lato;
+  src: url('../fonts/Lato-Regular.ttf');
+}
+
+$color-01: #339902;
+$color-02: #78B00A;
+$color-03: #ffffff;
+
+$main-color-01: linear-gradient(270deg, #78B00A 0%, #339902 100%);
+$main-color-02: linear-gradient(270deg, #339902 0% , #78B00A  100%);
+$transparent: rgba(0, 0, 0, 0);
+$inline-block: inline-block;
+
+body {
+  font-size: 14px;
+  p {
+    font-family: 'Noto Sans', sans-serif;;
+    text-align: justify;
+    font-weight: normal;
+  }
+  a {
+    outline: none;
+  }
+}
+
+.ti-arrow-right {
+  margin-left: 8px;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+%absolute {
+  position: absolute;
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin btn-transform($x,$y) {
+  -ms-transform: translate($x, $y);
+  -webkit-transform: translate($x, $y);
+  transform: translate($x, $y);
+}
+
+@mixin transition($ms) {
+  -webkit-transition: all $ms ease-in-out;
+  -moz-transition: all $ms ease-in-out;
+  -ms-transition: all $ms ease-in-out;
+  -o-transition: all $ms ease-in-out;
+  transition: all $ms ease-in-out;
+}
+
+.global-btn {
+  color: $color-03;
+  @include border-radius(5px);
+  background: $main-color-01;
+  min-height: 40px;
+  display: $inline-block;
+  text-transform: uppercase;
+  @include transition(0.3s);
+  &:hover {
+    color: $color-03;
+    background: $main-color-02;
+    box-shadow: 0 2px 0 0 rgba(51,153,2,0.5);
+    border: none;
+  }
+}
+
+.btn-next {
+  position: absolute;
+  @include border-radius(3px);
+  @include btn-transform (-50%, -50%);
+  top: 50%;
+  right: 0;
+  z-index: 1000;
+  padding: 8px 8px 4px 0;
+  background: $transparent;
+  border: 1px solid $color-02;
+  color: $color-02;
+  &:hover {
+    background: $color-02;
+    color: $color-03;
+    box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid $color-02;
+  }
+}
+
+.btn-prev {
+  position: absolute;
+  @include btn-transform (-50%, -50%);
+  @include border-radius(3px);
+  background: $transparent;
+  border: 1px solid $color-02;
+  top: 50%;
+  left: 25px;
+  color: $color-02;
+  z-index: 1000;
+  padding: 5px 7px;
+  &:hover {
+    background: $color-02;
+    color: $color-03;
+    box-shadow: 5px 5px 10px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid $color-02;
+  }
+}
+
+.text-green {
+  color: $color-01 !important;
+}
+
+.text-dark-green {
+  color: #153401;
+}
+
+.owl-dots {
+  position: absolute;
+}
+
+.owl-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 100%;
+  border: 1px solid $color-02;
+  margin-right: 5px;
+  display: inline-block; /*for making them horizontal, if you want vertical then you can use- display: block*/
+  &.active {
+    background: $color-02;
+  }
+}
