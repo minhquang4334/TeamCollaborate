@@ -15,6 +15,9 @@ import middlewares from './middleware'
 Vue.use(VueRouter)
 let routes = [
   {
+    path: '/', name: 'dashboard', component: Login, beforeEnter: middlewares.guest
+  },
+  {
     path: '/login', name: 'login', component: Login, beforeEnter: middlewares.guest
   },
   {

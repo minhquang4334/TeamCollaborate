@@ -141,6 +141,7 @@
     </nav>
 </template>
 <script>
+    import {get} from '../../helper/request.js'
     export default {
       methods: {
         logout: function () {
@@ -148,7 +149,8 @@
             .then(() => {
               this.$router.push({ name: 'login' });
             });
-        }
+        },
+
       },
     }
 </script>

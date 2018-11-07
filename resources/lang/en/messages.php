@@ -12,6 +12,7 @@ return [
         'update_info_fail' => 'Cập nhật thông tin thất bại',
         'student_post_answer_fail' => 'Trả lời bài tập thất bại',
         'student_post_answer_success' => 'Trả lời bài tập thành công',
-        'not_verified' => 'Chưa xác thực email'
+        'not_verified' => 'Chưa xác thực email',
+        'not_login' => 'Bạn chưa đăng nhập',
     ],
 ];

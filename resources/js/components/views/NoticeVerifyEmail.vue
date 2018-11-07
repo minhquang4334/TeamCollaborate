@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row justify-content-center" :class="loading ? 'verify-email' : ''">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Verify Your Email Address</div>
@@ -27,18 +27,28 @@
 
       data() {
         return {
-          resent: false
+          resent: false,
+          loading: false,
         }
       },
 
       methods: {
         resend() {
+          this.loading = true;
+          this.resent = false;
           get('/api/user/verification/resend').then(() => {
-            this.resent = true
           }).catch(() => {
-
+            this.loading = false;
+          }).finally(() => {
+            this.loading = false;
+            this.resent = true
           })
         }
       }
     }
 </script>
+<style scoped>
+    .verify-email {
+        cursor: wait;
+    }
+    </style>

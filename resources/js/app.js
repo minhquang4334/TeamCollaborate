@@ -19,7 +19,6 @@ import {HasError, AlertError, AlertSuccess} from 'vform'
 
 
 
-
 require('./bootstrap');
 
 window.Vue = require('vue');

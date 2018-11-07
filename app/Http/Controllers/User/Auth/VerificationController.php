@@ -48,12 +48,10 @@ class VerificationController extends Controller
      */
     public function verify(Request $request)
     {
-        dd(1);
         if ($request->route('id') == Auth::guard('api')->user()->getKey() &&
-            Auth::guard('user')->user()->markEmailAsVerified()) {
+            Auth::guard('api')->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
-        dd(1);
 
         return redirect($this->redirectPath())->with('verified', true);
     }
@@ -86,7 +84,7 @@ class VerificationController extends Controller
     public function __construct()
     {
         $this->middleware('jwt.auth');
-        $this->middleware('signed')->only('verify');
+        //$this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
 }

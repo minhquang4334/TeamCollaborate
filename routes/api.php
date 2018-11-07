@@ -32,18 +32,14 @@ Route::group(['namespace' => 'User', 'prefix' => 'user'], function () {
         Route::group(['middleware' => 'jwt.auth'], function () {
             Route::post('logout', 'AuthController@logout');
             Route::get('me', 'AuthController@me');
-
         });
     });
 
     Route::group(['middleware' => 'jwt.auth'], function() {
-        Route::get('check', 'UserController@check');
         Route::group(['namespace' => 'Auth', 'prefix' => 'verification'], function () {
             Route::get('resend', ['as' => 'resend', 'uses' => 'VerificationController@resend']);
             Route::get('verify', ['as' => 'notice', 'uses' => 'VerificationController@show']);
+
         });
-    });
-    Route::group(['namespace' => 'Auth'], function () {
-        Route::get('verify/{id}', ['as' => 'verification.verify', 'uses' => 'VerificationController@verify']);
     });
 });
