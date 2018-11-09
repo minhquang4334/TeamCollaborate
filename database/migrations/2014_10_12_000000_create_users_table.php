@@ -32,9 +32,8 @@ class CreateUsersTable extends Migration
             $table->boolean('is_teacher')->nullable();
             $table->boolean('is_bachelor')->default(1);
             $table->tinyInteger('grade')->default(1);
-            $table->tinyInteger('role')->default(0)->comment('0: normal user, 1: admin user');
             $table->text('about_me')->nullable();
-            $table->boolean('is_admin')->default(0)->comment('0 if user is not admin');
+            $table->tinyInteger('active')->default(1)->comment('1: active, 0:blocked');
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();
