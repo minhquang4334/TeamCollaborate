@@ -5,7 +5,6 @@
                append-to-body
                fullscreen
                class="user-select">
-        <router-link :to="{name: 'homeIndex'}">aaaaa</router-link>
         <div class="padding-bottom-10 flex1 user-select"
              id="settings">
             <div class="left-sidebar-box">
