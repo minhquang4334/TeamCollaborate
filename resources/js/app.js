@@ -16,7 +16,9 @@ import vClickOutside from 'v-click-outside'
 import Datepicker from "vue-datepicker"
 import Notifications from 'vue-notification'
 import {HasError, AlertError, AlertSuccess} from 'vform'
-
+import ElementUI from 'element-ui';
+import locale from 'element-ui/lib/locale/lang/en';
+import VueProgressBar from 'vue-progressbar';
 
 
 require('./bootstrap');
@@ -29,7 +31,16 @@ window.jQuery = require('jquery');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+window.moment = require('moment-timezone');
+window.moment.tz.setDefault('UTC');
 
+Vue.use(ElementUI, { locale });
+
+const VueProgressBarOptions = {
+  color: '#5587d7',
+  failedColor: '#db6e6e',
+  thickness: '3px'
+};
 Vue.component('multiselect', Multiselect);
 Vue.component('datepicker', Datepicker);
 Vue.component('vClickOutside', vClickOutside);
@@ -38,9 +49,19 @@ Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
 Vue.component(AlertSuccess.name, AlertSuccess);
 
+
+/**
+ * A small lirary that helps us with supporting Emojis in Voten's
+ * Great Markdown editor.
+ */
+window.emojione = require('./libs/emojione.min');
+
+
 Vue.use(VueRouter);
 Vue.use(vClickOutside);
 Vue.use(Notifications);
+
+Vue.prototype.$eventHub = new Vue();
 
 
 Vue.prototype.formateDateTime = () => {
@@ -103,6 +124,8 @@ Vue.mixin({
 });
 
 sync(store, router);
+
+
 
 new Vue({
   el: '#app',

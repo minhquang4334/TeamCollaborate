@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from './modules/auth.js'
+import modals from './modals.js'
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules : {
-    auth
+    auth,
   },
   state: {
     isLogin: false,
@@ -22,6 +23,7 @@ const store = new Vuex.Store({
     settingPrefs: {},
     emailContract: null,
     emailInviteCustomer: null,
+    modals: modals
   },
 
   getters: {},

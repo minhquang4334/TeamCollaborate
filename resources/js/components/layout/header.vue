@@ -5,6 +5,18 @@
             <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo_mini.svg"
                                                                            alt="logo"></a>
         </div>
+        <el-tooltip content="Preferences"
+                    placement="right"
+                    transition="false"
+                    :open-delay="500"
+                    >
+            <a class="item cursor-pointer"
+               @click.prevent="preferences"
+               >
+                <i class="el-icon-setting"
+                   aria-hidden="true"></i>
+            </a>
+        </el-tooltip>
         <div class="navbar-menu-wrapper d-flex align-items-center">
             <p class="page-name d-none d-lg-block">Hi, Dave Mattew</p>
             <ul class="navbar-nav ml-lg-auto">
@@ -149,6 +161,10 @@
             .then(() => {
               this.$router.push({ name: 'login' });
             });
+        },
+
+        preferences: function () {
+          this.$router.push({ name: 'preferences' });
         },
 
       },

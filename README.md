@@ -1,4 +1,3 @@
-
 # Team Collaborate
 
 Team Collaborate was built with Laravel 5.7 + VueJs 2.0

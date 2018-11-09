@@ -1,18 +1,12 @@
 <template>
-    <div>
         <router-view>
-            <home/>
         </router-view>
-    </div>
 </template>
 <script>
-    import Home from "./components/layout/index.vue"
     import {interceptors} from "./helper/request.js";
 
     export default {
-        components: {
-          Home
-        },
+
 
       created() {
         interceptors((err) => {
