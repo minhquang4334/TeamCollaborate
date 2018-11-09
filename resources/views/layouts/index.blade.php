@@ -28,7 +28,9 @@
 </head>
 <body>
     <div id="app"></div>
-    
+
+    @include('php-to-js-data')
     <script src="{{ mix('js/app.js') }}"></script>
 </body>
+
 </html>

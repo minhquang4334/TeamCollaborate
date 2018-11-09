@@ -9,6 +9,7 @@ import Register from "../components/user/auth/Register.vue"
 import PageNotFound from "../components/views/404.vue"
 import AccessDenied from "../components/views/400.vue"
 import NoticeVerifyEmail from "../components/views/NoticeVerifyEmail.vue"
+import Preferences from "../components/user/Preferences.vue"
 import store from '../store/index'
 import middlewares from './middleware'
 
@@ -25,6 +26,9 @@ let routes = [
   },
   {
     path: '/channel', name: 'channel', component: Channel
+  },
+  {
+    path: '/preferences', name: 'preferences', component: Preferences
   },
   {
     path: '/forgot-password', name: 'forgot_password', component: ForgotPassword, beforeEnter: middlewares.guest
