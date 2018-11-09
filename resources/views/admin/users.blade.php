@@ -22,7 +22,7 @@ User Manager
                 <th class="th-sm">Address
                     <i class="fa fa-sort float-right" aria-hidden="true"></i>
                 </th>
-                <th class="th-sm">Status
+                <th class="th-sm">Active
                     <i class="fa fa-sort float-right" aria-hidden="true"></i>
                 </th>
                 <th class="th-sm">Action
@@ -38,13 +38,13 @@ User Manager
                     <td>{{$user->address}}</td>
                     <td>
                         <label class="switch">
-                            <input class="user-status" type="checkbox" @if ($user->status == 1) checked @endif id="{{$user->id}}">
+                            <input class="user-status" type="checkbox" @if ($user->active == 1) checked @endif id="{{$user->id}}">
                             <span class="slider round"></span>
                         </label>
                     </td>
                     <td>
                         <button type="button" class="btn btn-info info-btn" value="{{$user->id}}">Info</button>
-                        <button type="button" class="btn btn-primary order-btn" value="{{$user->id}}">Order</button>
+                        {{--<button type="button" class="btn btn-primary order-btn" value="{{$user->id}}">Order</button>--}}
                     </td>
                 </tr>
             @endforeach
@@ -58,15 +58,15 @@ User Manager
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">User Infomation</h4>
+                    <h4 class="modal-title">User Information</h4>
                 </div>
                 <div class="modal-body">
                     <table class="table table-bordered">
                         <tbody>
-                        <tr>
-                            <td>ID</td>
-                            <td id="info-id"></td>
-                        </tr>
+                        {{--<tr>--}}
+                            {{--<td>ID</td>--}}
+                            {{--<td id="info-id"></td>--}}
+                        {{--</tr>--}}
                         <tr>
                             <td>Name</td>
                             <td id="info-name"></td>
@@ -88,8 +88,24 @@ User Manager
                             <td id="info-address"></td>
                         </tr>
                         <tr>
-                            <td>Status</td>
+                            <td>Active</td>
                             <td id="info-status"></td>
+                        </tr>
+                        <tr>
+                            <td>Gender</td>
+                            <td id="info-gender"></td>
+                        </tr>
+                        <tr>
+                            <td>Birthday</td>
+                            <td id="info-birthday"></td>
+                        </tr>
+                        <tr>
+                            <td>University</td>
+                            <td id="info-university"></td>
+                        </tr>
+                        <tr>
+                            <td>Japanese Level</td>
+                            <td id="info-jp"></td>
                         </tr>
                         <tr>
                             <td>Description</td>
@@ -141,7 +157,7 @@ User Manager
                 var status = ($(this).is(':checked')==1) ? 1 : 0;
                 $.ajax({
                     type:'PUT',
-                    url: 'update-status',
+                    url: 'update-user-status',
                     data:{
                         id:id,
                         status:status,
@@ -165,14 +181,18 @@ User Manager
                     url: 'users/'+$(this).val(),
                     success: function (response) {
                         $user=response.data;
-                        $("#info-id").html($user.id);
+                        // $("#info-id").html($user.id);
                         $("#info-name").html($user.name);
                         $("#info-mail").html($user.email);
                         $("#info-avatar").attr("src",$user.avatar);
-                        $("#info-phone").html($user.phone_number);
-                        $("#info-address").html($user.address);
-                        $("#info-status").html(($user.status==1)?"Active":"Blocked");
-                        $("#info-description").html($user.description);
+                        $("#info-phone").html($user.phone_number || "None");
+                        $("#info-address").html($user.address || "None");
+                        $("#info-status").html(($user.active==1)?"Active":"Blocked");
+                        $("#info-gender").html($user.gender || "Other");
+                        $("#info-birthday").html($user.birthday || "None");
+                        $("#info-university").html($user.university || "None");
+                        $("#info-jp").html(($user.japanese_level == null)?"None":('N' + $user.japanese_level));
+                        $("#info-description").html($user.about_me || "None");
                     }
                 });
             })

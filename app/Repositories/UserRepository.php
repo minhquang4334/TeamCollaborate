@@ -23,4 +23,10 @@ class UserRepository {
         $this->model = $user;
     }
 
+    public function updateStatus($status, $id){
+        $user = $this->getById($id);
+        $user->active = $status;
+        $this->update($id,$user->toArray());
+        return $status;
+    }
 }
