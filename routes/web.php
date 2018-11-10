@@ -46,6 +46,8 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.', 'prefix' => 'admin'], fu
         Route::delete('channels/{id}', "ChannelManagerController@delete");
 
         Route::get('files-manager', ['as' => 'files-manager', 'uses' => "FileManagerController@index"]);
+        Route::get('download/{id}', "FileManagerController@download");
+        Route::delete('files/{id}', "FileManagerController@delete");
         Route::get('reports-manager', ['as' => 'reports-manager', 'uses' => "ReportManagerController@index"]);
     });
 });
