@@ -38,7 +38,7 @@ Channel Manager
             <td>{{$channel->created_at}}</td>
             <td>
                 <label class="switch">
-                    <input class="user-status" type="checkbox" @if ($channel->status == 1) checked @endif id="{{$channel->id}}">
+                    <input class="user-status" type="checkbox" @if ($channel->status === 1) checked @endif id="{{$channel->id}}">
                     <span class="slider round"></span>
                 </label>
             </td>
@@ -76,6 +76,14 @@ Channel Manager
                         <td id="info-type"></td>
                     </tr>
                     <tr>
+                        <td>Members</td>
+                        <td id="info-mem"></td>
+                    </tr>
+                    <tr>
+                        <td>Posts</td>
+                        <td id="info-post"></td>
+                    </tr>
+                    <tr>
                         <td>Created Time</td>
                         <td id="info-time"></td>
                     </tr>
@@ -100,6 +108,13 @@ Channel Manager
                         <th>Owner</th>
                         <th>File</th>
                         <th>Time</th>
+                    </tr>
+                    </tbody>
+                    <tbody id="file-list">
+                    <tr>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
                     </tr>
                     </tbody>
                 </table>
@@ -154,7 +169,7 @@ Channel Manager
 
         $(".user-status").on("change",function () {
             var id = $(this).attr('id');
-            var status = ($(this).is(':checked')===1) ? 1 : 0;
+            var status = ($(this).is(':checked') ? 1 : 0);
             $.ajax({
                 type:'PUT',
                 url: 'update-channel-status',
@@ -184,10 +199,20 @@ Channel Manager
                     $("#info-id").html($channel.channel_id);
                     $("#info-creator").html($channel.get_creator.name);
                     $("#info-time").html($channel.created_at || "None");
+                    $("#info-mem").html($channel.members_count);
+                    $("#info-post").html($channel.posts_count);
                     $("#info-type").html($channel.type===0?"Public":($channel.type==1?"Private":"Protected"));
                     $("#info-status").html(($channel.active===1)?"Active":"Blocked");
                     $("#info-purpose").html($channel.purpose || "None");
                     $("#info-description").html($channel.description || "None");
+                    $("#file-list").empty();
+                    $channel.files.forEach( function (file) {
+                        $("#file-list").append('<tr><td>'+
+                                                file.creator.name+'</td><td><a href="/admin/download/' +
+                                                file.id + '">' +
+                                                file.file_name +'</a></td><td>' +
+                                                file.created_at +'</td></tr>');
+                    });
                 }
             });
         });

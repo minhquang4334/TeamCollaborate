@@ -38,4 +38,12 @@ class Channel extends Model
     public function getCreator(){
         return $this->hasOne(User::class, 'id', 'creator');
     }
+
+    public function getUsersCount(){
+        return $this->users()->whereChannelId($this->id)->count();
+    }
+
+    public function getPostsCount(){
+        return $this->posts()->whereChannelId($this->id)->count();
+    }
 }

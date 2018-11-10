@@ -30,6 +30,11 @@ class ChannelManagerController extends Controller
     public function detail($id){
         $channel = $this->channel->getById($id);
         $channel->getCreator;
+        foreach ($channel->files as $file){
+            $file->creator = $file->user;
+        }
+        $channel->members_count = $channel->getUsersCount();
+        $channel->posts_count = $channel->getPostsCount();
         return response()->json(['data'=>$channel]);
     }
 
