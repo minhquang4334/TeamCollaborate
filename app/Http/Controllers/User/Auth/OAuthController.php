@@ -6,6 +6,8 @@ use App\Model\SocialAccount;
 use App\Model\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -15,14 +17,14 @@ class OAuthController extends Controller
 
     public function redirectToProvider()
     {
-        return Socialite::driver('facebook')->stateless()->redirect();
+        return Socialite::driver('google')->stateless()->redirect();
     }
 
     public function handleProviderCallback(Request $request)
     {
-        $socialUser = Socialite::driver('facebook')->stateless()->user();
+        $socialUser = Socialite::driver('google')->stateless()->user();
 
-        $socialAccount = SocialAccount::where('facebook_id', $socialUser->getId())->first();
+        $socialAccount = SocialAccount::where('google_id', $socialUser->getId())->first();
         if ($socialAccount) {
             if ($socialAccount->user()->where('status', User::ACTIVE)->where('deleted_at', null)->first()) {
                 $socialAccount->update([
@@ -31,7 +33,7 @@ class OAuthController extends Controller
                 ]);
                 $user = $socialAccount->user;
             } else {
-                return view('user.fb-login-popup', ['token' => null]);
+                return view('login-gg-popup', ['token' => null]);
             }
         } else {
             $user = User::where('email', $socialUser->getEmail())->first();
@@ -39,25 +41,24 @@ class OAuthController extends Controller
                 $user = $this->createUser($socialUser);
 
                 $user->socialAccount()->create([
-                    'facebook_id' => $socialUser->getId(),
+                    'google_id' => $socialUser->getId(),
                     'access_token' => $socialUser->token,
                     'refresh_token' => $socialUser->refreshToken,
                 ]);
             } elseif (User::where('email', $socialUser->getEmail())->where('status', User::ACTIVE)
                 ->where('deleted_at', null)->first()) {
                 $user->socialAccount()->create([
-                    'facebook_id' => $socialUser->getId(),
+                    'google_id' => $socialUser->getId(),
                     'access_token' => $socialUser->token,
                     'refresh_token' => $socialUser->refreshToken,
                 ]);
             } else {
-                return view('user.fb-login-popup', ['token' => null]);
+                return view('login-gg-popup', ['token' => $socialUser->token]);
             }
         }
 
-        $token = $this->guard()->login($user);
-
-        return view('user.fb-login-popup', ['token' => $token]);
+        $token = Auth::guard('api')->login($user);
+        return view('login-gg-popup', ['token' => $token]);
     }
 
     public function createUser($socialUser)
@@ -65,7 +66,8 @@ class OAuthController extends Controller
         return User::create([
             'name' => $socialUser->getName(),
             'email' => $socialUser->getEmail(),
-            'avatar' => $socialUser->getAvatar()
+            'avatar' => $socialUser->getAvatar(),
+            'password' => Hash::make(str_random(8)),
         ]);
     }
 }

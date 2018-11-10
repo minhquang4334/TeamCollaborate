@@ -1,30 +1,24 @@
 <?php
 
-namespace App\model;
+namespace App\Model;
 
+use App\Scopes\AdminScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Admin extends Model
+class Admin extends AbstractUser
 {
     //
+    protected $table = 'admins';
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'email', 'password',
+        'username', 'password', 'status'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    public static function boot()
+    {
+        parent::boot();
+    }
+
 }

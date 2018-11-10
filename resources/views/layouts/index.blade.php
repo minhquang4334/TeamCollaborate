@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="css/style.css">
     <!-- endinject -->
     <link rel="shortcut icon" href="images/favicon.png"/>
-
+    <link rel="stylesheet" href="/css/AdminLTE.min.css"/>
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <script>
         window.Laravel = {
@@ -28,10 +28,9 @@
 </head>
 <body>
     <div id="app"></div>
-    
+
+    @include('php-to-js-data')
     <script src="{{ mix('js/app.js') }}"></script>
-    <script src="js/off-canvas.js"></script>
-    <script src="js/misc.js"></script>
-    <script src="js/dashboard.js"></script>
 </body>
+
 </html>

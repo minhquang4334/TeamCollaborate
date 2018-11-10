@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\User\Auth;
 
-//use App\Http\Requests\User\RegisterRequest;
+use App\Http\Requests\User\RegisterRequest;
 use App\Http\Controllers\Controller;
 use App\Model\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class RegisterController extends Controller
 {
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
         $user = User::create([
             'name' => $request->name,
@@ -19,14 +20,14 @@ class RegisterController extends Controller
             'gender' => $request->gender
         ]);
 
-        $token = $this->guard()->login($user);
+        $token = JWTAuth::fromUser($user);
 
         return response()->json([
             'message' => trans('messages.user.register_success'),
             'data' => [
                 'token' => $token
             ]
-        ]);
+        ], 201);
     }
 
     public function guard()

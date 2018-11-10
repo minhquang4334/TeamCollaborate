@@ -8,15 +8,25 @@
 @import '~@fortawesome/fontawesome-free-webfonts/scss/fa-regular';
 @import '~@fortawesome/fontawesome-free-webfonts/scss/fa-solid';
 
+@import 'node_modules/element-ui/packages/theme-chalk/src/index';
+
 // Variables
 @import 'variables';
+
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
 // Style
+@import 'common';
+@import 'grid';
+@import 'dialog';
 @import "channel";
+@import "form";
+@import "user";
+@import "comment";
 @import "style";
+
 html, body{
     height: 100%;
     overflow: hidden;

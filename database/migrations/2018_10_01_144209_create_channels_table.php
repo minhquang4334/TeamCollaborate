@@ -20,6 +20,7 @@ class CreateChannelsTable extends Migration
             $table->string('purpose')->nullable();
             $table->string('description')->nullable();
             $table->tinyInteger('status')->default(1)->comment('1: active, 0: inactive');
+            $table->string('channel_id');
             $table->softDeletes();
             $table->timestamps();
         });

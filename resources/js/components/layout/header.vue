@@ -5,9 +5,24 @@
             <a class="navbar-brand brand-logo-mini" href="index.html"><img src="images/logo_mini.svg"
                                                                            alt="logo"></a>
         </div>
+        <el-tooltip content="Preferences"
+                    placement="right"
+                    transition="false"
+                    :open-delay="500"
+                    >
+            <a class="item cursor-pointer"
+               @click.prevent="preferences"
+               >
+                <i class="el-icon-setting"
+                   aria-hidden="true"></i>
+            </a>
+        </el-tooltip>
         <div class="navbar-menu-wrapper d-flex align-items-center">
             <p class="page-name d-none d-lg-block">Hi, Dave Mattew</p>
             <ul class="navbar-nav ml-lg-auto">
+                <li>
+                    <a @click="logout()" class="cursor-pointer">Logout</a>
+                </li>
                 <li class="nav-item">
                     <form class="mt-2 mt-md-0 d-none d-lg-block search-input">
                         <div class="input-group">
@@ -138,5 +153,20 @@
     </nav>
 </template>
 <script>
+    import {get} from '../../helper/request.js'
+    export default {
+      methods: {
+        logout: function () {
+          this.$store.dispatch('auth/logout')
+            .then(() => {
+              this.$router.push({ name: 'login' });
+            });
+        },
 
+        preferences: function () {
+          this.$router.push({ name: 'preferences' });
+        },
+
+      },
+    }
 </script>

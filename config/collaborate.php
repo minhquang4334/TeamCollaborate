@@ -5,6 +5,8 @@ return [
     // Mail Notification
     'mail_notification' => env('MAIL_NOTIFICATION') ?: false,
 
+    'collaborate_title' => 'Team Collaborate',
+
     // Default Avatar
     'default_avatar' => env('DEFAULT_AVATAR') ?: '/images/icon.jpg',
 
@@ -33,16 +35,6 @@ return [
     'google' => [
         'id'   => env('GOOGLE_ANALYTICS_ID', 'Google-Analytics-ID'),
         'open' => env('GOOGLE_OPEN') ?: false
-    ],
-
-    // Article Page
-    'article' => [
-        'title'       => 'Minh Quang đại đế',
-        'description' => 'http://example.com',
-        'number'      => 5,
-        'sort'        => 'desc',
-        'sortColumn'  => 'published_at',
-        'numberInNav' => 4
     ],
 
     // Discussion Page
