@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\model\Channel;
+use App\Model\Channel;
 use Illuminate\Support\Facades\Auth;
 
 class ChannelRepository {
