@@ -154,7 +154,7 @@ User Manager
 
             $(".user-status").on("change",function () {
                 var id = $(this).attr('id');
-                var status = ($(this).is(':checked')==1) ? 1 : 0;
+                var status = ($(this).is(':checked') ? 1 : 0);
                 $.ajax({
                     type:'PUT',
                     url: 'update-user-status',
