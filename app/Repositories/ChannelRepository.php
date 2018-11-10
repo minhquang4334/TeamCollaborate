@@ -28,5 +28,4 @@ class ChannelRepository {
         $this->update($id,$channel->toArray());
         return $status;
     }
-
 }
