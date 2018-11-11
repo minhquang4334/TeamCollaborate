@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Transformers;
-use App\model\React;
+use App\Model\React;
 use League\Fractal\TransformerAbstract;
 
 class ReactTransformer extends TransformerAbstract {

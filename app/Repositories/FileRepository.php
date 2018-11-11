@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\model\File;
+use App\Model\File;
 use Illuminate\Support\Facades\Auth;
 
 class FileRepository {

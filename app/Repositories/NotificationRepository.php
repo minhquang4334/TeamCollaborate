@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\model\Notification;
+use App\Model\Notification;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Matcher\Not;
 

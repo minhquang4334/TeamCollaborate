@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Transformers;
-use App\model\File;
+use App\Model\File;
 use League\Fractal\TransformerAbstract;
 
 class FileTransformer extends TransformerAbstract {

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Transformers;
-use App\model\Admin;
+use App\Model\Admin;
 use League\Fractal\TransformerAbstract;
 
 class AdminTransformer extends TransformerAbstract {

@@ -2,8 +2,8 @@
 
 namespace App\Repositories;
 
-use App\model\Notification;
-use App\model\Post;
+use App\Model\Notification;
+use App\Model\Post;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Matcher\Not;
 

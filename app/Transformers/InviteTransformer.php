@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Transformers;
-use App\model\Invite;
+use App\Model\Invite;
 use League\Fractal\TransformerAbstract;
 
 class InviteTransformer extends TransformerAbstract {
