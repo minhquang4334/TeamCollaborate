@@ -202,7 +202,7 @@ Channel Manager
                     $("#info-mem").html($channel.members_count);
                     $("#info-post").html($channel.posts_count);
                     $("#info-type").html($channel.type===0?"Public":($channel.type==1?"Private":"Protected"));
-                    $("#info-status").html(($channel.active==1)?"Active":"Blocked");
+                    $("#info-status").html(($channel.status==1)?"Active":"Blocked");
                     $("#info-purpose").html($channel.purpose || "None");
                     $("#info-description").html($channel.description || "None");
                     $("#file-list").empty();
