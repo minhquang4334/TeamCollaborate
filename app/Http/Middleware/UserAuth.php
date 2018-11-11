@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class UserAuth
 {
     /**
-     * Handle an incoming request.
+     * Handle an incoming request. Check if User authenticated
      *
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
