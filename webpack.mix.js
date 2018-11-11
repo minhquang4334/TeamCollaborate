@@ -20,4 +20,6 @@ mix.webpackConfig({
 
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css')
+  .js('resources/js/admin/app.js', 'public/admin/js')
+  .sass('resources/sass/admin/app.scss', 'public/admin/css')
   .version();
