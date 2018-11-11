@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Transformers;
-use App\model\Notification;
+use App\Model\Notification;
 use League\Fractal\TransformerAbstract;
 
 class NotificationTransformer extends TransformerAbstract {

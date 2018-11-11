@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\model\Invite;
+use App\Model\Invite;
 use Illuminate\Support\Facades\Auth;
 
 class InviteRepository {

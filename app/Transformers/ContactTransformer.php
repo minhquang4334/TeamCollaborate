@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Transformers;
-use App\model\Contact;
+use App\Model\Contact;
 use League\Fractal\TransformerAbstract;
 
 class ContactTransformer extends TransformerAbstract {

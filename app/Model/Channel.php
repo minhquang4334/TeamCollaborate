@@ -1,11 +1,13 @@
 <?php
 
-namespace App\model;
+namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Channel extends Model
 {
+    protected $table = 'channels';
+    public $timestamp=true;
     CONST PUBLIC = 0;
     CONST PRIVATE = 1;
     CONST PROTECTED = 2;
@@ -22,7 +24,7 @@ class Channel extends Model
     }
 
     public function files() {
-        return $this->hasMany(Channel::class, 'channel_id');
+        return $this->hasMany(File::class, 'channel_id');
     }
 
     public function posts() {
@@ -33,4 +35,15 @@ class Channel extends Model
         return $this->hasMany(Unread::class, 'channel_id');
     }
 
+    public function getCreator(){
+        return $this->hasOne(User::class, 'id', 'creator');
+    }
+
+    public function getUsersCount(){
+        return $this->users()->whereChannelId($this->id)->count();
+    }
+
+    public function getPostsCount(){
+        return $this->posts()->whereChannelId($this->id)->count();
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Transformers;
-use App\model\Channel;
+use App\Model\Channel;
 use League\Fractal\TransformerAbstract;
 
 class ChannelTransformer extends TransformerAbstract {
