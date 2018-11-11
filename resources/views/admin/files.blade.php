@@ -41,7 +41,11 @@
                     <td>
                         <a href="/admin/download/{{$file->id}}" type="button" class="btn btn-info"><i class="fa fa-cloud-download" aria-hidden="true"></i></a>
                         <button type="button" class="btn btn-danger delete-btn" data-id="{{$file->id}}" data-name="{{$file->file_name}}" value="{{$file->id}}">Delete</button>
-                        @if ($file->is_image == 1)<button type="button" class="btn btn-info info-btn" value="{{$file->file_path}}">Preview</button> @endif
+                        @if ($file->is_image == 1)
+                            <button type="button" class="btn btn-info info-btn" value="{{$file->file_path}}">Preview</button>
+                        @elseif(in_array(pathinfo($file->file_path, PATHINFO_EXTENSION), ['pdf']))
+                            <a type="button" class="btn btn-info" href="{{$file->file_path}}">Preview</a>
+                        @endif
                     </td>
                 </tr>
             @endforeach
@@ -113,7 +117,7 @@
                 var id = $(this).data('id');
                 $.ajax({
                     type: 'delete',
-                    url: 'files/' + $(this).data('id'),
+                    url: 'files/' + id,
                     data:{
                         id: id,
                     },

@@ -22,9 +22,8 @@ class FileManagerController extends Controller
 
 
     public function delete($id){
-        $file = $this->file->getById($id);
-        $file->delete();
-        return response()->json(['data'=> 1 ], 200);
+        $status = $this->file->destroy($id);
+        return response()->json(['data'=> $status ], self::CODE_DELETE_SUCCESS);
     }
 
     public function download($id)

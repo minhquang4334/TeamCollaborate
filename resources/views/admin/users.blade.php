@@ -175,24 +175,27 @@ User Manager
             })
 
             $(".info-btn").on("click",function () {
-                $("#info-modal").modal("show");
                 $.ajax({
                     type: 'get',
                     url: 'users/'+$(this).val(),
                     success: function (response) {
-                        $user=response.data;
+                        $("#info-modal").modal("show");
+                        $user = response.data;
                         // $("#info-id").html($user.id);
                         $("#info-name").html($user.name);
                         $("#info-mail").html($user.email);
-                        $("#info-avatar").attr("src",$user.avatar);
+                        $("#info-avatar").attr("src", $user.avatar);
                         $("#info-phone").html($user.phone_number || "None");
                         $("#info-address").html($user.address || "None");
-                        $("#info-status").html(($user.active==1)?"Active":"Blocked");
+                        $("#info-status").html(($user.active == 1) ? "Active" : "Blocked");
                         $("#info-gender").html($user.gender || "Other");
                         $("#info-birthday").html($user.birthday || "None");
                         $("#info-university").html($user.university || "None");
-                        $("#info-jp").html(($user.japanese_level == null)?"None":('N' + $user.japanese_level));
+                        $("#info-jp").html(($user.japanese_level == null) ? "None" : ('N' + $user.japanese_level));
                         $("#info-description").html($user.about_me || "None");
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        toastr.error(xhr.responseJSON.message);
                     }
                 });
             })

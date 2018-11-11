@@ -190,11 +190,11 @@ Channel Manager
         })
 
         $(".info-btn").on("click",function () {
-            $("#info-modal").modal("show");
             $.ajax({
                 type: 'get',
                 url: 'channels/'+$(this).val(),
                 success: function (response) {
+                    $("#info-modal").modal("show");
                     $channel=response.data;
                     $("#info-id").html($channel.channel_id);
                     $("#info-creator").html($channel.get_creator.name);
@@ -213,6 +213,9 @@ Channel Manager
                                                 file.file_name +'</a></td><td>' +
                                                 file.created_at +'</td></tr>');
                     });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    toastr.error(xhr.responseJSON.message);
                 }
             });
         });
@@ -227,7 +230,7 @@ Channel Manager
             var id = $(this).data('id');
             $.ajax({
                 type: 'delete',
-                url: 'channels/' + $(this).data('id'),
+                url: 'channels/' + id,
                 data:{
                     id: id,
                 },

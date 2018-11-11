@@ -23,12 +23,12 @@ class UserManagerController extends Controller
     public function updateStatus(Request $request){
         $status = $request->get('status');
         $id=$request->get('id');
-        $this->user->updateStatus($status,$id);
-        return response()->json(['data'=>$status], 200);
+        $status = $this->user->updateStatus($status,$id);
+        return response()->json(['data'=>$status], self::CODE_UPDATE_SUCCESS);
     }
 
     public function detail($id){
         $user = $this->user->getById($id);
-        return response()->json(['data'=>$user]);
+        return response()->json(['data'=>$user], self::CODE_GET_SUCCESS);
     }
 }

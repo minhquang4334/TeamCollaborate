@@ -23,8 +23,8 @@ class ChannelManagerController extends Controller
     public function updateStatus(Request $request){
         $status = $request->get('status');
         $id=$request->get('id');
-        $this->channel->updateStatus($status,$id);
-        return response()->json(['data'=>$status], 200);
+        $status = $this->channel->updateStatus($status,$id);
+        return response()->json(['data'=>$status], self::CODE_UPDATE_SUCCESS);
     }
 
     public function detail($id){
@@ -35,12 +35,11 @@ class ChannelManagerController extends Controller
         }
         $channel->members_count = $channel->getUsersCount();
         $channel->posts_count = $channel->getPostsCount();
-        return response()->json(['data'=>$channel]);
+        return response()->json(['data'=>$channel], self::CODE_GET_SUCCESS);
     }
 
     public function delete($id){
-        $channel = $this->channel->getById($id);
-        $channel->delete();
-        return response()->json(['data'=> 1 ], 200);
+        $status = $this->channel->destroy($id);
+        return response()->json(['data'=> $status ], self::CODE_DELETE_SUCCESS);
     }
 }
