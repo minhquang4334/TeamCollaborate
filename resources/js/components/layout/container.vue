@@ -15,8 +15,7 @@
     import footer from "./footer.vue"
     export default {
         components:{
-            leftBar,
-            footer
+            leftBar
         }
     }
 </script>
