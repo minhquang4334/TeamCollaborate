@@ -242,7 +242,12 @@ Channel Manager
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    toastr.error(xhr.responseJSON.message);
+                    console.log(xhr.status);
+                    switch (xhr.status) {
+                        case 404: toastr.error("Channel " + thrownError);
+                            break;
+                        default: toastr.error(xhr.responseJSON.message);
+                    }
                 }
             });
         });
