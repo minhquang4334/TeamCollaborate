@@ -9,10 +9,12 @@ class Post extends Model
     //
     CONST NORMAL = 0;
     CONST PINNED = 1;
+    CONST BLOCK = 0;
+    CONST ACTIVE = 1;
 
     protected $fillable = [
       'content', 'is_parent', 'channel_id', 'parent_id',
-        'creator', 'user_following_post', 'status', 'post_id'
+        'creator', 'user_following_post', 'status', 'post_id', 'type'
     ];
 
     public function files() {

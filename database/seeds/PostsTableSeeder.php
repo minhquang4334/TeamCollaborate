@@ -18,7 +18,7 @@ class PostsTableSeeder extends Seeder
             'channel_id' => '1',
             'parent_id' => '1',
             'creator' => '1',
-            'status' => '1',
+            'type' => '1',
         ]);
 
         DB::table('posts')->insert([
@@ -28,7 +28,7 @@ class PostsTableSeeder extends Seeder
             'channel_id' => '1',
             'parent_id' => '1',
             'creator' => '1',
-            'status' => '1',
+            'type' => '1',
         ]);
 
         DB::table('posts')->insert([
@@ -38,7 +38,7 @@ class PostsTableSeeder extends Seeder
             'channel_id' => '2',
             'parent_id' => '1',
             'creator' => '2',
-            'status' => '0',
+            'type' => '0',
         ]);
     }
 }

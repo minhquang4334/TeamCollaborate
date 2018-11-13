@@ -15,6 +15,7 @@ class PostTransformer extends TransformerAbstract {
             'creator' => $post->creator,
             'user_following_post' => $post->user_following_post,
             'status' => $post->status,
+            'type' => $post->type,
             'post_id' => $post->post_id
         ];
     }

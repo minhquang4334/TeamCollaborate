@@ -22,7 +22,8 @@ class CreatePostsTable extends Migration
             $table->integer('parent_id')->nullable();
             $table->integer('creator');
             $table->string('user_following_post')->nullable();
-            $table->tinyInteger('status')->default(0)->comment('0: normal post, 1: pinned post');
+            $table->tinyInteger('type')->default(0)->comment('0: normal post, 1: pinned post');
+            $table->tinyInteger('status')->default(1)->comment('0: block, 1: active');
             $table->softDeletes();
             $table->timestamps();
         });
