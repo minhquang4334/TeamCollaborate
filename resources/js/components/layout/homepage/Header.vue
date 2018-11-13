@@ -18,7 +18,7 @@
             <!--</a>-->
         <!--</el-tooltip>-->
         <div class="navbar-menu-wrapper d-flex align-items-center">
-            <p class="page-name d-none d-lg-block">Hi, Dave Mattew</p>
+            <p class="page-name d-none d-lg-block" id="Channelname">Channel Name</p>
             <ul class="navbar-nav ml-lg-auto">
                 <li class="nav-item">
                     <a @click="logout()" class="cursor-pointer">Logout</a>
@@ -45,7 +45,7 @@
     </nav>
 </template>
 <script>
-    import {get} from '../../helper/request.js'
+    import {get} from '../../../helper/request.js'
     export default {
       methods: {
         logout: function () {

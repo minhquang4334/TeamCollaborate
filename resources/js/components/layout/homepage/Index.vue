@@ -5,8 +5,8 @@
     </div>
 </template>
 <script>
-    import headBar from "./header.vue"
-    import container from "./container.vue"
+    import headBar from "./Header.vue"
+    import container from "./Container.vue"
     export default {
         components:{
             headBar,

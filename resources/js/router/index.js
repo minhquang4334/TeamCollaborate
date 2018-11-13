@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeIndex from "../components/layout/index.vue"
+import HomeIndex from "../components/layout/homepage/Index.vue"
 import Channel from "../components/layout/channel/Index.vue"
 import Login from "../components/user/auth/Login.vue"
 import ForgotPassword from "../components/user/auth/ForgotPassword.vue"
