@@ -21,6 +21,14 @@ class ChannelApiController extends ApiController
     }
 
     /**
+     * add new channel
+     * return new channel information if success, else return error message
+     */
+    public function create() {
+
+    }
+
+    /**
      * get channel information
      * request has channel_id
      * return list all channels
@@ -68,4 +76,11 @@ class ChannelApiController extends ApiController
 
     }
 
+    /**
+     * invite a user to specific channel
+     *
+     */
+    public function invite() {
+
+    }
 }
