@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/adminlte/css/materialdesignicons.min.css">
     {{--<link rel="stylesheet" href="/adminlte/css/simple-line-icons.css">--}}
     <link rel="stylesheet" href="/adminlte/css/flag-icon.min.css">
-    <link rel="stylesheet" href="/adminlte/css/chartist.min.css" />
+    {{--<link rel="stylesheet" href="/adminlte/css/chartist.min.css" />--}}
     <link rel="stylesheet" href="/adminlte/css/jquery-jvectormap.css" />
     <link rel="stylesheet" href="/adminlte/css/style.css">
     <link rel="shortcut icon" href="/adminlte/images/favicon.png"/>
