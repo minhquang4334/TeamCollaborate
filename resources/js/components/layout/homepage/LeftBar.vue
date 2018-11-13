@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+
+        <nav class="sidebar sidebar-offcanvas ml-2" id="sidebar">
             <ul class="nav">
                 <li class="nav-item nav-category">
                     <span class="nav-link">CHANNELS <a class="fas fa-plus-circle" style="cursor:pointer" @click="newchannel()"></a></span>
@@ -41,7 +41,7 @@
 
             </ul>
         </nav>
-    </div>
+
 </template>
 <script>
     export default {
