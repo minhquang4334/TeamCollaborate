@@ -9,7 +9,9 @@
                         <messagelist/>
                         <newmessage/>
                     </div>
-                    <div class="col-4 h-100">asdas</div>
+                    <div class="col-4 h-100" id="right-content">
+                        <aboutchannel/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -21,11 +23,13 @@
     import leftBar from "./LeftBar.vue"
     import newmessage from "./NewMessage.vue"
     import messagelist from "./MessageList.vue"
+    import aboutchannel from "./AboutChannel.vue"
     export default {
         components:{
             leftBar,
             newmessage,
-            messagelist
+            messagelist,
+            aboutchannel
         }
     }
 </script>
