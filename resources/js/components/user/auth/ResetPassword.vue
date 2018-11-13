@@ -1,7 +1,7 @@
 <template>
     <div class="register-box">
         <div class="register-logo">
-            <a>HapoJC</a>
+            <a>App</a>
         </div>
 
         <div class="register-box-body">
