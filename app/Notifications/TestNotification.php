@@ -1,6 +1,6 @@
 <?php
 
-namespace HapoJC\Notifications;
+namespace App\Notifications;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
