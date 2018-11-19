@@ -1,11 +1,7 @@
 <template>
-    <div class="d-md-block d-none col-md-2 bg-dark px-3 text-white">
-        <a class="navbar-brand px-3" href="#">
-            <h3>Team Collaborate</h3>
-        </a>
-        <ul class="nav flex-column">
+        <ul class="nav" v-bind:class="{'flex-column': isLeft}">
             <li class="nav-item nav-category">
-                <a class="nav-link" style="cursor:pointer" @click="newchannel()">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
+                <span class="nav-link">CHANNELS <a class="fas fa-plus-circle" style="cursor:pointer" @click="newchannel()"></a></span>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="index.html">
@@ -41,8 +37,6 @@
                 </a>
             </li>
         </ul>
-    </div>
-
 </template>
 <script>
     export default {

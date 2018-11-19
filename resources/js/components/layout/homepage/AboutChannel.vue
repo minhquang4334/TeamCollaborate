@@ -1,5 +1,5 @@
 <template>
-    <div id="accordion">
+    <div id="accordion" class="about-channel">
         <div class="p-3">
             <strong>About <span>Channel name</span></strong>
             <a href=""><span class="float-right fas fa-times"></span></a>

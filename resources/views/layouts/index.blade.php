@@ -13,14 +13,7 @@
 
 
     <!-- endinject -->
-
-    <link rel="stylesheet" href="/adminlte/css/materialdesignicons.min.css">
-    {{--<link rel="stylesheet" href="/adminlte/css/simple-line-icons.css">--}}
-    <link rel="stylesheet" href="/adminlte/css/flag-icon.min.css">
-    {{--<link rel="stylesheet" href="/adminlte/css/chartist.min.css" />--}}
-    <link rel="stylesheet" href="/adminlte/css/jquery-jvectormap.css" />
-    <link rel="stylesheet" href="/adminlte/css/style.css">
-    <link rel="shortcut icon" href="/adminlte/images/favicon.png"/>
+    <link rel="stylesheet" href="/adminlte/css/custom.css">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <script>
         window.Laravel = {
@@ -39,16 +32,7 @@
     <!-- plugins:js -->
 
     <script src="{{ mix('js/app.js') }}"></script>
-    <script src="/adminlte/js/popper.min.js"></script>
-    <!-- endinject -->
-    <script src="/adminlte/js/jquery.flot.js"></script>
-    <script src="/adminlte/js/jquery.flot.resize.js"></script>
-    <script src="/adminlte/js/curvedLines.js"></script>
-    <script src="/adminlte/js/off-canvas.js"></script>
-    <script src="/adminlte/js/misc.js"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page-->
-    <script src="/adminlte/js/dashboard.js"></script>
+
 </body>
 
 </html>
