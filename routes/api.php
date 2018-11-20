@@ -43,3 +43,10 @@ Route::group(['namespace' => 'User', 'prefix' => 'user'], function () {
         });
     });
 });
+
+Route::group(['namespace' => 'Api'], function () {
+	Route::group(['middleware' => 'jwt.auth'], function() {
+		Route::get('/emojis', 'EmojiController@index');
+	});
+});
+

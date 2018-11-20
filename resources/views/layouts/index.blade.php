@@ -15,6 +15,9 @@
     <!-- endinject -->
     <link rel="stylesheet" href="/adminlte/css/custom.css">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
+
+
     <script>
         window.Laravel = {
         csrfToken: "{{ csrf_token() }}"
@@ -32,6 +35,8 @@
     <!-- plugins:js -->
 
     <script src="{{ mix('js/app.js') }}"></script>
+
+
 
 </body>
 

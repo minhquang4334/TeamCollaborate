@@ -19,20 +19,6 @@
       compiled() {
         let text = this.text;
 
-        text = text
-          .replace(
-            /(?:^| )(@[A-Za-z0-9\._]+)/gm,
-            ' [$1](https://voten.co/$1)'
-          )
-          .replace(
-            /(?:^| )#([A-Za-z0-9_]+)/gm,
-            ' [#$1](https://voten.co/c/$1)'
-          )
-          .replace(
-            /(?:^| )\/c\/([A-Za-z0-9_]+)/gm,
-            ' [#$1](https://voten.co/c/$1)'
-          );
-
         text = emojione.shortnameToImage(text);
 
         return md.render(text);
