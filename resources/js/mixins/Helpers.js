@@ -4,8 +4,10 @@ export default {
   data() {
     return {
       // Store,
-      meta,
-      auth,
+      meta: {
+        isGuest: !this.$store.state.auth.token
+      },
+      auth : this.$store.state.auth.user,
       Laravel,
       csrf: window.Laravel.csrfToken
     };
@@ -25,36 +27,36 @@ export default {
     //  *
     //  * @return bool
     //  */
-    // isGuest() {
-    //   return meta.isGuest;
-    // },
+    isGuest() {
+      return !this.$store.state.auth.token;
+    },
     //
     // /**
     //  * Is the user an authinticated user
     //  *
     //  * @return bool
     //  */
-    // isLoggedIn() {
-    //   return !meta.isGuest;
-    // },
+    isLoggedIn() {
+      return !isGuest();
+    },
     //
     // /**
     //  * Is visitor browsing via a mobile device
     //  *
     //  * @return bool
     //  */
-    // isMobile() {
-    //   return meta.isMobileDevice;
-    // },
+    isMobile() {
+      return meta.isMobileDevice;
+    },
     //
     // /**
     //  * Is visitor browsing via a desktop device
     //  *
     //  * @return bool
     //  */
-    // isDesktop() {
-    //   return !meta.isMobileDevice;
-    // },
+    isDesktop() {
+      return !meta.isMobileDevice;
+    },
     //
     // /**
     //  * is user a moderator?

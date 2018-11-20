@@ -106,7 +106,7 @@
           return;
         }
 
-        get('/emojis').then((response) => {
+        get('/api/emojis').then((response) => {
           let temp = [];
 
           response.data.forEach((element, index, self) => {

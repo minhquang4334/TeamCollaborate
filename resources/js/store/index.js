@@ -14,16 +14,15 @@ const store = new Vuex.Store({
     accessKey: null,
     user: null,
     notification: null,
-    role: null,
-    cam_paginate: 1,
-    cam_listCampaign: [],
-    kpi_listKPI: [],
-    kpi_paginate: 1,
-    accountId: null,
-    settingPrefs: {},
-    emailContract: null,
-    emailInviteCustomer: null,
-    modals: modals
+    modals: modals,
+    comments: {
+      likes: [],
+    },
+
+    bookmarks: {
+      comments: [],
+    },
+    moderatingAt: [],
   },
 
   getters: {},
@@ -33,12 +32,9 @@ const store = new Vuex.Store({
       state.accessKey = null;
       state.user = null;
       state.notification = null;
-      state.role = null;
-      state.cam_paginate = 1;
-      state.cam_listCampaign = [];
-      state.kpi_listKPI = [];
-      state.kpi_paginate = 1;
-      state.settingPrefs = {};
+      state.comments.likes = [];
+      state.bookmarks.comments = [];
+      state.moderatingAt = [];
     },
   },
   actions: {},

@@ -17,14 +17,21 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+
+@import 'icons/css/fontello.css';
+
 // Style
 @import 'common';
+@import 'progress';
+@import 'messages';
+@import 'emoji';
 @import 'grid';
 @import 'dialog';
 @import "channel";
 @import "form";
 @import "user";
 @import "comment";
+@import "emojione";
 @import "home";
 @import "style";
 
@@ -39,4 +46,9 @@ html, body{
 
 a:hover{
     cursor:pointer;
+}
+
+// top progressbar
+.__cov-progress {
+  box-shadow: rgba(119, 182, 255, 0.7) 0px 0px 10px;
 }
