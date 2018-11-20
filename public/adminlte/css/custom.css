@@ -1,0 +1,15 @@
+html,css{
+    height: 100%;
+}
+
+.message-list, .about-channel, .thread{
+    height: 80%;
+}
+
+.new-message{
+    height: 20%;
+}
+
+.h-90{
+    height: 90%;
+}

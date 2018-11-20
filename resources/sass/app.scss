@@ -25,6 +25,7 @@
 @import "form";
 @import "user";
 @import "comment";
+@import "home";
 @import "style";
 
 html, body{
@@ -36,3 +37,6 @@ html, body{
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
+a:hover{
+    cursor:pointer;
+}

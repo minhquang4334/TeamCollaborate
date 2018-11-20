@@ -11,10 +11,9 @@
 
     <link rel="shortcut icon" href="{{ config('blog.default_icon') }}">
 
-    <link rel="stylesheet" href="css/style.css">
+
     <!-- endinject -->
-    <link rel="shortcut icon" href="images/favicon.png"/>
-    <link rel="stylesheet" href="/css/AdminLTE.min.css"/>
+    <link rel="stylesheet" href="/adminlte/css/custom.css">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <script>
         window.Laravel = {
@@ -30,7 +29,10 @@
     <div id="app"></div>
 
     @include('php-to-js-data')
+    <!-- plugins:js -->
+
     <script src="{{ mix('js/app.js') }}"></script>
+
 </body>
 
 </html>
