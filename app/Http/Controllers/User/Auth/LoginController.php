@@ -37,7 +37,7 @@ class LoginController extends Controller
 
     protected function guard()
     {
-        return Auth::guard('user');
+        return Auth::guard('api');
     }
 
     protected $redirectTo = '/user';
@@ -52,10 +52,11 @@ class LoginController extends Controller
 
     public function authenticate(Request $request)
     {
+    	dd($request);
         $email = $request->email;
         $password = $request->password;
         $remember = $request->has('remember_token') ? true : false;
-        if (Auth::guard('user')->attempt(['email' => $email, 'password' => $password], $remember)) {
+        if ($this->guard()->attempt(['email' => $email, 'password' => $password], $remember)) {
             return redirect()->route('user.home');
         }
         return redirect()->back()->withErrors(['error' => trans('messages.login_failed')]);
