@@ -202,6 +202,7 @@
     },
 
     created() {
+      console.log(Echo);
       this.subscribeToEcho();
       this.$eventHub.$on('edit-comment', this.setEditing);
       this.$eventHub.$on('reply-comment', this.setReplying);

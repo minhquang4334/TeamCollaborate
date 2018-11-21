@@ -142,13 +142,13 @@
       this.loginFacebook()
     },
     beforeMount: function () {
-      $(function () {
-        $('input').iCheck({
-          checkboxClass: 'icheckbox_square-blue',
-          radioClass: 'iradio_square-blue',
-          increaseArea: '20%'
-        });
-      });
+      // $(function () {
+      //   $('input').iCheck({
+      //     checkboxClass: 'icheckbox_square-blue',
+      //     radioClass: 'iradio_square-blue',
+      //     increaseArea: '20%'
+      //   });
+      // });
 
       let classList = document.body.classList;
       while (classList.length > 0) {

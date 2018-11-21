@@ -70,7 +70,7 @@ class OAuthController extends Controller
             }
         }
 
-        $token = Auth::guard('api')->login($user);
+        $token = Auth::guard('api')->login($user, true);
         return view('login-gg-popup', ['token' => $token]);
     }
 
