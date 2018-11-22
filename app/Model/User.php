@@ -77,6 +77,7 @@ class User extends AbstractUser implements JWTSubject, MustVerifyEmail
         return $this->hasMany(React::class, 'user_id');
     }
 
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
