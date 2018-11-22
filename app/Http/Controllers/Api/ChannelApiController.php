@@ -99,7 +99,7 @@ class ChannelApiController extends ApiController
 
     /**
      * Method PUT
-     *
+     * $allow = ['type', 'purpose', 'description', 'channel_id']
      * update channel info
      * UpdateChannelRequest validate Channel information before handle
      * @param UpdateChannelRequest $request
