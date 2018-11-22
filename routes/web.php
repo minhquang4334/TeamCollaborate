@@ -19,9 +19,7 @@ Route::get('/', function () {
 Route::group(['namespace' => 'Admin', 'as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::group(['namespace' => 'Auth', 'middleware' => 'guest'], function () {
         Route::get('login', ['as' => 'login', 'uses' => 'LoginController@showLoginForm']);
-        Route::get('/', function() {
-            return redirect()->route('admin.login');
-        });
+        Route::get('/', 'LoginController@showLoginForm');
         Route::post('login', ['as' => 'login', 'uses' => 'LoginController@authenticate']);
         Route::get('forgot-password', ['as' => 'forgot_password', 'uses' => 'ForgotPasswordController@showLinkRequestForm']);
         Route::post('email', ['as' => 'email', 'uses' => 'ForgotPasswordController@sendResetLinkEmail']);
@@ -34,6 +32,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.', 'prefix' => 'admin'], fu
 
     Route::group(['middleware' => 'admin'], function () {
         Route::get('dashboard',['as' => 'home', 'uses' => 'UserManagerController@index']);
+        Route::get('/', 'UserManagerController@index');
         Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 
         Route::get('users-manager',['as' => 'users-manager', 'uses' => 'UserManagerController@index']);

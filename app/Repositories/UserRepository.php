@@ -29,4 +29,12 @@ class UserRepository {
         $this->update($id,$user->toArray());
         return $status;
     }
+
+    public function takePartInChannels($id){
+        $channels = $this->getById($id)->channels->toArray();
+        $channels = array_filter($channels, function ($channel) {
+            return $channel['status'] == Channel::ACTIVE;
+        });
+        return $channels;
+    }
 }

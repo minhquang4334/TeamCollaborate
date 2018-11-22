@@ -17,7 +17,7 @@ class CreateParticipationsTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('channel_id');
-            $table->integer('display_name');
+            $table->string('display_name');
             $table->tinyInteger('status')->default(1)->comment('1: active, 0:inactive');
             $table->timestamps();
         });
