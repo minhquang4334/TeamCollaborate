@@ -110,7 +110,7 @@
     methods: {
       close() {
         this.$router.push({
-          name: 'PageNotFound'
+          name: 'homeIndex'
         })
       },
 

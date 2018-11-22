@@ -1,5 +1,5 @@
 <template>
-    <div class="row p-3 h-90">
+    <div class="row p-3 h-100">
         <div class="col-md-8 h-100 border-right">
             <message-list :listMessages="listMessages"/>
             <comment-form @postComment="addNewComment"/>

@@ -1,7 +1,7 @@
 <template>
-    <div class="d-md-block d-none col-md-2 bg-dark px-3 text-white">
+    <div class="d-md-block d-none col-md-2 bg-side-bar px-3 text-white">
         <a class="navbar-brand px-3" href="#">
-            <h3>Team Collaborate</h3>
+            <h3 class="title">ASK60</h3>
         </a>
         <ul class="nav flex-column">
             <li class="nav-item nav-category">
@@ -9,7 +9,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="index.html">
-                    <span class="menu-title">channel 1</span>
+                    <span class="menu-title">Channel 1</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -54,3 +54,9 @@
         },
     }
 </script>
+<style scoped>
+    .title {
+        font-weight: bold;
+        color: #fff;
+    }
+    </style>
