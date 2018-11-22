@@ -1,7 +1,7 @@
 <template>
     <div class="login-homepage-form">
         <div class="container">
-            <div class="content-login col-md-4 m-auto col-sm-8 ">
+            <div class="content-login col-md-5 m-auto col-sm-8">
                 <div class="logo-left">
                     <img src="/images/logo.jpg" class="size-img">
                 </div>

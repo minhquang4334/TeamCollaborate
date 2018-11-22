@@ -8,10 +8,10 @@ return [
     'collaborate_title' => 'Team Collaborate',
 
     // Default Avatar
-    'default_avatar' => env('DEFAULT_AVATAR') ?: '/images/icon.jpg',
+    'default_avatar' => env('DEFAULT_AVATAR') ?: '/images/logo.jpg',
 
     // Default Icon
-    'default_icon' => env('DEFAULT_ICON') ?: '/images/icon.jpg',
+    'default_icon' => env('DEFAULT_ICON') ?: '/images/logo.jpg',
 
     // Color Theme
     'color_theme' => 'default-theme',
