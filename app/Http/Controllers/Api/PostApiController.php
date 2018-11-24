@@ -43,15 +43,19 @@ class PostApiController extends ApiController
 
     /**
      * add new thread in specific channel
+     * store file
      * check in thread has tagged user, handle this
      * return new thread information
      */
-    public function add() {
+    public function store() {
 
     }
 
     /**
+     *
      * destroy a thread
+     * remove file in thread
+     * remove tagged user in thread
      * return true if success, else return false
      */
     public function destroy() {

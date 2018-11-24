@@ -34,5 +34,4 @@ class SendUserNotification
             $user->notify(new TestNotification($subUser->token));
         }
     }
-
 }

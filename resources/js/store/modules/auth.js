@@ -1,5 +1,5 @@
 import Axios from 'axios'
-
+import {post} from '../../helper/request'
 const types = {
   LOGOUT: 'LOGOUT',
   SAVE_TOKEN: 'SAVE_TOKEN',
@@ -70,7 +70,7 @@ const auth = {
 
     logout({commit, state}) {
       return new Promise((resolve, reject) => {
-        Axios.post(`/api/user/auth/logout`, {token: state.token})
+        post(`/api/user/auth/logout`)
           .then(() => {
             commit(types.LOGOUT);
             resolve();
