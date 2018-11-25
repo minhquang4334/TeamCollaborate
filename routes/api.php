@@ -62,5 +62,11 @@ Route::group(['namespace' => 'Api'], function () {
             Route::get('users', 'UserApiController@getListUserInChannel');
             Route::put('change-name', 'UserApiController@changeDisplayName');
         });
+        Route::group(['prefix' => 'post', 'as' => 'post'], function (){
+            Route::post('add', 'PostApiController@add');
+            Route::get('list', 'PostApiController@getList');
+            Route::put('update', 'PostApiController@update');
+            Route::delete('destroy', 'PostApiController@destroy');
+        });
 	});
 });

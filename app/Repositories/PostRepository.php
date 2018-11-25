@@ -24,4 +24,8 @@ class PostRepository {
         $this->model = $post;
     }
 
+    public function list($channelId, $number, $limit = 10, $sort = 'desc', $sortColumn = 'created_at'){
+        return $this->model->where('channel_id', $channelId)->limit($limit)->offset($number)->orderBy($sortColumn, $sort)->get();
+    }
+
 }
