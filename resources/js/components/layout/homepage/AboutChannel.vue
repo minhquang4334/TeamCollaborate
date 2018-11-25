@@ -36,7 +36,12 @@
                         <button type="button" class="list-group-item list-group-item-action">Member 4</button>
                         <button type="button" class="list-group-item list-group-item-action">Member 5</button>
                     </div>
-                    <a href="">Invite</a>
+                    <a class="dropdown-item mt-3" data-toggle="modal" data-target="#inviteModal">
+                        <p>
+                            <span class="fas fa-hand-holding-heart mr-2"></span>
+                            Invite
+                        </p>
+                    </a>
                 </div>
             </div>
         </div>
