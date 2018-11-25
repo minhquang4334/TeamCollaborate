@@ -9,6 +9,10 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * Class ChannelWasDeleted
+ * @package App\Events
+ */
 class ChannelWasDeleted implements ShouldBroadcast
 {
 	use Dispatchable, InteractsWithSockets, SerializesModels;
