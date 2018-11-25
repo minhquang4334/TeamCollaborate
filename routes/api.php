@@ -54,5 +54,13 @@ Route::group(['namespace' => 'Api'], function () {
             Route::delete('destroy', 'ChannelApiController@destroy');
             Route::get('invite', 'ChannelApiController@invite');
         });
+        Route::group(['prefix' =>'user', 'as' => 'user-info'], function (){
+            Route::put('update', 'UserApiController@editInfo');
+            Route::put('change-password', 'UserApiController@changePassword');
+            Route::get('list', 'UserApiController@getListUser');
+            Route::delete('delete', 'UserApiController@deleteAccount');
+            Route::get('users', 'UserApiController@getListUserInChannel');
+            Route::put('change-name', 'UserApiController@changeDisplayName');
+        });
 	});
 });
