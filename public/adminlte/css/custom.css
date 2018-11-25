@@ -13,3 +13,40 @@ html,css{
 .h-90{
     height: 90%;
 }
+
+.el-textarea > textarea{
+    max-height: 43px !important;
+}
+
+.nav-link:hover{
+    background-color: #5685ff;
+}
+
+.nav-item.active{
+    background-color:#5685ff;
+}
+.active .menu-title{
+    color:white;
+    font-weight: bold;
+}
+
+@media (max-width: 767.98px) {
+    .navbar-collapse{
+        background-color:#2b2e96 !important;
+    }
+
+    .nav-link{
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+    .nav-category *{
+        color: white !important;
+    }
+    .searchForm input{
+        width: 80%;
+    }
+    .searchForm button{
+        width: 20%;
+    }
+}
+
