@@ -107,6 +107,9 @@ class User extends AbstractUser implements JWTSubject, MustVerifyEmail
             'user_first_id', 'user_second_id');
     }
 
+    public function follows() {
+    	return $this->hasMany(Follow::class, 'user_id');
+    }
     /**
      * @return array
      */
