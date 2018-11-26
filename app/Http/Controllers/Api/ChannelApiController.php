@@ -37,7 +37,7 @@ class ChannelApiController extends ApiController
         try{
             $channel = $this->channel->store(array_merge($request->all(), [
                 'creator' => $this->currentUser()->id,
-                'status'  => 1,
+                'status'  => Channel::ACTIVE,
             ]));
             return response()->json(['status' => true, 'data' => $channel], self::CODE_CREATE_SUCCESS);
         }catch (\Exception $e){
