@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('BROADCAST_DRIVER', 'null'),
+    'default' => env('BROADCAST_DRIVER', 'log'),
 
     /*
     |--------------------------------------------------------------------------
@@ -28,7 +28,33 @@ return [
     |
     */
 
-    'connections' => [
+	/*
+	|--------------------------------------------------------------------------
+	| Broadcast service
+	|--------------------------------------------------------------------------
+	|
+	| The service used for broadcasting needs. While Pusher is recommented
+	| for development, Voten uses a custom echo service runned on our own
+	| server. More info: "github.com/tlaverdure/laravel-echo-server"
+	|
+	| Supported: "pusher", "echo"
+	|
+	 */
+
+	'service' => env('BROADCAST_SERVICE', 'pusher'),
+
+	/*
+	|--------------------------------------------------------------------------
+	| Broadcast Connections
+	|--------------------------------------------------------------------------
+	|
+	| Here you may define all of the broadcast connections that will be used
+	| to broadcast events to other systems or over websockets. Samples of
+	| each available type of connection are provided inside this array.
+	|
+	 */
+
+	'connections' => [
 
         'pusher' => [
             'driver' => 'pusher',

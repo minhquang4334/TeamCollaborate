@@ -79,6 +79,7 @@ class PostApiController extends ApiController
      * Method post
      * @usage http://localhost:8000/api/post/list?channel_id=1&content=hello%20everyone
      * add new thread in specific channel
+     * store file
      * check in thread has tagged user, handle this
      * return new thread information
      * @param Request $request
@@ -108,6 +109,8 @@ class PostApiController extends ApiController
      * Method delete
      * @usage http://localhost:8000/api/post/destroy?id=1
      * destroy a thread
+     * remove file in thread
+     * remove tagged user in thread
      * return true if success, else return false
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse

@@ -7,19 +7,23 @@
                 <container/>
             </div>
         </div>
-    </div>
 
+        <invite/>
+
+    </div>
 
 </template>
 <script>
     import headBar from "./Header.vue"
     import container from "./Container.vue"
     import leftBar from "./LeftBar.vue"
+    import invite from "./InVite.vue"
     export default {
         components:{
             leftBar,
             headBar,
-            container
+            container,
+            invite
         }
     }
 </script>

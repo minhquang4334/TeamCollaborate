@@ -40,4 +40,8 @@ class Post extends Model
     public function parent() {
         return $this->belongsTo(Post::class, 'parent_id');
     }
+
+    public function follows() {
+		return $this->hasMany(Follow::class, 'post_id');
+    }
 }
