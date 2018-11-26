@@ -27,7 +27,7 @@ class ChannelApiController extends ApiController
 
     /**
      * Method POST
-     * usage: http://localhost:8000/api/channel/create?token={{jwt}}&type=1&purpose=For study&description=This is my Foa&channel_id=hahha
+     * usage: http://localhost:8000/api/channel/create?type=1&purpose=For study&description=This is my Foa&channel_id=hahha
      * add new channel
      * return new channel information if success, else return error message
      * @param CreateChannelRequest $request
@@ -47,7 +47,7 @@ class ChannelApiController extends ApiController
 
     /**
      * Method GET
-     * usage: http://localhost:8000/api/channel/info?token={{jwt}}&id=1
+     * usage: http://localhost:8000/api/channel/info?id=1
      * get channel information
      * request has channel_id
      * @param Request $request
@@ -64,7 +64,7 @@ class ChannelApiController extends ApiController
 
     /**
      * Method GEt
-     * usage: http://localhost:8000/api/channel/my?token={{jwt}}
+     * usage: http://localhost:8000/api/channel/my
      * get list channel of current user
      * return list channel of current user. except channel blocked
      * @return \Illuminate\Http\JsonResponse
@@ -80,7 +80,7 @@ class ChannelApiController extends ApiController
 
     /**
      * Method GET
-     * usage: http://localhost:8000/api/channel/list?token={{jwt}}&search_name=2ccd
+     * usage: http://localhost:8000/api/channel/list?search_name=2ccd
      * get List Channel
      * if request has 'search_name' return list channel has name like *search_name* else return list all channel
      * @param Request $request
@@ -98,6 +98,7 @@ class ChannelApiController extends ApiController
 
     /**
      * Method PUT
+     * usage: http://localhost:8000/api/channel/update
      * $allow = ['type', 'purpose', 'description', 'channel_id']
      * update channel info
      * UpdateChannelRequest validate Channel information before handle
@@ -124,7 +125,7 @@ class ChannelApiController extends ApiController
 
     /**
      * Method DELETE
-     * usage http://localhost:8000/api/channel/destroy?token={{jwt}}&id=14
+     * usage http://localhost:8000/api/channel/destroy?id=14
      * destroy channel
      * request has channel_id
      * require check permission of current user
@@ -149,6 +150,7 @@ class ChannelApiController extends ApiController
 
     /**
      * Method GET
+     * usage: http://localhost:8000/api/channel/invite
      * invite a user to specific channel
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
