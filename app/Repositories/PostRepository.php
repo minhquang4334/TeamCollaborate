@@ -32,7 +32,7 @@ class PostRepository {
 
     public function addFollower($post_id, $user_id){
         $follow = new Follow();
-        if($follow->where('post_id', $post_id)->where('user_id', $user_id)->count() == 0) {
+        if($this->getById($post_id)->is_parent && $follow->where('post_id', $post_id)->where('user_id', $user_id)->count() == 0) {
             $follow->fill(['post_id' => $post_id,
                 'user_id' => $user_id]);
             $follow->save();

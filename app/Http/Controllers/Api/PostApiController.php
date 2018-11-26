@@ -81,7 +81,7 @@ class PostApiController extends ApiController
 
     /**
      * Method post
-     * @usage http://localhost:8000/api/post/list?channel_id=1&content=hello%20everyone
+     * @usage http://localhost:8000/api/post/add?channel_id=2&content=hahahaha&tag_users = ['1', '2', '3']
      * add new thread in specific channel
      * store file
      * check in thread has tagged user, handle this
@@ -100,6 +100,10 @@ class PostApiController extends ApiController
                     'creator' => $this->currentUser()->id,
                     'status' => Post::ACTIVE,
                 ]));
+                $tag_users = $request->get('tag_users');
+                foreach ($tag_users as $u){
+                    $this->post->addFollower($post->id, $u);
+                }
                 return response()->json(['status' => true, 'data' => $post], self::CODE_CREATE_SUCCESS);
             }else{
                     return response()->json(['status' => false, 'data' => trans('messages.user.not_in_channel')], self::CODE_UNAUTHORIZED);
