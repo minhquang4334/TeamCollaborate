@@ -31,10 +31,10 @@ class UserApiController extends ApiController
      *  METHOD PUT
      * usage http://localhost:8000/api/user/update?is_teacher=1&facebook_url=http://f.....
      * $allow =  ['university','status','phone_number','name',
-                'japanese_level','japanese_certificate',
-                'is_teacher','is_bachelor','grade','gender',
-                'facebook_url','email_verified_at','email','birthday',
-                'avatar','address','about_me',];
+     *           'japanese_level','japanese_certificate',
+     *           'is_teacher','is_bachelor','grade','gender',
+     *           'facebook_url','email_verified_at','email','birthday',
+     *           'avatar','address','about_me',];
      *
      * edit user information.
      * EditInfoRequest validate request before handle
