@@ -12,7 +12,6 @@ class PostsTableSeeder extends Seeder
     public function run()
     {
         DB::table('posts')->insert([
-            'post_id' => '1',
             'content' => 'hello',
             'is_parent' => 1,
             'channel_id' => '1',
@@ -22,7 +21,6 @@ class PostsTableSeeder extends Seeder
         ]);
 
         DB::table('posts')->insert([
-            'post_id' => '2',
             'content' => 'hello1',
             'is_parent' => 0,
             'channel_id' => '1',
@@ -32,7 +30,6 @@ class PostsTableSeeder extends Seeder
         ]);
 
         DB::table('posts')->insert([
-            'post_id' => '3x',
             'content' => 'idiot',
             'is_parent' => 1,
             'channel_id' => '2',

@@ -3,25 +3,29 @@
 namespace App\Http\Controllers\Api;
 
 use App\Model\Post;
+use App\Model\Report;
 use App\Repositories\ChannelRepository;
 use App\Repositories\PostRepository;
+use App\Repositories\ReportRepository;
 use Illuminate\Http\Request;
 
 class PostApiController extends ApiController
 {
     protected $post;
     protected $channel;
+    protected $report;
     protected $number_post_limit;
     /**
      * PostApiController constructor.
      * @param PostRepository $post
      * @param ChannelRepository $channel
      */
-    public function __construct(PostRepository $post, ChannelRepository $channel)
+    public function __construct(PostRepository $post, ChannelRepository $channel, ReportRepository $report)
     {
         parent::__construct();
         $this->post = $post;
         $this->channel = $channel;
+        $this->report = $report;
     }
 
     /**
@@ -77,7 +81,7 @@ class PostApiController extends ApiController
 
     /**
      * Method post
-     * @usage http://localhost:8000/api/post/list?channel_id=1&content=hello%20everyone
+     * @usage http://localhost:8000/api/post/add?channel_id=2&content=hahahaha&tag_users = ['1', '2', '3']
      * add new thread in specific channel
      * store file
      * check in thread has tagged user, handle this
@@ -96,6 +100,10 @@ class PostApiController extends ApiController
                     'creator' => $this->currentUser()->id,
                     'status' => Post::ACTIVE,
                 ]));
+                $tag_users = $request->get('tag_users');
+                foreach ($tag_users as $u){
+                    $this->post->addFollower($post->id, $u);
+                }
                 return response()->json(['status' => true, 'data' => $post], self::CODE_CREATE_SUCCESS);
             }else{
                     return response()->json(['status' => false, 'data' => trans('messages.user.not_in_channel')], self::CODE_UNAUTHORIZED);
@@ -131,15 +139,54 @@ class PostApiController extends ApiController
     }
 
     /**
+     * @Method PUT
+     * @usage http://localhost:8000/api/post/follow?post_id=2&user_id=2
      * unfollow a thread
      * return true if success, else return false and message
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function unFollow() {
+    public function follow(Request $request) {
+        try {
+            $userId = $request->get('user_id');
+            $postId = $request->get('post_id');
+            $follow = $this->post->addFollower($postId, $userId);
+            if(!empty($follow)) {
+                return response()->json(['status' => true, 'data' => $follow], self::CODE_CREATE_SUCCESS);
+            }else{
+                return response()->json(['status' => true, 'data' => trans('messages.user.not_follow')], self::CODE_INTERNAL_ERROR);
+            }
+        }catch (\Exception $e){
+            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
+        }
+    }
 
+
+    /**
+     * @Method delete
+     * @usage http://localhost:8000/api/post/unfollow?post_id=2&user_id=2
+     * unfollow a thread
+     * return true if success, else return false and message
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function unFollow(Request $request) {
+        try {
+            $userId = $request->get('user_id');
+            $postId = $request->get('post_id');
+            $follow = $this->post->removeFollower($postId, $userId);
+            if(!empty($follow)) {
+                return response()->json(['status' => true, 'data' => $follow], self::CODE_DELETE_SUCCESS);
+            }else{
+                return response()->json(['status' => true, 'data' => trans('messages.user.not_follow')], self::CODE_INTERNAL_ERROR);
+            }
+        }catch (\Exception $e){
+            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
+        }
     }
 
     /**
-     * MEthod PUT
+     * @Method PUT
      * @usage http://localhost:8000/api/post/pin?post_id=9
      * pin a thread to a channel
      * return true if success, else return false
@@ -191,11 +238,23 @@ class PostApiController extends ApiController
     }
 
     /**
+     * @Method post
+     * @usage http://localhost:8000/api/post/report?post_id=2&channel_id=1&description=Taji no ngu
      * report a thread
      * return report information
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function report() {
-
+    public function report(Request $request) {
+        try{
+            $report = $this->report->store(array_merge($request->all(), [
+                'report_creator_id' => $this->currentUser()->id,
+                'status' => Report::YET,
+            ]));
+            return response()->json(['status' => true, 'data' => $report], self::CODE_UPDATE_SUCCESS);
+        }catch (\Exception $e){
+            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+        }
     }
 
 }
