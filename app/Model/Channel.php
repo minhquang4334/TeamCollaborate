@@ -31,6 +31,10 @@ class Channel extends Model
         return $this->hasMany(Post::class, 'channel_id');
     }
 
+    public function pinned(){
+        return $this->posts()->where('type', Post::PINNED)->get();
+    }
+
     public function unreads() {
         return $this->hasMany(Unread::class, 'channel_id');
     }

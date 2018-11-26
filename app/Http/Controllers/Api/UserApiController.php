@@ -8,7 +8,6 @@ use App\Http\Requests\User\EditInfoRequest;
 use App\Repositories\ChannelRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
@@ -32,10 +31,10 @@ class UserApiController extends ApiController
      *  METHOD PUT
      * usage http://localhost:8000/api/user/update?is_teacher=1&facebook_url=http://f.....
      * $allow =  ['university','status','phone_number','name',
-     *      'japanese_level','japanese_certificate',
-     *      'is_teacher','is_bachelor','id','grade','gender',
-     *      'facebook_url','email_verified_at','email','birthday',
-     *      'avatar','address','active','about_me',];
+                'japanese_level','japanese_certificate',
+                'is_teacher','is_bachelor','grade','gender',
+                'facebook_url','email_verified_at','email','birthday',
+                'avatar','address','about_me',];
      *
      * edit user information.
      * EditInfoRequest validate request before handle
@@ -47,11 +46,11 @@ class UserApiController extends ApiController
     public function editInfo(EditInfoRequest $request) {
        $allow =  ['university','status','phone_number','name',
                     'japanese_level','japanese_certificate',
-                    'is_teacher','is_bachelor','id','grade','gender',
+                    'is_teacher','is_bachelor','grade','gender',
                     'facebook_url','email_verified_at','email','birthday',
-                    'avatar','address','active','about_me',];
+                    'avatar','address','about_me',];
        try{
-            $id = Auth::guard('api')->user()->id;
+            $id = $this->currentUser()->id;
             $updateInput = array_filter(array_intersect_key($request->all(), array_flip($allow) ));
             $success = $this->user->updateColumn($id, $updateInput);
             if($success){
@@ -81,7 +80,7 @@ class UserApiController extends ApiController
      */
     public function changePassword(ChangePasswordRequest $request) {
         try{
-            $id = Auth::guard('api')->user()->id;
+            $id = $this->currentUser()->id;
             $user = $this->user->getById($id);
             $success = false;
             if(Hash::check($request->get('old_password'), $user->password)){
@@ -116,12 +115,12 @@ class UserApiController extends ApiController
     /**
      * usage http://localhost:8000/api/user/delete
      * delete Current User Account
-     * use Auth::guard('api')->user() to get current user
+     * use $this->currentUser() to get current user
      * @return JsonResponse
      */
     public function deleteAccount() {
         try{
-            $id = Auth::guard('api')->user()->id;
+            $id = $this->currentUser()->id;
             $success = $this->user->destroy($id);
             return response()->json(['status' => true, 'data' => $success,], self::CODE_DELETE_SUCCESS);
         }catch (\Exception $e){
@@ -161,12 +160,12 @@ class UserApiController extends ApiController
             $channelId = $request->get('channel_id');
             $name   = $request->get('display_name');
             $channel = $this->channel->getById($channelId);
-            $user = Auth::guard('api')->user();
+            $user = $this->currentUser();
             if($user->channels->contains($channel)) {
                 $user->channels()->sync([$channelId => ['display_name' => $name]]);
                 return response()->json(['status' => true, 'data' => $user], self::CODE_UPDATE_SUCCESS);
             }else{
-                return response()->json(['status' => false, 'data' => 'You not in this channel'], self::CODE_UNAUTHORIZED);
+                return response()->json(['status' => false, 'data' => trans('messages.user.not_in_channel')], self::CODE_UNAUTHORIZED);
             }
         }catch (\Exception $e){
             return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);

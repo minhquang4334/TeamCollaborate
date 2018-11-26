@@ -14,7 +14,7 @@ class Post extends Model
 
     protected $fillable = [
       'content', 'is_parent', 'channel_id', 'parent_id',
-        'creator', 'user_following_post', 'status', 'post_id', 'type'
+        'creator', 'user_following_post', 'status', 'type'
     ];
 
     public function files() {

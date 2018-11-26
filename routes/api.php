@@ -67,6 +67,9 @@ Route::group(['namespace' => 'Api'], function () {
             Route::get('list', 'PostApiController@getList');
             Route::put('update', 'PostApiController@update');
             Route::delete('destroy', 'PostApiController@destroy');
+            Route::put('pin', 'PostApiController@pin');
+            Route::get('pinned', 'PostApiController@getPinned');
+            Route::put('unfollow', 'PostApiController@unFollow');
         });
 	});
 });
