@@ -13,3 +13,5 @@ Homestead.yaml
 npm-debug.log
 .DS_Store
 .rnd
+/public/admin/css/app.css
+/public/admin/css/app.js

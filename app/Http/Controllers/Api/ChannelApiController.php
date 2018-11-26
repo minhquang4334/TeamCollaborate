@@ -7,7 +7,6 @@ use App\Http\Requests\User\UpdateChannelRequest;
 use App\Model\Channel;
 use App\Repositories\ChannelRepository;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 class ChannelApiController extends ApiController
 {
@@ -37,7 +36,7 @@ class ChannelApiController extends ApiController
     public function create(CreateChannelRequest $request) {
         try{
             $channel = $this->channel->store(array_merge($request->all(), [
-                'creator' => Auth::guard('api')->user()->id,
+                'creator' => $this->currentUser()->id,
                 'status'  => Channel::ACTIVE,
             ]));
             return response()->json(['status' => true, 'data' => $channel], self::CODE_CREATE_SUCCESS);
@@ -55,12 +54,12 @@ class ChannelApiController extends ApiController
      * @return \Illuminate\Http\JsonResponse :list all channels
      */
     public function getChannelInfo(Request $request) {
-            try{
-                $channel = $this->channel->getById($request->get('id'));
-                return response()->json(['status' => true, 'data' => $channel], self::CODE_GET_SUCCESS);
-            }catch (\Exception $e){
-                return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
-            }
+        try{
+            $channel = $this->channel->getById($request->get('id'));
+            return response()->json(['status' => true, 'data' => $channel], self::CODE_GET_SUCCESS);
+        }catch (\Exception $e){
+            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+        }
     }
 
     /**
@@ -72,7 +71,7 @@ class ChannelApiController extends ApiController
      */
     public function getListChannelOfUser() {
         try {
-            $channels = $this->user->takePartInChannels(Auth::guard('api')->user()->id);
+            $channels = $this->user->takePartInChannels($this->currentUser()->id);
             return response()->json(['status' => true, 'data' => $channels], self::CODE_GET_SUCCESS);
         }catch (\Exception $e){
             return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
@@ -110,14 +109,14 @@ class ChannelApiController extends ApiController
         try{
             $id = $request->get('id');
             $channel = $this->channel->getById($id);
-            if($channel->creator == Auth::guard('api')->user()->id) {
+            if($channel->creator == $this->currentUser()->id) {
                 $allow = ['type', 'purpose', 'description', 'channel_id'];
                 $update = array_filter(array_intersect_key($request->all(), array_flip($allow)));
                 $success = $this->channel->updateColumn($id, $update);
                 $channel = $this->channel->getById($id);
                 return response()->json(['status' => $success, 'data' => $channel], self::CODE_UPDATE_SUCCESS);
             }else{
-                return response()->json(['status' => false, 'data' => 'Permission deny'], self::CODE_METHOD_NOT_ALLOWED);
+                return response()->json(['status' => false, 'data' => trans('messages.user.permission_deny')], self::CODE_METHOD_NOT_ALLOWED);
             }
         }catch (\Exception $e){
             return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
@@ -138,11 +137,11 @@ class ChannelApiController extends ApiController
         try{
             $id = $request->get('id');
             $channel = $this->channel->getById($id);
-            if($channel->creator == Auth::guard('api')->user()->id) {
+            if($channel->creator == $this->currentUser()->id) {
                 $success = $this->channel->destroy($id);
-                return response()->json(['status' => $success, 'data' => $channel], self::CODE_UPDATE_SUCCESS);
+                return response()->json(['status' => $success, 'data' => $channel], self::CODE_DELETE_SUCCESS);
             }else{
-                return response()->json(['status' => false, 'data' => 'Permission deny'], self::CODE_METHOD_NOT_ALLOWED);
+                return response()->json(['status' => false, 'data' => trans('messages.user.permission_deny')], self::CODE_METHOD_NOT_ALLOWED);
             }
         }catch (\Exception $e){
             return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
@@ -157,19 +156,19 @@ class ChannelApiController extends ApiController
      * @return \Illuminate\Http\JsonResponse
      */
     public function invite(Request $request) {
-            try{
-                $channelId = $request->get('channel_id');
-                $userId = $request->get('user_id');
-                $channel = $this->channel->getById($channelId);
-                if(Auth::guard('api')->user()->channels->contains($channel)){
-                    $user = $this->user->getById($userId);
-                    $channel->users()->attach($userId, ['display_name' => $user->name, 'status' => 0 ]);
-                    return response()->json(['status' => true, 'data' => $channel], self::CODE_UPDATE_SUCCESS);
-                }else{
-                    return response()->json(['status' => false, 'data' => 'Permission deny'], self::CODE_METHOD_NOT_ALLOWED);
-                }
-            }catch (\Exception $e){
-                return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+        try{
+            $channelId = $request->get('channel_id');
+            $userId = $request->get('user_id');
+            $channel = $this->channel->getById($channelId);
+            if($this->currentUser()->channels->contains($channel)){
+                $user = $this->user->getById($userId);
+                $channel->users()->attach($userId, ['display_name' => $user->name, 'status' => Channel::ACTIVE ]);
+                return response()->json(['status' => true, 'data' => $channel], self::CODE_UPDATE_SUCCESS);
+            }else{
+                return response()->json(['status' => false, 'data' => trans('messages.user.permission_deny')], self::CODE_METHOD_NOT_ALLOWED);
             }
+        }catch (\Exception $e){
+            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+        }
     }
 }

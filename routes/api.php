@@ -54,5 +54,22 @@ Route::group(['namespace' => 'Api'], function () {
             Route::delete('destroy', 'ChannelApiController@destroy');
             Route::get('invite', 'ChannelApiController@invite');
         });
+        Route::group(['prefix' =>'user', 'as' => 'user-info'], function (){
+            Route::put('update', 'UserApiController@editInfo');
+            Route::put('change-password', 'UserApiController@changePassword');
+            Route::get('list', 'UserApiController@getListUser');
+            Route::delete('delete', 'UserApiController@deleteAccount');
+            Route::get('users', 'UserApiController@getListUserInChannel');
+            Route::put('change-name', 'UserApiController@changeDisplayName');
+        });
+        Route::group(['prefix' => 'post', 'as' => 'post'], function (){
+            Route::post('add', 'PostApiController@add');
+            Route::get('list', 'PostApiController@getList');
+            Route::put('update', 'PostApiController@update');
+            Route::delete('destroy', 'PostApiController@destroy');
+            Route::put('pin', 'PostApiController@pin');
+            Route::get('pinned', 'PostApiController@getPinned');
+            Route::put('unfollow', 'PostApiController@unFollow');
+        });
 	});
 });

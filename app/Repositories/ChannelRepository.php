@@ -34,9 +34,6 @@ class ChannelRepository {
         return $this->model->where('channel_id', $id)->first();
     }
 
-    public function getByLike($field, $val){
-        return $this->model->where($field, 'like', '%' . $val . '%');
-    }
     public function searchByName($name){
         return $this->getByLike('channel_id', $name)->get();
     }
