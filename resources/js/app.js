@@ -19,6 +19,7 @@ import {HasError, AlertError, AlertSuccess} from 'vform'
 import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
 import VueProgressBar from 'vue-progressbar';
+import 'vue-multiselect/dist/vue-multiselect.min.css'
 
 import LocalStorage from './plugins/local-storage';
 import infiniteScroll from 'vue-infinite-scroll';
