@@ -1,6 +1,6 @@
 <template>
-    <div class="modal fade">
-        <div class="modal-dialog" id="inviteModal">
+    <div class="modal fade" id="inviteModal" ref="inviteModals">
+        <div class="modal-dialog">
             <div class="modal-content">
 
                 <!-- Modal Header -->
@@ -15,7 +15,7 @@
                 <div class="modal-body">
                     <div class="d-flex flex-row">
                         <div class="p-2 bd-highlight">
-                            <input type="radio" v-model="inviteSelect" value="'to channel'" checked>
+                            <input type="radio" value="toChannel" v-model="inviteSelect">
                         </div>
                         <div class="p-2 bd-highlight">
                             <strong>Invite to this channel</strong>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="d-flex flex-row">
                         <div class="p-2 bd-highlight">
-                            <input type="radio" v-model="inviteSelect" value="'to app'">
+                            <input type="radio"  value="toApp" v-model="inviteSelect">
                         </div>
                         <div class="p-2 bd-highlight">
                             <strong>Create new channel</strong>
@@ -37,8 +37,8 @@
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <!--<button type="button" class="btn btn-primary" id="inviteBtn">Next <i class="fas fa-arrow-right"></i></button>-->
-                    <button @click.prevent="nextStep">Next</button>
+                    <button type="button" class="btn btn-primary" @click.prevent="nextStep"">Next <i class="fas fa-arrow-right"></i></button>
+
                 </div>
 
             </div>
@@ -49,6 +49,9 @@
 <script>
     export default {
         data() {
+            return {
+                inviteSelect: 'toChannel'
+            }
         },
 
         components: {
@@ -57,7 +60,13 @@
 
         methods: {
             nextStep(){
-                alert("ok");
+                if(this.inviteSelect === "toChannel") {
+                    this.$router.push({name:'invite'});
+                }
+                else{
+                    this.$router.push({name:'channel'});
+                }
+                $("#inviteModal").modal('hide');
             }
         }
     }

@@ -9,10 +9,10 @@ class CreateChannelRequest extends JsonFormRequest
     public function rules()
     {
         return [
-            'channel_id'    => 'required|unique:channels,channel_id',
+        	'name'          => 'required|max:22',
             'purpose'       => 'required',
-            'description'   => 'required',
-            'type'          => 'required|integer|between:0,1',
+            'description'   => 'nullable',
+            'type'          => 'nullable|integer|between:0,1',
         ];
     }
 }

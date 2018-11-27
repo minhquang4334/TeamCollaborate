@@ -51,14 +51,44 @@
 
 </template>
 <script>
-    export default {
-        methods: {
-            newchannel: function () {
-                this.$router.push({ name: 'channel' });
-            },
+  import {get} from '../../../helper/request'
 
-        },
-    }
+  export default {
+    name: 'LeftBar',
+    data() {
+      return {
+        listChannels: [],
+        listDirectUsers: []
+      }
+    },
+
+    created() {
+      this.getListChannel();
+    },
+
+    methods: {
+      newchannel: function () {
+        this.$router.push({ name: 'channel' });
+      },
+
+      getListChannel() {
+        let url = '/api/channel/my'
+        get(url).then(({data}) => {
+          console.log(data);
+          this.listChannels = data;
+        }).catch(err => {
+
+        })
+      },
+
+      getListDirectMessage() {
+
+      }
+
+
+
+    },
+  }
 </script>
 <style scoped>
     .title {
