@@ -116,4 +116,15 @@ trait BaseRepository
 
         return $model;
     }
+
+    /**
+     * Search by a keyword in a field
+     *
+     * @param $field
+     * @param $val
+     * @return mixed
+     */
+    public function getByLike($field, $val){
+        return $this->model->where($field, 'like', '%' . $val . '%');
+    }
 }

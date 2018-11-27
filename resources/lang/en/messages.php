@@ -14,5 +14,8 @@ return [
         'student_post_answer_success' => 'Trả lời bài tập thành công',
         'not_verified' => 'Chưa xác thực email',
         'not_login' => 'Bạn chưa đăng nhập',
+        'not_in_channel' => 'Bạn không nằm trong channel này',
+        'permission_deny' => 'Bạn không có quyền thực hiện thao tác này',
+        'not_follow' => 'Bạn không theo dõi bài đăng này',
     ],
 ];

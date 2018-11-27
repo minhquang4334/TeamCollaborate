@@ -14,7 +14,7 @@ class Post extends Model
 
     protected $fillable = [
       'content', 'is_parent', 'channel_id', 'parent_id',
-        'creator', 'user_following_post', 'status', 'post_id', 'type'
+        'creator', 'user_following_post', 'status', 'type'
     ];
 
     public function files() {
@@ -40,4 +40,9 @@ class Post extends Model
     public function parent() {
         return $this->belongsTo(Post::class, 'parent_id');
     }
+
+    public function followers() {
+		return $this->hasMany(Follow::class, 'post_id');
+    }
+
 }
