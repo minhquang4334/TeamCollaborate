@@ -2,7 +2,6 @@
     <div id="accordion" class="about-channel overflow-auto">
         <div class="p-3">
             <strong>About <span>Channel name</span></strong>
-            <a href=""><span class="float-right fas fa-times"></span></a>
         </div>
         <div class="card">
             <div class="card-header">
