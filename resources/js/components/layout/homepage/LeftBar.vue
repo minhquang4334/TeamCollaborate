@@ -3,7 +3,7 @@
         <a class="navbar-brand px-3" href="#">
             <h3 class="title">ASK60</h3>
         </a>
-        <ul class="nav flex-column">
+        <ul class="menu nav flex-column">
             <li class="nav-item nav-category">
                 <a class="nav-link" style="cursor:pointer" @click="newchannel()">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
             </li>

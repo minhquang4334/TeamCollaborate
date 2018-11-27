@@ -75,7 +75,7 @@
 
         <!-- Navbar links -->
         <div class="collapse navbar-collapse" id="navbarSupportedConten">
-            <ul class="navbar-nav d-md-none">
+            <ul class="navbar-nav d-md-none menu">
                 <li class="nav-item nav-category">
                     <a class="nav-link" style="cursor:pointer" @click="newchannel()">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
                 </li>
