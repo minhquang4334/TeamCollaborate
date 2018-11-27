@@ -12,7 +12,14 @@
                 <!-- Modal body -->
                 <div class="modal-body">
                     <label class="typo__label">Invite mail address</label>
-                    <multiselect v-model="mailValue" tag-placeholder="Add email" placeholder="Search or add mail" label="name" track-by="code" :options="mailOptions" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
+                    <multiselect v-model="mailValue"
+                                 tag-placeholder="Add email"
+                                 placeholder="Search or add mail"
+                                 label="name" track-by="code"
+                                 :options="mailOptions"
+                                 :multiple="true"
+                                 :taggable="true"
+                                 @tag="addTag"/>
                     <label class="typo__label mt-3">Invite to:</label>
                     <multiselect v-model="typeValue"  track-by="name" label="name" placeholder="Select one" :options="typeInvites" :searchable="false" :allow-empty="false">
                         <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong></template>
@@ -31,12 +38,8 @@
 </template>
 
 <script>
-    import Multiselect from 'vue-multiselect'
 
     export default {
-        components: {
-            Multiselect
-        },
         data () {
             return {
                 mailValue: [
@@ -62,14 +65,10 @@
                     name: newTag,
                     code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
                 }
-                this.options.push(tag)
-                this.value.push(tag)
+                this.mailOptions.push(tag)
+                this.mailValue.push(tag)
             }
         }
     }
 </script>
-
-<!-- New step!
-     Add Multiselect CSS. Can be added as a static asset or inside a component. -->
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
