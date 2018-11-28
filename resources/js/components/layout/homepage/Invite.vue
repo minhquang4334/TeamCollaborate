@@ -1,62 +1,43 @@
 <template>
-    <div class="modal fade" id="inviteModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Invite</h4>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+    <div class="col-8 col-md-6 m-auto h-100 text-center">
+        <a href="/"  class="close float-right mt-5" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            <p><small>esc</small></p>
+        </a>
+        <div class="row h-50 justify-content-center align-items-center">
+            <div class="w-100">
+                <h2 class="text-center mb-5">Invite to <strong class="">Channel name</strong></h2>
+                <div class="w-100 row">
+                    <div class="col-11 p-0">
+                        <multiselect v-model="value" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
+                    </div>
+                    <div class="col-1 px-0 pb-1">
+                        <button type="button" class="btn btn-secondary h-100">Send</button>
+                    </div>
                 </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <label class="typo__label">Invite mail address</label>
-                    <multiselect v-model="mailValue"
-                                 tag-placeholder="Add email"
-                                 placeholder="Search or add mail"
-                                 label="name" track-by="code"
-                                 :options="mailOptions"
-                                 :multiple="true"
-                                 :taggable="true"
-                                 @tag="addTag"/>
-                    <label class="typo__label mt-3">Invite to:</label>
-                    <multiselect v-model="typeValue"  track-by="name" label="name" placeholder="Select one" :options="typeInvites" :searchable="false" :allow-empty="false">
-                        <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong></template>
-                    </multiselect>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="inviteBtn">Send</button>
-                </div>
-
+                <p class="text-muted">entry name or email of user! press enter to add selection</p>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import Multiselect from 'vue-multiselect'
 
     export default {
+        components: {
+            Multiselect
+        },
         data () {
             return {
-                mailValue: [
-
+                value: [
+                    { name: 'Javascript', code: 'js' }
                 ],
-                typeValue: [
-                    { name: 'This Channel', code: 'channel' },
-                ],
-                mailOptions: [
+                options: [
                     { name: 'Vue.js', code: 'vu' },
                     { name: 'Javascript', code: 'js' },
                     { name: 'Open Source', code: 'os' }
-                ],
-                typeInvites: [
-                    { name: 'This Channel', code: 'channel' },
-                    { name: 'This App', code: 'app' }
-                ],
+                ]
             }
         },
         methods: {
@@ -65,10 +46,9 @@
                     name: newTag,
                     code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
                 }
-                this.mailOptions.push(tag)
-                this.mailValue.push(tag)
+                this.options.push(tag)
+                this.value.push(tag)
             }
         }
     }
 </script>
-

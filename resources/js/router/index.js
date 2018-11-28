@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeIndex from "../components/layout/homepage/Index.vue"
 import Channel from "../components/layout/channel/Index.vue"
+import Invite from "../components/layout/homepage/Invite.vue"
 import Login from "../components/user/auth/Login.vue"
 import ForgotPassword from "../components/user/auth/ForgotPassword.vue"
 import ResetPassword from "../components/user/auth/ResetPassword.vue"
@@ -26,6 +27,9 @@ let routes = [
   },
   {
     path: '/channel', name: 'channel', component: Channel
+  },
+  {
+    path: '/invite', name: 'invite', component: Invite
   },
   {
     path: '/preferences', name: 'preferences', component: Preferences

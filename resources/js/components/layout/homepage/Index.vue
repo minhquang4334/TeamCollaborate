@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        <invite/>
+        <inviteModal/>
 
     </div>
 
@@ -17,13 +17,13 @@
     import headBar from "./Header.vue"
     import container from "./Container.vue"
     import leftBar from "./LeftBar.vue"
-    import invite from "./InVite.vue"
+    import inviteModal from "./InviteModal.vue"
     export default {
         components:{
             leftBar,
             headBar,
             container,
-            invite
+            inviteModal
         }
     }
 </script>

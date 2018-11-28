@@ -120,7 +120,7 @@
                 </li>
             </ul>
 
-            <span class="dropdown ml-auto d-sm-none d-md-block" data-toggle="collapse" data-target="#preferencesDropdown2">
+            <span class="dropdown ml-auto d-none d-md-block" data-toggle="collapse" data-target="#preferencesDropdown2">
                     <a style="cursor: pointer" data-toggle="dropdown">
                         <img src="/images/faces/face4.jpg" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
                         <span class="online-status online bg-success"></span>
