@@ -52,7 +52,7 @@ Route::group(['namespace' => 'Api'], function () {
             Route::get('list', 'ChannelApiController@getListChannel');
             Route::put('update', 'ChannelApiController@update');
             Route::delete('destroy', 'ChannelApiController@destroy');
-            Route::get('invite', 'ChannelApiController@invite');
+            Route::put('invite', 'ChannelApiController@invite');
         });
         Route::group(['prefix' =>'user', 'as' => 'user-info'], function (){
             Route::put('update', 'UserApiController@editInfo');
