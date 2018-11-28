@@ -77,7 +77,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedConten">
             <ul class="navbar-nav d-md-none menu">
                 <li class="nav-item nav-category">
-                    <a class="nav-link" style="cursor:pointer" @click="newchannel()">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
+                    <a class="nav-link" style="cursor:pointer" @click="newchannel">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="index.html">
@@ -163,6 +163,11 @@
         preferences: function () {
           this.$router.push({ name: 'preferences' });
         },
+
+        newchannel: function () {
+          this.$router.push({ name: 'channel' });
+        },
+
 
       },
     }
