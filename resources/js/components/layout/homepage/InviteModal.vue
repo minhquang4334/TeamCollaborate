@@ -27,8 +27,8 @@
                             <input type="radio"  value="toApp" v-model="inviteSelect">
                         </div>
                         <div class="p-2 bd-highlight">
-                            <strong>Create new channel</strong>
-                            <p>This app will archive the existing channel and automatically invite all of its members to a new channel.</p>
+                            <strong>Invite to this app</strong>
+                            <p>Add new members to this application</p>
                         </div>
                     </div>
 
@@ -37,7 +37,7 @@
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" @click.prevent="nextStep"">Next <i class="fas fa-arrow-right"></i></button>
+                    <button type="button" class="btn btn-primary" @click.prevent="nextStep">Next <i class="fas fa-arrow-right"></i></button>
 
                 </div>
 
@@ -61,10 +61,10 @@
         methods: {
             nextStep(){
                 if(this.inviteSelect === "toChannel") {
-                    this.$router.push({name:'invite'});
+                    this.$router.push({name:'inviteToChannel'});
                 }
                 else{
-                    this.$router.push({name:'channel'});
+                    this.$router.push({name:'inviteToApp'});
                 }
                 $("#inviteModal").modal('hide');
             }

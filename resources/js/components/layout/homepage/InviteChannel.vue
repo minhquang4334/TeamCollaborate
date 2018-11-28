@@ -1,9 +1,5 @@
 <template>
-    <div class="col-8 col-md-6 m-auto h-100 text-center">
-        <a href="/"  class="close float-right mt-5" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            <p><small>esc</small></p>
-        </a>
+    <div class="col-10 col-md-6 m-auto h-100 text-center">
         <div class="row h-50 justify-content-center align-items-center">
             <div class="w-100">
                 <h2 class="text-center mb-5">Invite to <strong class="">Channel name</strong></h2>
@@ -15,7 +11,10 @@
                         <button type="button" class="btn btn-secondary h-100">Send</button>
                     </div>
                 </div>
-                <p class="text-muted">entry name or email of user! press enter to add selection</p>
+                <p class="text-muted">
+                    entry name or email of user! press enter to add selection or
+                    <a href="/home" >Back</a>
+                </p>
             </div>
         </div>
     </div>
