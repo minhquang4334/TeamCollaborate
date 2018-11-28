@@ -27,7 +27,8 @@ class PostRepository {
     }
 
     public function removeFollower($post_id, $user_id){
-        return $this->getById($post_id)->followers()->where('user_id', $user_id)->get()->each->delete();
+        $post =  $this->getById($post_id);
+        return $post->followers()->where('user_id', $user_id)->get();//->each->delete();
     }
 
     public function addFollower($post_id, $user_id){
