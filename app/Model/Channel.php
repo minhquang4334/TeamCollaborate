@@ -15,7 +15,7 @@ class Channel extends Model
     CONST INACTIVE = 0;
 
     protected $fillable = [
-        'type', 'creator', 'purpose', 'description', 'status', 'channel_id'
+        'type', 'creator', 'purpose', 'description', 'status', 'channel_id', 'name'
     ];
 
     public function users() {

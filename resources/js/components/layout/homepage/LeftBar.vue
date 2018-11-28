@@ -5,7 +5,7 @@
         </a>
         <ul class="menu nav flex-column">
             <li class="nav-item nav-category">
-                <a class="nav-link" style="cursor:pointer" @click="newchannel()">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
+                <a class="nav-link" style="cursor:pointer" @click="newchannel">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="index.html">
