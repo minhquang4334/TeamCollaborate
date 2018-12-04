@@ -8,7 +8,6 @@ use App\Model\Channel;
 use App\Repositories\ChannelRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
-use stdClass;
 
 class ChannelApiController extends ApiController
 {
