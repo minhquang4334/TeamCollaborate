@@ -10,7 +10,6 @@ class UserTransformer extends TransformerAbstract {
         return [
             'name' => $user->name,
             'email' => $user->email,
-            'password' => $user->password,
             'gender' => $user->gender,
             'phone_number' => $user->phone_number,
             'address' => $user->address,

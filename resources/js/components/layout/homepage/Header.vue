@@ -2,7 +2,7 @@
 
     <nav class="navbar navbar-expand-md bg-light navbar-light">
         <!-- Brand -->
-        <a class="navbar-brand ml-3" href="#">
+        <div class="navbar-brand ml-3">
             <strong id="Channelname">Channel Name</strong>
             <small><span class="far fa-user mx-2"></span><span id="member-number">5</span></small>
 
@@ -66,7 +66,7 @@
                     </div>
                 </span>
 
-        </a>
+        </div>
 
         <!-- Toggler/collapsibe Button -->
         <button class="navbar-toggler mr-3" type="button" data-toggle="collapse" data-target="#navbarSupportedConten">

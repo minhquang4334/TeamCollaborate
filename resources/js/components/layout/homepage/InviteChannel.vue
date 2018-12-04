@@ -13,7 +13,7 @@
                 </div>
                 <p class="text-muted">
                     entry name or email of user! press enter to add selection or
-                    <a href="/home" >Back</a>
+                    <router-link :to="{name: 'homeIndex'}" >Back</router-link>
                 </p>
             </div>
         </div>

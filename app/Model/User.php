@@ -34,7 +34,13 @@ class User extends AbstractUser implements JWTSubject, MustVerifyEmail
         'university', 'is_bachelor',  'is_teacher', 'grade', 'active'
     ];
 
-    protected $dates = ['birthday'];
+    protected $dates = [
+    	'birthday'
+    ];
+
+    protected $hidden = [
+    	'password'
+    ];
 
     const IS_TEACHER = true;
     const INACTIVE = 0;

@@ -35,7 +35,7 @@ class ChannelApiController extends ApiController
      */
     public function create(CreateChannelRequest $request) {
         try{
-	        $str_random = str_random(config('const.length_channel_code') - 1);
+	        $str_random = strtoupper(str_random(config('const.length_channel_code')));
             $channel = $this->channel->store(array_merge($request->all(), [
                 'creator' => $this->currentUser()->id,
                 'status'  => Channel::ACTIVE,
@@ -49,6 +49,7 @@ class ChannelApiController extends ApiController
                     $channel->users()->attach($id, ['display_name' => $user->name, 'status' => Channel::ACTIVE ]);
                 }
             }
+            $channel->channel_id = $channel_code;
             return $this->response->withCreated($channel);
         }catch (\Exception $e){
             return $this->response->withForbidden($e->getMessage());

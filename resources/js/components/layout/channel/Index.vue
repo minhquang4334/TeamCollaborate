@@ -101,7 +101,9 @@
             invited_users: invited_users,
           }
           post(url, payload).then(({data}) => {
-
+            this.$router.push({
+              name: "ChannelDetail"
+            })
           })
         },
 
