@@ -1,5 +1,5 @@
 <?php
 
 return [
-	'length_channel_code' => '9'
+	'length_channel_code' => '10'
 ];

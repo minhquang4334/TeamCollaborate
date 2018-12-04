@@ -90,6 +90,7 @@
         submit() {
           let url = '/api/channel/create';
           let invited_users = [];
+          console.log(this.invite_users);
           this.invite_users.forEach((data) => {
             invited_users.push(data.id);
           });
@@ -101,8 +102,12 @@
             invited_users: invited_users,
           }
           post(url, payload).then(({data}) => {
+            console.log(data.data);
             this.$router.push({
-              name: "ChannelDetail"
+              name: "ChannelDetail",
+              params: {
+                id: data.data.channel_id,
+              }
             })
           })
         },

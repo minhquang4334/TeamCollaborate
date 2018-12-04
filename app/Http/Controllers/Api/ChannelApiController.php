@@ -67,7 +67,7 @@ class ChannelApiController extends ApiController
      */
     public function getChannelInfo(Request $request) {
         try{
-            $channel = $this->channel->getById($request->get('id'));
+            $channel = $this->channel->getChannelById($request->get('id'));
             return $this->response->withCreated($channel);
         }catch (\Exception $e){
             return $this->response->withInternalServer($e->getMessage());
