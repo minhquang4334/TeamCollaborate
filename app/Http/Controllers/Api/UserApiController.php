@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\User\ChangeDisplayNameRequest;
 use App\Http\Requests\User\ChangePasswordRequest;
 use App\Http\Requests\User\EditInfoRequest;
+use App\Model\User;
 use App\Repositories\ChannelRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
@@ -55,12 +56,12 @@ class UserApiController extends ApiController
             $success = $this->user->updateColumn($id, $updateInput);
             if($success){
                 $user = $this->user->getById($id);
-                return response()->json(['status' => true, 'data' => $user], self::CODE_UPDATE_SUCCESS);
+                return $this->response->withUpdated($user);
             }else{
-                return response()->json(['status' => true, 'data' => 'Update failed'], self::CODE_INTERNAL_ERROR);
+                return $this->response->withForbidden(trans('user.messages.update_info_fail'));
             }
        }catch(\Exception $e){
-           return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_FORBIDDEN);
+           return $this->response->withInternalServer($e->getMessage());
        }
     }
 
@@ -86,9 +87,12 @@ class UserApiController extends ApiController
             if(Hash::check($request->get('old_password'), $user->password)){
                 $success = $this->user->updateColumn($id, ['password' => bcrypt($request->get('new_password'))]);
             }
-            return response()->json(['status' => $success, 'data' => $success], self::CODE_UPDATE_SUCCESS);
+            if ($success)
+                return $this->response->withMessage(trans('messages.user.password_reset_success'));
+            else
+                return $this->response->withForbidden(trans('messages.user.password_reset_fail'));
         }catch(\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withForbidden(trans('messages.user.password_reset_fail'));
         }
     }
 
@@ -106,9 +110,9 @@ class UserApiController extends ApiController
         try {
             $name = $request->get('search_name');
             $users = $this->user->getByLike('name', $name)->get();
-            return response()->json(['status' => true, 'data' => $users], self::CODE_GET_SUCCESS);
+            return $this->response->withArray($users);
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
+            return $this->response->withNotFound($e->getMessage());
         }
     }
 
@@ -121,10 +125,10 @@ class UserApiController extends ApiController
     public function deleteAccount() {
         try{
             $id = $this->currentUser()->id;
-            $success = $this->user->destroy($id);
-            return response()->json(['status' => true, 'data' => $success,], self::CODE_DELETE_SUCCESS);
+            $this->user->destroy($id);
+            return $this->response->withMessage(trans('messages.user.delete_account_success'));
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withInternalServer(trans('messages.user.delete_account_fail'));
         }
     }
 
@@ -141,9 +145,9 @@ class UserApiController extends ApiController
         try{
             $id = $request->get('channel_id');
             $users = $this->channel->getById($id)->users;
-            return response()->json(['status' => true, 'data' => $users], self::CODE_GET_SUCCESS);
+            return $this->response->withArray($users);
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withNotFound($e->getMessage());
         }
     }
 
@@ -163,12 +167,12 @@ class UserApiController extends ApiController
             $user = $this->currentUser();
             if($user->channels->contains($channel)) {
                 $user->channels()->sync([$channelId => ['display_name' => $name]]);
-                return response()->json(['status' => true, 'data' => $user], self::CODE_UPDATE_SUCCESS);
+                return $this->response->withUpdated($user);
             }else{
-                return response()->json(['status' => false, 'data' => trans('messages.user.not_in_channel')], self::CODE_UNAUTHORIZED);
+                $this->response->withForbidden(trans('messages.user.not_in_channel'));
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            $this->response->withInternalServer($e->getMessage());
         }
     }
 
