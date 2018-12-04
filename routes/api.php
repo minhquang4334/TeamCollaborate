@@ -55,12 +55,13 @@ Route::group(['namespace' => 'Api'], function () {
             Route::put('invite', 'ChannelApiController@invite');
         });
         Route::group(['prefix' =>'user', 'as' => 'user-info'], function (){
-            Route::put('update', 'UserApiController@editInfo');
+            Route::put('update', 'UserApiController@changeUserProfile');
             Route::put('change-password', 'UserApiController@changePassword');
             Route::get('list', 'UserApiController@getListUser');
             Route::delete('delete', 'UserApiController@deleteAccount');
             Route::get('users', 'UserApiController@getListUserInChannel');
             Route::put('change-name', 'UserApiController@changeDisplayName');
+            Route::post('avatar', 'UserApiController@changeUserAvatar');
         });
         Route::group(['prefix' => 'post', 'as' => 'post'], function (){
             Route::post('add', 'PostApiController@add');

@@ -11,6 +11,10 @@ use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
+use Intervention\Image\ImageManagerStatic as Image;
+
 
 class UserApiController extends ApiController
 {
@@ -44,12 +48,12 @@ class UserApiController extends ApiController
      * return user updated information
      * @return JsonResponse
      */
-    public function editInfo(EditInfoRequest $request) {
+    public function changeUserProfile(EditInfoRequest $request) {
        $allow =  ['university','status','phone_number','name',
                     'japanese_level','japanese_certificate',
                     'is_teacher','is_bachelor','grade','gender',
                     'facebook_url','email_verified_at','email','birthday',
-                    'avatar','address','about_me',];
+                    'address','about_me',];
        try{
             $id = $this->currentUser()->id;
             $updateInput = array_filter(array_intersect_key($request->all(), array_flip($allow) ));
@@ -120,16 +124,21 @@ class UserApiController extends ApiController
      * usage http://localhost:8000/api/user/delete
      * delete Current User Account
      * use $this->currentUser() to get current user
+     * @param Request $request
      * @return JsonResponse
      */
-    public function deleteAccount() {
-        try{
-            $id = $this->currentUser()->id;
-            $this->user->destroy($id);
-            return $this->response->withMessage(trans('messages.user.delete_account_success'));
-        }catch (\Exception $e){
-            return $this->response->withInternalServer(trans('messages.user.delete_account_fail'));
-        }
+    public function deleteAccount(Request $request) {
+	    if(Hash::check($request->get('password'), $this->currentUser()->password)) {
+		    try {
+			    $id = $this->currentUser()->id;
+			    $this->user->destroy($id);
+			    return $this->response->withMessage(trans('messages.user.delete_account_success'));
+		    } catch (\Exception $e) {
+			    return $this->response->withInternalServer(trans('messages.user.delete_account_fail'));
+		    }
+	    } else {
+	    	return response()->json(['status' => false], 200);
+	    }
     }
 
     /**
@@ -174,6 +183,50 @@ class UserApiController extends ApiController
         }catch (\Exception $e){
             $this->response->withInternalServer($e->getMessage());
         }
+    }
+
+	/**
+	 * Method post
+	 * usage: http://localhost:8000/api/user/avatar
+	 * change Display name of user in specific channel
+	 * $request has channel_id
+	 * @param Request $request
+	 * @return JsonResponse
+	 */
+    public function changeUserAvatar(Request $request) {
+	    $this->validate($request, ['photo' => ['required', 'image', Rule::dimensions()->minWidth(250)->minHeight(250)->ratio(1 / 1)],]);
+	    try {
+		    // validate
+
+		    // fill variables
+		    $filename = time() . str_random(16) . '.png';
+		    $image = Image::make($request->file('photo')->getRealPath());
+		    $folder = config('const.avatar_folder');
+
+		    // crop it
+		    $image = $image->resize(250, 250);
+
+		    // optimize it
+		    $image->encode('png', 60);
+
+		    // upload it
+		    Storage::put('public/'.$folder . '/' . $filename, $image);
+		    $imageAddress = $folder . '/' . $filename;
+
+		    // delete the old avatar
+		    if (isset($this->currentUser()->avatar)) {
+			    Storage::delete($folder . str_after($this->currentUser()->avatar, 'public/'.$folder));
+		    }
+
+		    // update user's avatar
+		    $this->user->updateColumn($this->currentUser()->id, ['avatar' => $imageAddress,]);
+		    return response()->json(['image_address' => Storage::url($imageAddress)], 200);
+
+	    }
+	    catch (\Exception $e) {
+		    return $this->response->withInternalServer($e->getMessage());
+	    }
+
     }
 
 
