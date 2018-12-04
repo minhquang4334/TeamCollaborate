@@ -7,24 +7,20 @@
             <li class="nav-item nav-category">
                 <a class="nav-link" style="cursor:pointer" @click="newchannel">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    <span class="fab fa-slack-hash text-light"></span>
-                    <span class="menu-title">Genarate</span>
-                </a>
+        </ul>
+        <ul class="menu nav nav-menu">
+            <li class="nav-item cursor-pointer"
+                :class="(channel_id === channel.channel_id) ? 'active' : ''"
+                v-for="(channel, index) in listChannels"
+                :key="index"
+                @click="toChannelDetail(channel.channel_id)">
+                <p class="nav-link">
+                    <span v-bind:class="channelIconClass(channel.type)"></span>
+                    <span class="menu-title">{{ channel.name}}</span>
+                </p>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
-                    <span class="fas fa-lock text-light"></span>
-                    <span class="menu-title">Channel 1</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="index.html">
-                    <span class="fas fa-lock text-light"></span>
-                    <span class="menu-title">Channel 2</span>
-                </a>
-            </li>
+        </ul>
+        <ul class="menu nav flex-column">
             <li class="nav-item nav-category">
                 <span class="nav-link">DIRECT MESSAGE</span>
             </li>
@@ -55,10 +51,14 @@
 
   export default {
     name: 'LeftBar',
+    props: [
+      'channel_id'
+    ],
+
     data() {
       return {
         listChannels: [],
-        listDirectUsers: []
+        listDirectUsers: [],
       }
     },
 
@@ -66,7 +66,15 @@
       this.getListChannel();
     },
 
+    computed: {
+
+    },
+
     methods: {
+      channelIconClass: function(type) {
+        return type === 0 ? "fab fa-slack-hash text-light" : "fas fa-lock text-light";
+      },
+
       newchannel: function () {
         this.$router.push({ name: 'channel' });
       },
@@ -75,14 +83,23 @@
         let url = '/api/channel/my'
         get(url).then(({data}) => {
           console.log(data);
-          this.listChannels = data;
+          this.listChannels = data.data;
         }).catch(err => {
-
+          console.log(err);
         })
       },
 
       getListDirectMessage() {
 
+      },
+
+      toChannelDetail(channel_id) {
+        this.$router.push({
+          name: 'ChannelDetail',
+          params: {
+            id: channel_id
+          }
+        })
       }
 
 
@@ -94,5 +111,9 @@
     .title {
         font-weight: bold;
         color: #fff;
+    }
+    .nav-menu {
+        max-height: 400px;
+        overflow: auto;
     }
     </style>

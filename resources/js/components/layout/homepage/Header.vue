@@ -2,9 +2,10 @@
 
     <nav class="navbar navbar-expand-md bg-light navbar-light">
         <!-- Brand -->
-        <a class="navbar-brand ml-3" href="#">
-            <strong id="Channelname">Channel Name</strong>
-            <small><span class="far fa-user mx-2"></span><span id="member-number">5</span></small>
+        <div class="navbar-brand ml-3">
+            <strong id="Channelname" v-if="inChannel">{{channel.name}}</strong>
+            <strong v-else>Home</strong>
+            <small><span class="far fa-user mx-2"></span><span id="member-number">{{numberMemberInChannel}}</span></small>
 
             <span class="mx-3 dropdown" data-toggle="collapse" data-target="#settingDropdown">
                 <a style="cursor: pointer" data-toggle="dropdown">
@@ -46,7 +47,7 @@
             </span>
             <span class="dropdown d-md-none" data-toggle="collapse" data-target="#preferencesDropdown">
                     <a style="cursor: pointer" data-toggle="dropdown">
-                        <img src="/images/faces/face4.jpg" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
+                        <img :src="userAvatar" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
                         <span class="online-status online bg-success"></span>
                     </a>
                     <div id="preferencesDropdown" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation">
@@ -66,7 +67,7 @@
                     </div>
                 </span>
 
-        </a>
+        </div>
 
         <!-- Toggler/collapsibe Button -->
         <button class="navbar-toggler mr-3" type="button" data-toggle="collapse" data-target="#navbarSupportedConten">
@@ -120,55 +121,85 @@
                 </li>
             </ul>
 
-            <span class="dropdown ml-auto d-none d-md-block" data-toggle="collapse" data-target="#preferencesDropdown2">
-                    <a style="cursor: pointer" data-toggle="dropdown">
-                        <img src="/images/faces/face4.jpg" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
-                        <span class="online-status online bg-success"></span>
-                    </a>
-
-                    <div id="preferencesDropdown2" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation">
-                        <a class="dropdown-item" @click="preferences()">
-                            <p>
-                                <span class="fas fa-user-circle mr-2"></span>
-                                Preferences
-                            </p>
-                        </a>
-                        <a class="dropdown-item" @click="logout()">
-                            <p>
-                                <span class="fas fa-sign-out-alt mr-2"></span>
-                                Logout
-                            </p>
-                        </a>
-
-                    </div>
-                </span>
             <form class="form-inline p-3 searchForm" action="/action_page.php">
                 <input class="form-control" type="text" placeholder="Search">
-                <button class="btn btn-success" type="submit">Search</button>
+                <button class="btn btn-success margin-left-10" type="submit">Search</button>
             </form>
+            <span class="dropdown ml-auto margin-right-35 d-none d-md-block" data-toggle="collapse" data-target="#preferencesDropdown2">
+                <a style="cursor: pointer" data-toggle="dropdown">
+                    <img :src="userAvatar" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
+                    <span class="online-status online bg-success"></span>
+                </a>
+
+                <div id="preferencesDropdown2" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation">
+                    <a class="dropdown-item" @click="preferences()">
+                        <p>
+                            <span class="fas fa-user-circle mr-2"></span>
+                            Preferences
+                        </p>
+                    </a>
+                    <a class="dropdown-item" @click="logout()">
+                        <p>
+                            <span class="fas fa-sign-out-alt mr-2"></span>
+                            Logout
+                        </p>
+                    </a>
+
+                </div>
+            </span>
         </div>
     </nav>
 </template>
 <script>
-    import {get} from '../../../helper/request.js'
-    export default {
-      methods: {
-        logout: function () {
-          this.$store.dispatch('auth/logout')
-            .then(() => {
-              this.$router.push({ name: 'login' });
-            });
-        },
-
-        preferences: function () {
-          this.$router.push({ name: 'preferences' });
-        },
-
-        newchannel: function () {
-          this.$router.push({ name: 'channel' });
-        },
+  import {get} from '../../../helper/request.js'
 
 
+  export default {
+    props: ['channel'],
+
+    data() {
+      return {
+        currentUser: this.$store.state.auth.user,
+      }
+    },
+
+    computed: {
+      inChannel: function() {
+        return this.channel.channel_id;
       },
-    }
+
+      numberMemberInChannel: function() {
+        if(this.inChannel) {
+          return this.channel.users.data.length;
+        }
+        return 0;
+      },
+
+      userAvatar: function() {
+        if(!this.currentUser.avatar) {
+          this.currentUser.avatar = '/images/default-avatar.png'
+        }
+        return this.currentUser.avatar;
+      }
+    },
+
+    methods: {
+      logout: function () {
+        this.$store.dispatch('auth/logout')
+          .then(() => {
+            this.$router.push({ name: 'login' });
+          });
+      },
+
+      preferences: function () {
+        this.$router.push({ name: 'preferences' });
+      },
+
+      newchannel: function () {
+        this.$router.push({ name: 'channel' });
+      },
+
+
+    },
+  }
 </script>

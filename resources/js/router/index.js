@@ -12,6 +12,7 @@ import PageNotFound from "../components/views/404.vue"
 import AccessDenied from "../components/views/400.vue"
 import NoticeVerifyEmail from "../components/views/NoticeVerifyEmail.vue"
 import Preferences from "../components/user/Preferences.vue"
+import ChannelDetail from "../components/layout/homepage/Index.vue"
 import store from '../store/index'
 import middlewares from './middleware'
 
@@ -25,6 +26,9 @@ let routes = [
   },
   {
     path: '/home', name: 'homeIndex', component: HomeIndex, beforeEnter: middlewares.auth
+  },
+  {
+    path: '/channel/:id', name: 'ChannelDetail', component: ChannelDetail, beforeEnter: middlewares.auth
   },
   {
     path: '/channel', name: 'channel', component: Channel
