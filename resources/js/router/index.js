@@ -31,17 +31,18 @@ let routes = [
     path: '/channel/:id', name: 'ChannelDetail', component: ChannelDetail, beforeEnter: middlewares.auth
   },
   {
-    path: '/channel', name: 'channel', component: Channel
+    path: '/channel', name: 'channel', component: Channel, beforeEnter: middlewares.auth
   },
   {
-    path: '/invite-channel', name: 'inviteToChannel', component: InviteChannel
+    path: '/invite-channel', name: 'inviteToChannel', component: InviteChannel, beforeEnter: middlewares.auth
   },
   {
-    path: '/invite-app', name: 'inviteToApp', component: InviteApp
+    path: '/invite-app', name: 'inviteToApp', component: InviteApp, beforeEnter: middlewares.auth
   },
   {
-    path: '/preferences', name: 'preferences', component: Preferences
+    path: '/preferences', name: 'preferences', component: Preferences, beforeEnter: middlewares.auth
   },
+
   {
     path: '/forgot-password', name: 'forgot_password', component: ForgotPassword, beforeEnter: middlewares.guest
   },
