@@ -17,5 +17,12 @@ return [
         'not_in_channel' => 'Bạn không nằm trong channel này',
         'permission_deny' => 'Bạn không có quyền thực hiện thao tác này',
         'not_follow' => 'Bạn không theo dõi bài đăng này',
+        'delete_account_fail' => 'Bạn không thể xóa tài khoản này',
+        'delete_account_success' => 'Xóa tài khoản thành công',
+        'delete_post_success' => 'Xóa post thành công',
+        'delete_post_fail' => 'Xóa post thất bại',
+        'pin_success' => 'Pin post thành công',
+        'follow_success' => 'Bắt đầu theo dõi post',
+        'unfollow_success' => 'Bỏ theo dõi thành công',
     ],
 ];
