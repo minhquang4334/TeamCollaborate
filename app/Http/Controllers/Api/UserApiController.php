@@ -194,7 +194,7 @@ class UserApiController extends ApiController
 	 * @return JsonResponse
 	 */
     public function changeUserAvatar(Request $request) {
-	    $this->validate($request, ['photo' => ['required', 'image', Rule::dimensions()->minWidth(250)->minHeight(250)->ratio(1 / 1)],]);
+	    $this->validate($request, ['photo' => ['required', 'image', Rule::dimensions()->minWidth(250)->minHeight(250)],]);
 	    try {
 		    // validate
 
