@@ -48,6 +48,11 @@
                                 <span class="count">{{ points }}</span>
                             </a>
 
+                            <a class="like-button"
+                               @click.prevent="showComment">
+                                <i class="far fa-comment-dots text-muted"></i>
+                            </a>
+
                             <el-tooltip :content="bookmarked ? 'Unbookmark' : 'Bookmark'"
                                         placement="top"
                                         transition="false"
@@ -247,6 +252,10 @@
         }
       },
 
+      comment(){
+          this.$emit('comment');
+      },
+
       bookmarked: {
         get() {
           return this.$store.state.bookmarks.comments.indexOf(this.list.id) !== -1;
@@ -396,6 +405,10 @@
             app.$Progress.fail();
           });
       },
+
+        showComment(){
+            this.$emit('comment');
+        },
 
       doubleClicked() {
         if (this.isGuest) return;

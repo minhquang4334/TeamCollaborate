@@ -12,7 +12,7 @@
                     <span class="fas fa-cogs"></span>
                 </a>
                 <div id="settingDropdown" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation" aria-labelledby="notificationDropdown">
-                <a class="dropdown-item">
+                <a class="dropdown-item" @click.prevent="showAboutChannel">
                     <p>
                         <span class="fas fa-info-circle mr-2"></span>
                         Channel About
@@ -49,6 +49,7 @@
                     <a style="cursor: pointer" data-toggle="dropdown">
                         <img :src="userAvatar" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
                         <span class="online-status online bg-success"></span>
+                        <strong class="ml-3">Username</strong>
                     </a>
                     <div id="preferencesDropdown" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation">
                         <a class="dropdown-item" @click="preferences()">
@@ -76,59 +77,18 @@
 
         <!-- Navbar links -->
         <div class="collapse navbar-collapse" id="navbarSupportedConten">
-            <ul class="navbar-nav d-md-none menu">
-                <li class="nav-item nav-category">
-                    <a class="nav-link" style="cursor:pointer" @click="newchannel">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="index.html">
-                        <span class="fab fa-slack-hash text-light"></span>
-                        <span class="menu-title">Genarate</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">
-                        <span class="fas fa-lock text-light"></span>
-                        <span class="menu-title">Channel 1</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">
-                        <span class="fas fa-lock text-light"></span>
-                        <span class="menu-title">Channel 2</span>
-                    </a>
-                </li>
-                <li class="nav-item nav-category">
-                    <span class="nav-link">DIRECT MESSAGE</span>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="pages/tables/basic-table.html">
-                        <span class="fas fa-user text-light"></span>
-                        <span class="menu-title">User 1</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="pages/tables/basic-table.html">
-                        <span class="fas fa-user text-light"></span>
-                        <span class="menu-title">User 2</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="pages/tables/basic-table.html">
-                        <span class="fas fa-user text-light"></span>
-                        <span class="menu-title">User 3</span>
-                    </a>
-                </li>
-            </ul>
+
+
+            <menu-list :channel_id="channel_id" :isVertical="isVertical"/>
 
             <form class="form-inline p-3 searchForm" action="/action_page.php">
                 <input class="form-control" type="text" placeholder="Search">
-                <button class="btn btn-success margin-left-10" type="submit">Search</button>
             </form>
             <span class="dropdown ml-auto margin-right-35 d-none d-md-block" data-toggle="collapse" data-target="#preferencesDropdown2">
                 <a style="cursor: pointer" data-toggle="dropdown">
                     <img :src="userAvatar" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
                     <span class="online-status online bg-success"></span>
+                    <strong class="ml-3" style="font-size: 18px">Username</strong>
                 </a>
 
                 <div id="preferencesDropdown2" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation">
@@ -152,6 +112,7 @@
 </template>
 <script>
   import {get} from '../../../helper/request.js'
+  import menuList from "./Menu.vue"
 
 
   export default {
@@ -160,8 +121,12 @@
     data() {
       return {
         currentUser: this.$store.state.auth.user,
+        isVertical: false,
+        channel_id: this.channel.id,
       }
     },
+
+
 
     computed: {
       inChannel: function() {
@@ -183,6 +148,10 @@
       }
     },
 
+      components:{
+          menuList
+      },
+
     methods: {
       logout: function () {
         this.$store.dispatch('auth/logout')
@@ -199,6 +168,9 @@
         this.$router.push({ name: 'channel' });
       },
 
+      showAboutChannel: function () {
+          this.$emit('showAboutChannel');
+      },
 
     },
   }
