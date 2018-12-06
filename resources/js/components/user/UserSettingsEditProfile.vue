@@ -169,7 +169,6 @@
         this.avatar.uploading = true;
         this.avatar.errors = [];
         this.avatar.fileUploadFormData = new FormData();
-        console.log(e.target.files);
         this.avatar.fileUploadFormData.append('photo', e.target.files[0]);
 
         post('/api/user/avatar', this.avatar.fileUploadFormData)
