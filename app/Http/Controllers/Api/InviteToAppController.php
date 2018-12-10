@@ -23,6 +23,8 @@ class InviteToAppController extends ApiController
 
 
     /**
+     * Method POST
+     * @usage http://localhost:8000/api/invite-to-app?emails[]=anhlahau.hl@gmail.com&emails[]=leconghau.hit@gmail.com&names[]=LeeKangHo&names[]=KangMinKyung
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */

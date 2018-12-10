@@ -45,7 +45,7 @@ Route::group(['namespace' => 'User', 'prefix' => 'user'], function () {
 Route::group(['namespace' => 'Api'], function () {
 	Route::group(['middleware' => 'jwt.auth'], function() {
 		Route::get('/emojis', 'EmojiController@index');
-		Route::get('/invite-to-app', 'InviteToAppController@create');
+		Route::post('/invite-to-app', 'InviteToAppController@create');
         Route::group(['prefix' => 'channel', 'as' => 'channel'], function (){
             Route::post('create',['as' => 'create', 'uses' => 'ChannelApiController@create'] );
             Route::get('info', 'ChannelApiController@getChannelInfo');
