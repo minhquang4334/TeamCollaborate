@@ -1,6 +1,6 @@
 
 <template>
-    <div class="fixed-comment-form-wrapper"
+    <div class="fixed-comment-form-wrapper new-message"
          @keydown.down="handleKey($event, 'down')"
          @keydown.up="handleKey($event, 'up')"
          @keydown.enter="handleKey($event, 'enter')"
@@ -35,7 +35,7 @@
             <markdown :text="message.trim()"></markdown>
         </div>
 
-        <form class="chat-input-form relative">
+        <form class="chat-input-form relative" style="max-height: 50%">
             <transition name="el-zoom-in-bottom">
                 <quick-emoji-picker v-if="quickEmojiPicker.show"
                                     @close="quickEmojiPicker.show = false"
