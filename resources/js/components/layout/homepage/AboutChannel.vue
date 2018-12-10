@@ -1,7 +1,7 @@
 <template>
     <div id="accordion" class="about-channel overflow-auto">
         <div class="p-3">
-            <strong>About <span>Channel name</span></strong>
+            <strong>About <span>{{ channelDetail.channelName }}</span></strong>
         </div>
         <div class="card">
             <div class="card-header">
@@ -13,7 +13,7 @@
             </div>
             <div id="channeldetail" class="collapse" data-parent="#accordion">
                 <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    {{ channelDetail.channelPurpose }}
                 </div>
             </div>
         </div>
@@ -42,11 +42,12 @@
             <div id="memberlist" class="collapse" data-parent="#accordion">
                 <div class="card-body">
                     <div class="list-group">
-                        <button type="button" class="list-group-item list-group-item-action">Member 1</button>
-                        <button type="button" class="list-group-item list-group-item-action">Member 2</button>
-                        <button type="button" class="list-group-item list-group-item-action">Member 3</button>
-                        <button type="button" class="list-group-item list-group-item-action">Member 4</button>
-                        <button type="button" class="list-group-item list-group-item-action">Member 5</button>
+                        <span
+                                class="fas fa-user list-group-item list-group-item-action cursor-pointer"
+                                v-for="(user, index) in channelDetail.listUsers" :key="index">
+
+                            {{user.name}}
+                        </span>
                     </div>
                     <a class="dropdown-item mt-3" data-toggle="modal" data-target="#inviteModal">
                         <p>
@@ -176,5 +177,15 @@
     </div>
 </template>
 <script>
+    import {get} from '../../../helper/request.js'
+    export default {
+      props: ['channelDetail'],
+
+      data() {
+        return {
+
+        }
+      }
+    }
 
 </script>

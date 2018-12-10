@@ -52,6 +52,7 @@ class Response
      * @param TransformerAbstract|null $transformer
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function withCreated($resource = null, TransformerAbstract $transformer = null)
     {
@@ -64,6 +65,40 @@ class Response
         return $this->item($resource, $transformer);
     }
 
+
+    /**
+     * @param null $resource
+     * @param TransformerAbstract|null $transformer
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function withUpdated($resource = null, TransformerAbstract $transformer = null){
+        $this->statusCode = HttpResponse::HTTP_OK;
+
+        if (is_null($resource)) {
+            return $this->json();
+        }
+
+        return $this->item($resource, $transformer);
+    }
+    /**
+     * Return a 200 response with the got resource as array.
+     *
+     * @param null $resource
+     * @param TransformerAbstract|null $transformer
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function withArray($resource = null, TransformerAbstract $transformer = null)
+    {
+        $this->statusCode = HttpResponse::HTTP_OK;
+
+        if (is_null($resource)) {
+            return $this->json();
+        }
+
+        return $this->collection($resource, $transformer);
+    }
     /**
      * Make a 204 no content response.
      *
@@ -104,6 +139,17 @@ class Response
         )->withError($message);
     }
 
+    /**
+     * Return 200 code with message when operation successful
+     *
+     * @param string $message
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function withMessage($message = 'OK'){
+        return $this->setStatusCode(
+            HttpResponse::HTTP_OK
+        )->withError($message);
+    }
     /**
      * Make a 403 'Forbidden' response.
      *
@@ -181,6 +227,7 @@ class Response
      * @param TransformerAbstract|null $transformer
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function item($item, TransformerAbstract $transformer = null)
     {
@@ -196,6 +243,7 @@ class Response
      * @param TransformerAbstract|null $transformer
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function collection($items, TransformerAbstract $transformer = null)
     {

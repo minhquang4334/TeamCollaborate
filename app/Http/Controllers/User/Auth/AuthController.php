@@ -21,12 +21,11 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-	    $customClaims = [];
     	if($request['remember']) {
-		    $customClaims = ['exp' => date('Y-m-d', strtotime('+2 week'))];
+		    config(['jwt.ttl' => env('TOKEN_TTL_REMEMBER_ME',  86400 * 30)]); // 30 days
 	    }
         $credentials = $request->only('email', 'password');
-        if ($token = JWTAuth::attempt($credentials, $customClaims)) {
+        if ($token = JWTAuth::attempt($credentials)) {
             return $this->respondWithToken($token);
         }
 

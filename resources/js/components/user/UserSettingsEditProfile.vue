@@ -46,17 +46,6 @@
         <el-form label-position="top"
                  label-width="10px"
                  :model="form">
-            <el-form-item label="Cover Color">
-                <el-select v-model="form.cover_color"
-                           placeholder="Cover Color..."
-                           filterable>
-                    <el-option v-for="item in coverColors"
-                               :key="item"
-                               :label="item"
-                               :value="item">
-                    </el-option>
-                </el-select>
-            </el-form-item>
 
             <el-form-item label="Full Name">
                 <el-input placeholder="Your full name..."
@@ -67,43 +56,52 @@
                           :key="e"></el-alert>
             </el-form-item>
 
-            <el-form-item label="Bio">
+            <el-form-item label="About me">
                 <el-input placeholder="How would you describe you?"
-                          v-model="form.bio"
+                          v-model="form.about_me"
                           type="textarea"
                           :autosize="{ minRows: 4, maxRows: 10}"></el-input>
-                <el-alert v-for="e in errors.bio"
+                <el-alert v-for="e in errors.about_me"
                           :title="e"
                           type="error"
                           :key="e"></el-alert>
             </el-form-item>
 
-            <el-form-item label="Website">
-                <el-input placeholder="Website..."
-                          v-model="form.website"
+            <el-form-item label="Phone Number">
+                <el-input placeholder="Phone Number..."
+                          v-model="form.phone_number"
                           type="url"></el-input>
-                <el-alert v-for="e in errors.website"
+                <el-alert v-for="e in errors.phone_number"
                           :title="e"
                           type="error"
                           :key="e"></el-alert>
             </el-form-item>
 
-            <el-form-item label="Location">
-                <el-input placeholder="Location..."
-                          v-model="form.location"></el-input>
-                <el-alert v-for="e in errors.location"
+            <el-form-item label="Address">
+                <el-input placeholder="Address..."
+                          v-model="form.address"></el-input>
+                <el-alert v-for="e in errors.address"
                           :title="e"
                           type="error"
                           :key="e"></el-alert>
             </el-form-item>
 
-            <el-form-item label="Twitter Username">
-                <el-input placeholder="Twitter Username..."
-                          v-model="form.twitter">
-                    <template slot="prepend">Https://twitter.com/</template>
+            <el-form-item label="University">
+                <el-input placeholder="University..."
+                          v-model="form.university"></el-input>
+                <el-alert v-for="e in errors.university"
+                          :title="e"
+                          type="error"
+                          :key="e"></el-alert>
+            </el-form-item>
+
+            <el-form-item label="Facebook Username">
+                <el-input placeholder="Facebook Username..."
+                          v-model="form.facebook_url">
+                    <template slot="prepend">Https://facebook.com/</template>
                 </el-input>
 
-                <el-alert v-for="e in errors.twitter"
+                <el-alert v-for="e in errors.facebook_url"
                           :title="e"
                           type="error"
                           :key="e"></el-alert>
@@ -122,6 +120,7 @@
 
 <script>
   import Helpers from '../../mixins/Helpers';
+  import {post, put, get} from "../../helper/request"
 
   export default {
     mixins: [Helpers],
@@ -133,24 +132,12 @@
         currentUser: this.$store.state.auth.user,
         form: {
           name: this.$store.state.auth.user.name,
-          bio: this.$store.state.auth.user.bio,
-          website: this.$store.state.auth.user.website,
-          cover_color: this.$store.state.auth.user.cover_color,
-          location: this.$store.state.auth.user.location,
-          twitter: this.$store.state.auth.user.twitter
+          about_me: this.$store.state.auth.user.about_me,
+          address: this.$store.state.auth.user.address,
+          facebook_url: this.$store.state.auth.user.facebook_url,
+          university: this.$store.state.auth.user.university,
+          phone_number: this.$store.state.auth.user.phone_number
         },
-
-        coverColors: [
-          'Blue',
-          'Dark Blue',
-          'Red',
-          'Dark',
-          'Dark Green',
-          'Bright Green',
-          'Purple',
-          'Pink',
-          'Orange'
-        ],
 
         avatar: {
           fileUploadFormData: new FormData(),
@@ -164,11 +151,11 @@
       changed() {
         if (
           this.currentUser.name !== this.form.name ||
-          this.currentUser.bio !== this.form.bio ||
-          this.currentUser.website !== this.form.website ||
-          this.currentUser.location !== this.form.location ||
-          this.currentUser.cover_color !== this.form.cover_color ||
-          this.currentUser.twitter !== this.form.twitter
+          this.currentUser.about_me !== this.form.about_me ||
+          this.currentUser.phone_number !== this.form.phone_number ||
+          this.currentUser.address !== this.form.address ||
+          this.currentUser.university !== this.form.university ||
+          this.currentUser.facebook_url !== this.form.facebook_url
         ) {
           return true;
         }
@@ -182,61 +169,63 @@
         this.avatar.uploading = true;
         this.avatar.errors = [];
         this.avatar.fileUploadFormData = new FormData();
-
         this.avatar.fileUploadFormData.append('photo', e.target.files[0]);
 
-        axios
-          .post('/this.currentUser/avatar', this.avatar.fileUploadFormData)
+        post('/api/user/avatar', this.avatar.fileUploadFormData)
           .then((response) => {
-            location.reload();
-
+            //location.reload();
+            this.currentUser.avatar = response.data.image_address
             this.avatar.uploading = false;
+              this.$message({
+                  type: 'success',
+                  message: 'User Avatar Update Successfully'
+              });
           })
           .catch((error) => {
             this.avatar.errors = error.response.data.errors;
             this.avatar.uploading = false;
+              this.$message({
+                  type: 'failed',
+                  message: 'Some thing error'
+              });
           });
       },
 
       save() {
         this.sending = true;
-
-        axios
-          .patch('/users/profile', {
+        let payload = {
             name: this.form.name,
-            bio: this.form.bio,
-            website: this.form.website,
-            location: this.form.location,
-            cover_color: this.form.cover_color,
-            twitter: this.form.twitter
-          })
+            about_me: this.form.about_me,
+            phone_number: this.form.phone_number,
+            address: this.form.address,
+            facebook_url: 'https://facebook.com/' + this.form.facebook_url,
+            university: this.form.university
+        }
+
+        put('/api/user/update', payload)
           .then(() => {
             this.errors = [];
 
             this.currentUser.name = this.form.name;
-            this.currentUser.bio = this.form.bio;
-            this.currentUser.location = this.form.location;
-            this.currentUser.cover_color = this.form.cover_color;
-            this.currentUser.website = this.form.website;
-            this.currentUser.twitter = this.form.twitter;
-
-            if (
-              typeof Store.page.user.temp.username != 'undefined' &&
-              Store.page.user.temp.id == this.currentUser.id
-            ) {
-              Store.page.user.temp.name = this.currentUser.name;
-              Store.page.user.temp.bio = this.currentUser.bio;
-              Store.page.user.temp.cover_color = this.currentUser.cover_color;
-              Store.page.user.temp.location = this.currentUser.location;
-              Store.page.user.temp.website = this.currentUser.website;
-              Store.page.user.temp.twitter = this.currentUser.twitter;
-            }
+            this.currentUser.about_me = this.form.about_me;
+            this.currentUser.address = this.form.address;
+            this.currentUser.university = this.form.university;
+            this.currentUser.phone_number = this.form.phone_number;
+            this.currentUser.facebook_url = this.form.facebook_url;
 
             this.sending = false;
+              this.$message({
+                  type: 'success',
+                  message: 'User Profile Update Successfully'
+              });
           })
           .catch((error) => {
             this.sending = false;
             this.errors = error.response.data.errors;
+              this.$message({
+                  type: 'failed',
+                  message: 'Some thing error'
+              });
           });
       }
     }

@@ -46,12 +46,12 @@ class PostApiController extends ApiController
             $user = $this->currentUser();
             if($user->channels->contains($channel)) {
                 $posts = $this->post->list($channelId, $number, $limit);
-                return response()->json(['status' => true, 'data' => $posts], self::CODE_UPDATE_SUCCESS);
+                return $this->response->withArray(Post::hydrate($posts));
             }else{
-                return response()->json(['status' => false, 'data' => trans('messages.user.not_in_channel')], self::CODE_UNAUTHORIZED);
+                return $this->response->withForbidden(trans('messages.user.not_in_channel'));
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withInternalServer($e->getMessage());
         }
     }
 
@@ -70,12 +70,12 @@ class PostApiController extends ApiController
             $user = $this->currentUser();
             if($user->channels->contains($channel)) {
                 $posts = $channel->pinned();
-                return response()->json(['status' => true, 'data' => $posts], self::CODE_UPDATE_SUCCESS);
+                return $this->response->withArray($posts);
             }else{
-                return response()->json(['status' => false, 'data' => trans('messages.user.not_in_channel')], self::CODE_UNAUTHORIZED);
+                return $this->response->withForbidden(trans('messages.user.not_in_channel'));
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withInternalServer($e->getMessage());
         }
     }
 
@@ -108,12 +108,13 @@ class PostApiController extends ApiController
                     $this->post->addFollower($post->id, $u);
                 }
                 $post->followers;
-                return response()->json(['status' => true, 'data' => $post], self::CODE_CREATE_SUCCESS);
+
+                return $this->response->withCreated($post);
             }else{
-                    return response()->json(['status' => false, 'data' => trans('messages.user.not_in_channel')], self::CODE_UNAUTHORIZED);
-                }
+                return $this->response->withForbidden(trans('messages.user.not_in_channel'));
+            }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
+            return $this->response->withInternalServer($e->getMessage());
         }
     }
 
@@ -132,13 +133,13 @@ class PostApiController extends ApiController
             $id = $request->get('id');
             $post = $this->post->getById($id);
             if($post->creator == $this->currentUser()->id) {
-                $success = $this->post->destroy($id);
-                return response()->json(['status' => $success, 'data' => $post], self::CODE_DELETE_SUCCESS);
+                $this->post->destroy($id);
+                return $this->response->withUpdated($post);
             }else{
-                return response()->json(['status' => false, 'data' => trans('messages.user.permission_deny')], self::CODE_METHOD_NOT_ALLOWED);
+                return $this->response->withForbidden(trans('messages.user.permission_deny'));
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withInternalServer($e->getMessage());
         }
     }
 
@@ -156,12 +157,12 @@ class PostApiController extends ApiController
             $postId = $request->get('post_id');
             $follow = $this->post->addFollower($postId, $userId);
             if(!empty($follow)) {
-                return response()->json(['status' => true, 'data' => $follow], self::CODE_CREATE_SUCCESS);
+                return $this->response->withMessage(trans('messages.user.follow_success'));
             }else{
                 return response()->json(['status' => true, 'data' => trans('messages.user.not_follow')], self::CODE_INTERNAL_ERROR);
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
+            return $this->response->withInternalServer($e->getMessage());
         }
     }
 
@@ -180,12 +181,12 @@ class PostApiController extends ApiController
             $postId = $request->get('post_id');
             $follow = $this->post->removeFollower($postId, $userId);
             if(!empty($follow)) {
-                return response()->json(['status' => true, 'data' => $follow], self::CODE_DELETE_SUCCESS);
+                return $this->response->withMessage(trans('messages.user.unfollow_success'));
             }else{
-                return response()->json(['status' => true, 'data' => trans('messages.user.not_follow')], self::CODE_INTERNAL_ERROR);
+                return $this->response->withForbidden(trans('messages.user.not_follow'));
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
+            return $this->response->withInternalServer($e->getMessage());
         }
     }
 
@@ -205,12 +206,12 @@ class PostApiController extends ApiController
             if($user->channels->contains($channel)) {
                 $post = $this->post->updateColumn($request->get('post_id'),[
                     'type' => Post::PINNED,]);
-                return response()->json(['status' => true, 'data' => $post], self::CODE_UPDATE_SUCCESS);
+                return $this->response->withMessage(trans('messages.user.pin_success'));
             }else{
-                return response()->json(['status' => false, 'data' => trans('messages.user.not_in_channel')], self::CODE_UNAUTHORIZED);
+                return $this->response->withForbidden(trans('messages.user.not_in_channel'));
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
+            return $this->response->withInternalServer($e->getMessage());
         }
     }
 
@@ -230,14 +231,14 @@ class PostApiController extends ApiController
             if($post->creator == $this->currentUser()->id) {
                 $allow = ['content'];
                 $update = array_filter(array_intersect_key($request->all(), array_flip($allow)));
-                $success = $this->post->updateColumn($id, $update);
+                $this->post->updateColumn($id, $update);
                 $post = $this->post->getById($id);
-                return response()->json(['status' => $success, 'data' => $post], self::CODE_UPDATE_SUCCESS);
+                return $this->response->withUpdated($post);
             }else{
-                return response()->json(['status' => false, 'data' => trans('messages.user.permission_deny')], self::CODE_METHOD_NOT_ALLOWED);
+                return $this->response->withForbidden( trans('messages.user.permission_deny'));
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withInternalServer($e->getMessage());
         }
     }
 
@@ -255,9 +256,9 @@ class PostApiController extends ApiController
                 'report_creator_id' => $this->currentUser()->id,
                 'status' => Report::YET,
             ]));
-            return response()->json(['status' => true, 'data' => $report], self::CODE_UPDATE_SUCCESS);
+            return $this->response->withCreated($report);
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withInternalServer($e->getMessage());
         }
     }
 

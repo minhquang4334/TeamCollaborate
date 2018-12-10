@@ -2,16 +2,17 @@
 
     <nav class="navbar navbar-expand-md bg-light navbar-light">
         <!-- Brand -->
-        <a class="navbar-brand ml-3" href="#">
-            <strong id="Channelname">Channel Name</strong>
-            <small><span class="far fa-user mx-2"></span><span id="member-number">5</span></small>
+        <div class="navbar-brand ml-3">
+            <strong id="Channelname" v-if="inChannel">{{channel.name}}</strong>
+            <strong v-else>Home</strong>
+            <small><span class="far fa-user mx-2"></span><span id="member-number">{{numberMemberInChannel}}</span></small>
 
             <span class="mx-3 dropdown" data-toggle="collapse" data-target="#settingDropdown">
                 <a style="cursor: pointer" data-toggle="dropdown">
                     <span class="fas fa-cogs"></span>
                 </a>
                 <div id="settingDropdown" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation" aria-labelledby="notificationDropdown">
-                <a class="dropdown-item">
+                <a class="dropdown-item" @click.prevent="showAboutChannel">
                     <p>
                         <span class="fas fa-info-circle mr-2"></span>
                         Channel About
@@ -46,8 +47,9 @@
             </span>
             <span class="dropdown d-md-none" data-toggle="collapse" data-target="#preferencesDropdown">
                     <a style="cursor: pointer" data-toggle="dropdown">
-                        <img src="/images/faces/face4.jpg" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
+                        <img :src="userAvatar" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
                         <span class="online-status online bg-success"></span>
+                        <strong class="ml-3">Username</strong>
                     </a>
                     <div id="preferencesDropdown" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation">
                         <a class="dropdown-item" @click="preferences()">
@@ -66,7 +68,7 @@
                     </div>
                 </span>
 
-        </a>
+        </div>
 
         <!-- Toggler/collapsibe Button -->
         <button class="navbar-toggler mr-3" type="button" data-toggle="collapse" data-target="#navbarSupportedConten">
@@ -75,95 +77,101 @@
 
         <!-- Navbar links -->
         <div class="collapse navbar-collapse" id="navbarSupportedConten">
-            <ul class="navbar-nav d-md-none menu">
-                <li class="nav-item nav-category">
-                    <a class="nav-link" style="cursor:pointer" @click="newchannel()">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="index.html">
-                        <span class="fab fa-slack-hash text-light"></span>
-                        <span class="menu-title">Genarate</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">
-                        <span class="fas fa-lock text-light"></span>
-                        <span class="menu-title">Channel 1</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="index.html">
-                        <span class="fas fa-lock text-light"></span>
-                        <span class="menu-title">Channel 2</span>
-                    </a>
-                </li>
-                <li class="nav-item nav-category">
-                    <span class="nav-link">DIRECT MESSAGE</span>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="pages/tables/basic-table.html">
-                        <span class="fas fa-user text-light"></span>
-                        <span class="menu-title">User 1</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="pages/tables/basic-table.html">
-                        <span class="fas fa-user text-light"></span>
-                        <span class="menu-title">User 2</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="pages/tables/basic-table.html">
-                        <span class="fas fa-user text-light"></span>
-                        <span class="menu-title">User 3</span>
-                    </a>
-                </li>
-            </ul>
 
-            <span class="dropdown ml-auto d-none d-md-block" data-toggle="collapse" data-target="#preferencesDropdown2">
-                    <a style="cursor: pointer" data-toggle="dropdown">
-                        <img src="/images/faces/face4.jpg" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
-                        <span class="online-status online bg-success"></span>
-                    </a>
 
-                    <div id="preferencesDropdown2" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation">
-                        <a class="dropdown-item" @click="preferences()">
-                            <p>
-                                <span class="fas fa-user-circle mr-2"></span>
-                                Preferences
-                            </p>
-                        </a>
-                        <a class="dropdown-item" @click="logout()">
-                            <p>
-                                <span class="fas fa-sign-out-alt mr-2"></span>
-                                Logout
-                            </p>
-                        </a>
+            <menu-list :channel_id="channel_id" :isVertical="isVertical"/>
 
-                    </div>
-                </span>
             <form class="form-inline p-3 searchForm" action="/action_page.php">
                 <input class="form-control" type="text" placeholder="Search">
-                <button class="btn btn-success" type="submit">Search</button>
             </form>
+            <span class="dropdown ml-auto margin-right-35 d-none d-md-block" data-toggle="collapse" data-target="#preferencesDropdown2">
+                <a style="cursor: pointer" data-toggle="dropdown">
+                    <img :src="userAvatar" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
+                    <span class="online-status online bg-success"></span>
+                    <strong class="ml-3" style="font-size: 18px">Username</strong>
+                </a>
+
+                <div id="preferencesDropdown2" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation">
+                    <a class="dropdown-item" @click="preferences()">
+                        <p>
+                            <span class="fas fa-user-circle mr-2"></span>
+                            Preferences
+                        </p>
+                    </a>
+                    <a class="dropdown-item" @click="logout()">
+                        <p>
+                            <span class="fas fa-sign-out-alt mr-2"></span>
+                            Logout
+                        </p>
+                    </a>
+
+                </div>
+            </span>
         </div>
     </nav>
 </template>
 <script>
-    import {get} from '../../../helper/request.js'
-    export default {
-      methods: {
-        logout: function () {
-          this.$store.dispatch('auth/logout')
-            .then(() => {
-              this.$router.push({ name: 'login' });
-            });
-        },
+  import {get} from '../../../helper/request.js'
+  import menuList from "./Menu.vue"
 
-        preferences: function () {
-          this.$router.push({ name: 'preferences' });
-        },
 
+  export default {
+    props: ['channel'],
+
+    data() {
+      return {
+        currentUser: this.$store.state.auth.user,
+        isVertical: false,
+        channel_id: this.channel.id,
+      }
+    },
+
+
+
+    computed: {
+      inChannel: function() {
+        return this.channel.channel_id;
       },
-    }
+
+      numberMemberInChannel: function() {
+        if(this.inChannel) {
+          return this.channel.users.data.length;
+        }
+        return 0;
+      },
+
+      userAvatar: function() {
+        if(!this.currentUser.avatar) {
+          this.currentUser.avatar = '/images/default-avatar.png'
+        }
+        return this.currentUser.avatar;
+      }
+    },
+
+      components:{
+          menuList
+      },
+
+    methods: {
+      logout: function () {
+        this.$store.dispatch('auth/logout')
+          .then(() => {
+            this.$router.push({ name: 'login' });
+          });
+      },
+
+      preferences: function () {
+        this.$router.push({ name: 'preferences' });
+      },
+
+      newchannel: function () {
+        this.$router.push({ name: 'channel' });
+      },
+
+      showAboutChannel: function () {
+          this.$emit('showAboutChannel');
+      },
+
+    },
+  }
 </script>

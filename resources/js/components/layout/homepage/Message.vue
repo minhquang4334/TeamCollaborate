@@ -48,6 +48,11 @@
                                 <span class="count">{{ points }}</span>
                             </a>
 
+                            <a class="like-button"
+                               @click.prevent="showComment">
+                                <i class="far fa-comment-dots text-muted"></i>
+                            </a>
+
                             <el-tooltip :content="bookmarked ? 'Unbookmark' : 'Bookmark'"
                                         placement="top"
                                         transition="false"
@@ -150,7 +155,13 @@
                 </div>
 
                 <div class="text">
-                    <markdown :text="list.content.text"></markdown>
+                    <markdown :text="list.content.text" ></markdown>
+                </div>
+                <div class="media cursor-pointer">
+                    <p class="media-body small ml-5" @click.prevent="showComment">
+                        <strong class="d-block text-gray-dark">12 reply <i class="fas fa-reply"></i></strong>
+
+                    </p>
                 </div>
             </div>
 
@@ -245,6 +256,10 @@
           this.list.likes_count++;
           this.$store.state.comments.likes.push(this.list.id);
         }
+      },
+
+      comment(){
+          this.$emit('comment');
       },
 
       bookmarked: {
@@ -396,6 +411,10 @@
             app.$Progress.fail();
           });
       },
+
+        showComment(){
+            this.$emit('comment');
+        },
 
       doubleClicked() {
         if (this.isGuest) return;

@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeIndex from "../components/layout/homepage/Index.vue"
 import Channel from "../components/layout/channel/Index.vue"
-import Invite from "../components/layout/homepage/Invite.vue"
+import InviteChannel from "../components/layout/homepage/InviteChannel.vue"
+import InviteApp from "../components/layout/homepage/InviteApp.vue"
+import DirectMessage from "../components/layout/homepage/DirectMessage.vue"
 import Login from "../components/user/auth/Login.vue"
 import ForgotPassword from "../components/user/auth/ForgotPassword.vue"
 import ResetPassword from "../components/user/auth/ResetPassword.vue"
@@ -11,6 +13,7 @@ import PageNotFound from "../components/views/404.vue"
 import AccessDenied from "../components/views/400.vue"
 import NoticeVerifyEmail from "../components/views/NoticeVerifyEmail.vue"
 import Preferences from "../components/user/Preferences.vue"
+import ChannelDetail from "../components/layout/homepage/Index.vue"
 import store from '../store/index'
 import middlewares from './middleware'
 
@@ -26,14 +29,24 @@ let routes = [
     path: '/home', name: 'homeIndex', component: HomeIndex, beforeEnter: middlewares.auth
   },
   {
-    path: '/channel', name: 'channel', component: Channel
+    path: '/channel/:id', name: 'ChannelDetail', component: ChannelDetail, beforeEnter: middlewares.auth
   },
   {
-    path: '/invite', name: 'invite', component: Invite
+    path: '/channel', name: 'channel', component: Channel, beforeEnter: middlewares.auth
   },
   {
-    path: '/preferences', name: 'preferences', component: Preferences
+    path: '/direct-message', name: 'derectMessage', component: DirectMessage, beforeEnter: middlewares.auth
   },
+  {
+    path: '/invite-channel', name: 'inviteToChannel', component: InviteChannel, beforeEnter: middlewares.auth
+  },
+  {
+    path: '/invite-app', name: 'inviteToApp', component: InviteApp, beforeEnter: middlewares.auth
+  },
+  {
+    path: '/preferences', name: 'preferences', component: Preferences, beforeEnter: middlewares.auth
+  },
+
   {
     path: '/forgot-password', name: 'forgot_password', component: ForgotPassword, beforeEnter: middlewares.guest
   },

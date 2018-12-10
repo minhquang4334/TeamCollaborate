@@ -53,7 +53,7 @@
                         <button type="submit" @click.prevent="submit" class="btn btn-primary">Submit</button>
                     </form>
                     <div class="card-body cs-pointer text-info" @click="toHome">
-                        <i class="fa fa-backward">Back</i>
+                        <i class="fa fa-backward "></i> Back
                     </div>
                 </div>
             </div>
@@ -89,14 +89,24 @@
 
         submit() {
           let url = '/api/channel/create';
+          let invited_users = [];
+          this.invite_users.forEach((data) => {
+            invited_users.push(data.id);
+          });
+          console.log("invited_users: ", invited_users);
           let payload = {
-            type : "public" ? 0 : 1,
+            type : this.type === "public" ? 0 : 1,
             purpose : this.purpose,
             name: this.name,
-            invited_users: this.invite_users
+            invited_users: invited_users,
           }
           post(url, payload).then(({data}) => {
-
+            this.$router.push({
+              name: "ChannelDetail",
+              params: {
+                id: data.data.channel_id,
+              }
+            })
           })
         },
 

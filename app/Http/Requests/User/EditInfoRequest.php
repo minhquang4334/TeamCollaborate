@@ -21,7 +21,6 @@ class EditInfoRequest extends JsonFormRequest
             'facebook_url' => 'url',
             'email' => 'email',
             'birthday' => 'date',
-            'avatar' => 'nullable',
             'address' => 'nullable',
             'about_me' => 'nullable',
         ];

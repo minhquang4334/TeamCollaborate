@@ -35,6 +35,6 @@ class ChannelRepository {
     }
 
     public function searchByName($name){
-        return $this->getByLike('channel_id', $name)->get();
+        return $this->getByLike('name', $name)->get();
     }
 }

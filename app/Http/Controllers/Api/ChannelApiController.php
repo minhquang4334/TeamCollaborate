@@ -8,6 +8,7 @@ use App\Model\Channel;
 use App\Repositories\ChannelRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
+
 class ChannelApiController extends ApiController
 {
     protected $channel;
@@ -35,11 +36,14 @@ class ChannelApiController extends ApiController
      */
     public function create(CreateChannelRequest $request) {
         try{
+	        $str_random = strtoupper(str_random(config('const.length_channel_code')));
             $channel = $this->channel->store(array_merge($request->all(), [
                 'creator' => $this->currentUser()->id,
                 'status'  => Channel::ACTIVE,
             ]));
-            if($request->has('invited_users')) {
+            $channel_code = $str_random.$channel->id;
+			      $this->channel->updateColumn($channel->id, ['channel_id' => $channel_code]);
+            if($request->has('invited_users')){
                 $members = array_merge($request->get('invited_users'), [$this->currentUser()->id]);
             }else
                 $members = [$this->currentUser()->id];
@@ -48,10 +52,11 @@ class ChannelApiController extends ApiController
                     $channel->users()->attach($id, ['display_name' => $user->name, 'status' => Channel::ACTIVE ]);
 //                }
             }
-            $channel->users;
-            return response()->json(['status' => true, 'data' => $channel], self::CODE_CREATE_SUCCESS);
+
+            $channel->channel_id = $channel_code;
+            return $this->response->withCreated($channel);
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
+            return $this->response->withForbidden($e->getMessage());
         }
     }
 
@@ -65,10 +70,10 @@ class ChannelApiController extends ApiController
      */
     public function getChannelInfo(Request $request) {
         try{
-            $channel = $this->channel->getById($request->get('id'));
-            return response()->json(['status' => true, 'data' => $channel], self::CODE_GET_SUCCESS);
+            $channel = $this->channel->getChannelById($request->get('id'));
+            return $this->response->withCreated($channel);
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withInternalServer($e->getMessage());
         }
     }
 
@@ -82,9 +87,9 @@ class ChannelApiController extends ApiController
     public function getListChannelOfUser() {
         try {
             $channels = $this->user->takePartInChannels($this->currentUser()->id);
-            return response()->json(['status' => true, 'data' => $channels], self::CODE_GET_SUCCESS);
+            return $this->response->withArray(Channel::hydrate($channels));
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
+            return $this->response->withNotFound($e->getMessage());
         }
     }
 
@@ -100,9 +105,9 @@ class ChannelApiController extends ApiController
         try {
             $name = $request->get('search_name');
             $channels = $this->channel->searchByName($name);
-            return response()->json(['status' => true, 'data' => $channels], self::CODE_GET_SUCCESS);
+            return $this->response->withArray($channels);
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_BAD_REQUEST);
+            return $this->response->withNotFound($e->getMessage());
         }
     }
 
@@ -120,16 +125,16 @@ class ChannelApiController extends ApiController
             $id = $request->get('id');
             $channel = $this->channel->getById($id);
             if($channel->creator == $this->currentUser()->id) {
-                $allow = ['type', 'purpose', 'description', 'channel_id'];
+                $allow = ['type', 'purpose', 'description', 'channel_id', 'name'];
                 $update = array_filter(array_intersect_key($request->all(), array_flip($allow)));
-                $success = $this->channel->updateColumn($id, $update);
+                $this->channel->updateColumn($id, $update);
                 $channel = $this->channel->getById($id);
-                return response()->json(['status' => $success, 'data' => $channel], self::CODE_UPDATE_SUCCESS);
+                return $this->response->withUpdated($channel);
             }else{
-                return response()->json(['status' => false, 'data' => trans('messages.user.permission_deny')], self::CODE_METHOD_NOT_ALLOWED);
+                return $this->response->withForbidden(trans('messages.user.permission_deny'));
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withNotFound($e->getMessage());
         }
     }
 
@@ -148,13 +153,13 @@ class ChannelApiController extends ApiController
             $id = $request->get('id');
             $channel = $this->channel->getById($id);
             if($channel->creator == $this->currentUser()->id) {
-                $success = $this->channel->destroy($id);
-                return response()->json(['status' => $success, 'data' => $channel], self::CODE_DELETE_SUCCESS);
+                $this->channel->destroy($id);
+                return $this->response->withUpdated($channel);
             }else{
-                return response()->json(['status' => false, 'data' => trans('messages.user.permission_deny')], self::CODE_METHOD_NOT_ALLOWED);
+                return $this->response->withForbidden(trans('messages.user.permission_deny'));
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withBadRequest($e->getMessage());
         }
     }
 
@@ -173,12 +178,12 @@ class ChannelApiController extends ApiController
             if($this->currentUser()->channels->contains($channel)){
                 $user = $this->user->getById($userId);
                 $channel->users()->attach($userId, ['display_name' => $user->name, 'status' => Channel::ACTIVE ]);
-                return response()->json(['status' => true, 'data' => $channel], self::CODE_UPDATE_SUCCESS);
+                return $this->response->withUpdated($channel);
             }else{
-                return response()->json(['status' => false, 'data' => trans('messages.user.permission_deny')], self::CODE_METHOD_NOT_ALLOWED);
+                return $this->response->withForbidden(trans('messages.user.permission_deny'));
             }
         }catch (\Exception $e){
-            return response()->json(['status' => false, 'data' => $e->getMessage()], self::CODE_INTERNAL_ERROR);
+            return $this->response->withBadRequest($e->getMessage());
         }
     }
 }

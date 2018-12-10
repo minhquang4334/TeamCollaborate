@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Model\Channel;
 use App\Model\User;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Matcher\Not;
