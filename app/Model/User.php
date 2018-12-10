@@ -2,13 +2,13 @@
 
 namespace App\Model;
 
+use App\Notifications\InviteToAppNotification;
 use App\Notifications\UserResetPasswordNotification;
 use App\Notifications\UserVerifyEmail;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends AbstractUser implements JWTSubject, MustVerifyEmail
@@ -20,7 +20,7 @@ class User extends AbstractUser implements JWTSubject, MustVerifyEmail
     //use HasPushSubscriptions;
 
     protected $table = 'users';
-
+    protected $email;
     /**
      * The attributes that are mass assignable.
      *
@@ -60,6 +60,7 @@ class User extends AbstractUser implements JWTSubject, MustVerifyEmail
     {
         parent::boot();
     }
+
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -210,5 +211,18 @@ class User extends AbstractUser implements JWTSubject, MustVerifyEmail
     public function sendEmailVerificationNotification()
     {
         $this->notify(new UserVerifyEmail());
+    }
+
+    public function setEmail($email){
+        $this->email = $email;
+        return $this;
+    }
+    /**
+     * Send email to invite user to app
+     *
+     * @param $link
+     */
+    public function sendInviteToAppNotification($link){
+        $this->notify(new InviteToAppNotification($link));
     }
 }

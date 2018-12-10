@@ -81,6 +81,8 @@ class PostApiController extends ApiController
 
     /**
      * Method post
+     * @usage http://localhost:8000/api/post/add?channel_id=2&content=hahahaha&tag_users[]=1&tag_users[]=2
+
      * @usage http://localhost:8000/api/post/add?channel_id=6&content=hahahaha&tag_users[]= 1&tag_users[]=2&is_parent=1&tag_users[]=3
      * add new thread in specific channel
      * store file
