@@ -81,7 +81,7 @@ class PostApiController extends ApiController
 
     /**
      * Method post
-     * @usage http://localhost:8000/api/post/add?channel_id=2&content=hahahaha&tag_users = ['1', '2', '3']
+     * @usage http://localhost:8000/api/post/add?channel_id=6&content=hahahaha&tag_users[]= 1&tag_users[]=2&is_parent=1&tag_users[]=3
      * add new thread in specific channel
      * store file
      * check in thread has tagged user, handle this
@@ -94,16 +94,21 @@ class PostApiController extends ApiController
             $user = $this->currentUser();
             $channel = $this->channel->getById($request->get('channel_id'));
             if($user->channels->contains($channel)) {
-                $allow = ['content', 'channel_id'];
+                $allow = ['content', 'channel_id', 'type', 'is_parent'];
                 $input = array_filter(array_intersect_key($request->all(), array_flip($allow)));
                 $post = $this->post->store(array_merge($input, [
                     'creator' => $this->currentUser()->id,
                     'status' => Post::ACTIVE,
                 ]));
-                $tag_users = $request->get('tag_users');
+                if($request->has('tag_users'))
+                    $tag_users = array_merge($request->get('tag_users'), [$this->currentUser()->id]);
+                else
+                    $tag_users = [$this->currentUser()->id];
                 foreach ($tag_users as $u){
                     $this->post->addFollower($post->id, $u);
                 }
+                $post->followers;
+
                 return $this->response->withCreated($post);
             }else{
                 return $this->response->withForbidden(trans('messages.user.not_in_channel'));
