@@ -38,4 +38,8 @@ class UserRepository {
         });
         return $channels;
     }
+
+    public function isRegistered($email){
+        return ($this->model->where('email', $email)->count() > 0);
+    }
 }

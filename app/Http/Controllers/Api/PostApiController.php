@@ -81,7 +81,7 @@ class PostApiController extends ApiController
 
     /**
      * Method post
-     * @usage http://localhost:8000/api/post/add?channel_id=2&content=hahahaha&tag_users = ['1', '2', '3']
+     * @usage http://localhost:8000/api/post/add?channel_id=2&content=hahahaha&tag_users[]=1&tag_users[]=2
      * add new thread in specific channel
      * store file
      * check in thread has tagged user, handle this
