@@ -43,8 +43,9 @@
                 <div class="card-body">
                     <div class="list-group">
                         <span
-                                class="list-group-item list-group-item-action cursor-pointer"
+                                class="fas fa-user list-group-item list-group-item-action cursor-pointer"
                                 v-for="(user, index) in channelDetail.listUsers" :key="index">
+
                             {{user.name}}
                         </span>
                     </div>

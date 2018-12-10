@@ -4,6 +4,7 @@ import HomeIndex from "../components/layout/homepage/Index.vue"
 import Channel from "../components/layout/channel/Index.vue"
 import InviteChannel from "../components/layout/homepage/InviteChannel.vue"
 import InviteApp from "../components/layout/homepage/InviteApp.vue"
+import DirectMessage from "../components/layout/homepage/DirectMessage.vue"
 import Login from "../components/user/auth/Login.vue"
 import ForgotPassword from "../components/user/auth/ForgotPassword.vue"
 import ResetPassword from "../components/user/auth/ResetPassword.vue"
@@ -32,6 +33,9 @@ let routes = [
   },
   {
     path: '/channel', name: 'channel', component: Channel, beforeEnter: middlewares.auth
+  },
+  {
+    path: '/direct-message', name: 'derectMessage', component: DirectMessage, beforeEnter: middlewares.auth
   },
   {
     path: '/invite-channel', name: 'inviteToChannel', component: InviteChannel, beforeEnter: middlewares.auth

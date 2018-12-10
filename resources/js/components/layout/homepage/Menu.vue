@@ -14,21 +14,21 @@
             </a>
         </li>
         <li class="nav-item nav-category">
-            <span class="nav-link">DIRECT MESSAGE</span>
+            <a class="nav-link" style="cursor:pointer" @click="directMessage">DIRECT MESSAGE<span class="fas fa-plus-circle float-right"></span></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="pages/tables/basic-table.html">
-                <span class="menu-title">User 1</span>
+                <span class="menu-title"> <span class="fas fa-user mr-2"></span>User 1</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="pages/tables/basic-table.html">
-                <span class="menu-title">User 2</span>
+                <span class="menu-title"> <span class="fas fa-user mr-2"></span>User 2</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="pages/tables/basic-table.html">
-                <span class="menu-title">User 3</span>
+                <span class="menu-title"> <span class="fas fa-user mr-2"></span>User 3</span>
             </a>
         </li>
     </ul>
@@ -64,6 +64,10 @@
 
             newchannel: function () {
                 this.$router.push({ name: 'channel' });
+            },
+
+            directMessage: function(){
+                this.$router.push({name : 'derectMessage'});
             },
 
             getListChannel() {

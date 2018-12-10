@@ -155,7 +155,13 @@
                 </div>
 
                 <div class="text">
-                    <markdown :text="list.content.text"></markdown>
+                    <markdown :text="list.content.text" ></markdown>
+                </div>
+                <div class="media cursor-pointer">
+                    <p class="media-body small ml-5" @click.prevent="showComment">
+                        <strong class="d-block text-gray-dark">12 reply <i class="fas fa-reply"></i></strong>
+
+                    </p>
                 </div>
             </div>
 
