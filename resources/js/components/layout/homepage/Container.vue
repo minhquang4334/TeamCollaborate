@@ -1,16 +1,16 @@
 <template>
     <div class="row p-3 h-100">
         <div class="col-md-8 h-100 border-right">
-            <message-list :listMessages="listMessages"/>
+            <message-list :listMessages="listMessages" @showComment="showComment"/>
             <comment-form @postComment="addNewComment"/>
         </div>
         <div class="col-md-4 h-100 d-none d-md-block">
             <about-channel v-if="isAboutChannel" :channelDetail="channelDetail"/>
+            <thread v-else/>
         </div>
     </div>
 </template>
 <script>
-  import NewMessage from "./NewMessage.vue"
   import CommentForm from "../../includes/CommentForm.vue"
   import MessageList from "./MessageList.vue"
   import AboutChannel from "./AboutChannel.vue"
@@ -18,11 +18,10 @@
   import {get} from "../../../helper/request"
 
   export default {
-    props: ['channel'],
+    props: ['channel', 'isAboutChannel'],
 
     data() {
       return {
-        isAboutChannel: true,
         channel_id: this.channel.channel_id,
         channelDetail: {
           listUsers: [],
@@ -89,7 +88,6 @@
     },
 
     components:{
-      NewMessage,
       MessageList,
       AboutChannel,
       Thread,
@@ -138,9 +136,10 @@
         return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
       },
 
-      getAboutChannel() {
+        showComment(){
+          this.$emit('showComment');
+        },
 
-      }
     }
 
   }

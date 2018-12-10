@@ -3,8 +3,8 @@
         <div class="row h-100">
             <leftBar :channel_id="channel_id"/>
             <div class="col-md-10 p-0">
-                <headBar :channel="channel"/>
-                <container :channel="channel"/>
+                <headBar :channel="channel"  @showAboutChannel="showAboutChannel"/>
+                <container :channel="channel" :isAboutChannel="isAboutChannel" @showComment="showComment"/>
             </div>
         </div>
 
@@ -25,6 +25,7 @@
       return {
         channel_id: this.$route.params.id,
         channel: {},
+        isAboutChannel: false,
       }
     },
 
@@ -56,6 +57,14 @@
             console.log(err);
           })
         }
+      },
+
+      showAboutChannel(){
+          this.isAboutChannel = true;
+      },
+
+      showComment(){
+          this.isAboutChannel = false;
       }
     }
 

@@ -53,7 +53,7 @@
                         <button type="submit" @click.prevent="submit" class="btn btn-primary">Submit</button>
                     </form>
                     <div class="card-body cs-pointer text-info" @click="toHome">
-                        <i class="fa fa-backward">Back</i>
+                        <i class="fa fa-backward "></i> Back
                     </div>
                 </div>
             </div>
