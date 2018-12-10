@@ -31,6 +31,7 @@
                   let data = x[x.length-1].split('---');
                   document.getElementById('inputEmail').value = atob(data[0]);
                   document.getElementById('inputName').value = atob(data[1]);
+                  document.getElementById('inputEmail').readOnly = true;
                   clearInterval(checkExist);
               }
           }, 100);
