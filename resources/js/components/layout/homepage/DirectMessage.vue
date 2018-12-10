@@ -2,17 +2,17 @@
     <div class="col-10 col-md-6 m-auto h-100 text-center">
         <div class="row h-50 justify-content-center align-items-center">
             <div class="w-100">
-                <h2 class="text-center mb-5">Invite to <strong class="">Channel name</strong></h2>
+                <h2 class="text-center mb-5">Direct Message</h2>
                 <div class="w-100 row">
                     <div class="col-11 p-0">
                         <multiselect v-model="value" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
                     </div>
-                    <div class="col-1 px-0">
+                    <div class="col-1 px-0 ">
                         <button type="button" class="btn btn-secondary h-100">Send</button>
                     </div>
                 </div>
                 <p class="text-muted">
-                    Recent conversations or
+                    entry name or email of user! press enter to add selection or
                     <router-link :to="{name: 'homeIndex'}" >Back</router-link>
                 </p>
             </div>
