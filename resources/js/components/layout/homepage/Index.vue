@@ -25,7 +25,7 @@
       return {
         channel_id: this.$route.params.id,
         channel: {},
-        isAboutChannel: false,
+        isAboutChannel: true,
       }
     },
 

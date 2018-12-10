@@ -1,4 +1,3 @@
-
 <template>
     <div class="fixed-comment-form-wrapper new-message"
          @keydown.down="handleKey($event, 'down')"
@@ -138,352 +137,354 @@
 </template>
 
 <script>
-  import Markdown from './Markdown.vue';
-  import MoonLoader from './MoonLoader.vue';
-  import EmojiPicker from './EmojiPicker';
-  import QuickEmojiPicker from './QuickEmojiPicker.vue';
-  import QuickChannelPicker from './QuickChannelPicker';
-  import QuickMentioner from './QuickMentioner.vue';
-  import Typing from './Typing.vue';
-  import Helpers from '../../mixins/Helpers';
-  import InputHelpers from '../../mixins/InputHelpers.js';
-  import {get, post, put} from '../../helper/request'
-  import EmojiIcon from "./Icons/EmojiIcon";
-  import MarkdownGuide from './MarkdownGuide'
+    import Markdown from './Markdown.vue';
+    import MoonLoader from './MoonLoader.vue';
+    import EmojiPicker from './EmojiPicker';
+    import QuickEmojiPicker from './QuickEmojiPicker.vue';
+    import QuickChannelPicker from './QuickChannelPicker';
+    import QuickMentioner from './QuickMentioner.vue';
+    import Typing from './Typing.vue';
+    import Helpers from '../../mixins/Helpers';
+    import InputHelpers from '../../mixins/InputHelpers.js';
+    import {get, post, put} from '../../helper/request'
+    import EmojiIcon from "./Icons/EmojiIcon";
+    import MarkdownGuide from './MarkdownGuide'
 
-  export default {
-    components: {
-      QuickChannelPicker,
-      QuickEmojiPicker,
-      QuickMentioner,
-      MoonLoader,
-      EmojiPicker,
-      EmojiIcon,
-      Markdown,
-      Typing,
-      MarkdownGuide
-    },
-
-    props: ['submission', 'before', 'commentors'],
-
-    mixins: [Helpers, InputHelpers],
-
-    data() {
-      return {
-        emojiPicker: false,
-        loading: false,
-        message: '',
-        temp: '',
-        mentioning: false,
-        EchoChannelAddress: 'submission.' + this.$route.params.slug,
-        isTyping: false,
-        preview: false,
-        showMarkdownGuide: false,
-
-        quickMentioner: {
-          show: false,
-          starter: null
+    export default {
+        components: {
+            QuickChannelPicker,
+            QuickEmojiPicker,
+            QuickMentioner,
+            MoonLoader,
+            EmojiPicker,
+            EmojiIcon,
+            Markdown,
+            Typing,
+            MarkdownGuide
         },
 
-        quickEmojiPicker: {
-          show: false,
-          starter: null
+        props: ['submission', 'before', 'commentors'],
+
+        mixins: [Helpers, InputHelpers],
+
+        data() {
+            return {
+                emojiPicker: false,
+                loading: false,
+                message: '',
+                temp: '',
+                mentioning: false,
+                EchoChannelAddress: 'submission.' + this.$route.params.slug,
+                isTyping: false,
+                preview: false,
+                showMarkdownGuide: false,
+
+                quickMentioner: {
+                    show: false,
+                    starter: null
+                },
+
+                quickEmojiPicker: {
+                    show: false,
+                    starter: null
+                },
+
+                quickChannelPicker: {
+                    show: false,
+                    starter: null
+                },
+
+                editingComment: [],
+                replyingComment: [],
+                parent: 0,
+                list_tag_users: [],
+            };
         },
 
-        quickChannelPicker: {
-          show: false,
-          starter: null
+        created() {
+            console.log(Echo);
+            this.subscribeToEcho();
+            this.$eventHub.$on('edit-comment', this.setEditing);
+            this.$eventHub.$on('reply-comment', this.setReplying);
+            this.$eventHub.$on('pressed-esc', this.handleEscapteKeyup);
         },
 
-        editingComment: [],
-        replyingComment: [],
-        parent: 0,
-      };
-    },
+        beforeDestroy() {
+            this.$eventHub.$off('edit-comment', this.setEditing);
+            this.$eventHub.$off('reply-comment', this.setReplying);
+            this.$eventHub.$off('pressed-esc', this.handleEscapteKeyup);
+        },
 
-    created() {
-      console.log(Echo);
-      this.subscribeToEcho();
-      this.$eventHub.$on('edit-comment', this.setEditing);
-      this.$eventHub.$on('reply-comment', this.setReplying);
-      this.$eventHub.$on('pressed-esc', this.handleEscapteKeyup);
-    },
+        watch: {
+            $route() {
+                this.clear();
+            }
+        },
 
-    beforeDestroy() {
-      this.$eventHub.$off('edit-comment', this.setEditing);
-      this.$eventHub.$off('reply-comment', this.setReplying);
-      this.$eventHub.$off('pressed-esc', this.handleEscapteKeyup);
-    },
+        computed: {
+            replying() {
+                return !_.isEmpty(this.replyingComment);
+            },
 
-    watch: {
-      $route() {
-        this.clear();
-      }
-    },
+            editing() {
+                return !_.isEmpty(this.editingComment);
+            },
 
-    computed: {
-      replying() {
-        return !_.isEmpty(this.replyingComment);
-      },
+            showSubmit() {
+                return this.loading == false && this.message.trim();
+            }
+        },
 
-      editing() {
-        return !_.isEmpty(this.editingComment);
-      },
+        methods: {
+            typed(string) {
+                // close on empty input
+                if (!string.trim()) {
+                    this.quickMentioner.show = false;
+                    this.quickEmojiPicker.show = false;
+                    this.quickChannelPicker.show = false;
+                    return;
+                }
 
-      showSubmit() {
-        return this.loading == false && this.message.trim();
-      }
-    },
+                // get the last typed character (but not the last character of the string)
+                let lastStrIndex = this.lastTypedCharacter('comment-form-textarea');
+                let lastStr = string[lastStrIndex];
+                // let previousStr = string[lastStrIndex - 1];
 
-    methods: {
-      typed(string) {
-        // close on empty input
-        if (!string.trim()) {
-          this.quickMentioner.show = false;
-          this.quickEmojiPicker.show = false;
-          this.quickChannelPicker.show = false;
-          return;
+                // close on space
+                if (lastStr == ' ') {
+                    this.quickMentioner.show = false;
+                    this.quickEmojiPicker.show = false;
+                    this.quickChannelPicker.show = false;
+                    return;
+                }
+
+                // previous must be empty space to continue
+                // if (previousStr != ' ' && string.length > 1) return;
+
+                if (lastStr == '@') {
+                    this.quickMentioner.show = true;
+                    this.quickMentioner.starter = lastStrIndex;
+
+                    this.quickEmojiPicker.show = false;
+                    this.quickChannelPicker.show = false;
+                } else if (lastStr == ':') {
+                    this.quickEmojiPicker.show = true;
+                    this.quickEmojiPicker.starter = lastStrIndex;
+
+                    this.quickMentioner.show = false;
+                    this.quickChannelPicker.show = false;
+                } else if (lastStr == '#') {
+                    this.quickChannelPicker.show = true;
+                    this.quickChannelPicker.starter = lastStrIndex;
+
+                    this.quickEmojiPicker.show = false;
+                    this.quickMentioner.show = false;
+                }
+            },
+
+            /**
+             * Subscribes to the Echo channel. Prepares comment form for whispering "typing".
+             *
+             * @return void
+             */
+            subscribeToEcho() {
+                if (this.isGuest) return;
+
+                Echo.private(this.EchoChannelAddress);
+            },
+
+            /**
+             * Broadcast "typing".
+             *
+             * @return void
+             */
+            whisperTyping() {
+                if (this.isGuest) return;
+
+                if (this.isTyping) return;
+
+                if (this.editing) return;
+
+                Echo.private(this.EchoChannelAddress).whisper('typing', {
+                    username: auth.username
+                });
+
+                this.isTyping = true;
+            },
+
+            /**
+             * Broadcast "finished-typing".
+             *
+             * @return void
+             */
+            whisperFinishedTyping: _.debounce(function () {
+                if (this.isGuest) return;
+
+                Echo.private(this.EchoChannelAddress).whisper('finished-typing', {
+                    username: auth.username
+                });
+
+                this.isTyping = false;
+            }, 600),
+
+            handleKey(event, key) {
+                if (
+                    !this.quickEmojiPicker.show &&
+                    !this.quickMentioner.show &&
+                    !this.quickChannelPicker.show
+                )
+                    return;
+
+                event.preventDefault();
+
+                this.$eventHub.$emit('keyup:' + key);
+            },
+
+            setEditing(comment) {
+                this.clear();
+
+                this.editingComment = comment;
+                this.message = this.editingComment.content.text;
+                this.parent = this.editingComment.parent_id;
+
+                this.$refs.input.focus();
+            },
+
+            setReplying(comment) {
+                this.clear();
+
+                this.replyingComment = comment;
+                this.parent = this.replyingComment.id;
+
+                this.$refs.input.focus();
+            },
+
+            handleEscapteKeyup() {
+                if (this.quickEmojiPicker.show) {
+                    this.quickEmojiPicker.show = false;
+                } else if (this.quickMentioner.show) {
+                    this.quickMentioner.show = false;
+                } else if (this.quickChannelPicker.show) {
+                    this.quickChannelPicker.show = false;
+                } else {
+                    if (
+                        !_.isEmpty(this.editingComment) ||
+                        !_.isEmpty(this.replyingComment)
+                    ) {
+                        this.clear();
+                    }
+                }
+            },
+
+            /**
+             * Like it never happened!
+             *
+             * @return void
+             */
+            clear() {
+                this.editingComment = [];
+                this.replyingComment = [];
+                this.message = '';
+                this.loading = false;
+                this.preview = false;
+                this.parent = 0;
+            },
+
+            pick(pickedStr, starterIndex, typedLength, user) {
+                this.insertPickedItem(
+                    'comment-form-textarea',
+                    pickedStr + ' ',
+                    starterIndex,
+                    typedLength
+                );
+                this.list_tag_users.push(user.id);
+            },
+
+            openEmojiPicker() {
+                this.emojiPicker = true;
+            },
+
+            closeEmojiPicker() {
+                this.emojiPicker = false;
+            },
+
+            submit(event) {
+                event.preventDefault();
+
+                // ignore if any quick pciking box is open
+                if (
+                    this.quickEmojiPicker.show ||
+                    this.quickMentioner.show ||
+                    this.quickChannelPicker.show ||
+                    !this.message.trim()
+                )
+                    return;
+
+                this.closeEmojiPicker();
+
+                if (this.isGuest) {
+                    this.mustBeLogin();
+                    return;
+                }
+
+                this.temp = this.message;
+                this.message = '';
+
+                this.loading = true;
+
+                // we're editing, not posting a new comment
+                if (this.editing) {
+                    if (this.temp == this.before) {
+                        this.message = this.temp;
+                        this.loading = false;
+                        this.$eventHub.$emit('patchedComment', this.editingComment);
+
+                        return;
+                    }
+
+                    this.patchComment();
+                    return;
+                }
+
+                // new comment
+                this.postComment();
+            },
+
+            patchComment() {
+                put(`/comments/${this.editingComment.id}`, {
+                    body: this.temp
+                })
+                    .then(() => {
+                        this.editingComment.content.text = this.temp;
+                        this.$eventHub.$emit('patchedComment', this.editingComment);
+
+                        this.clear();
+                    })
+                    .catch((error) => {
+                        this.loading = false;
+                        this.message = this.temp;
+                    });
+            },
+
+            postComment() {
+                //   post(`/submissions/${this.submission}/comments`, {
+                //       parent_id: this.parent,
+                //       body: this.temp
+                //     })
+                //     .then((response) => {
+                //       Store.state.comments.likes.push(response.data.data.id);
+                //       this.$eventHub.$emit('newComment', response.data.data);
+                //
+                //       this.clear();
+                //     })
+                //     .catch((error) => {
+                //       this.loading = false;
+                //       this.message = this.temp;
+                //     });
+                // }
+                this.$emit('postComment', this.temp);
+                this.clear();
+            }
         }
-
-        // get the last typed character (but not the last character of the string)
-        let lastStrIndex = this.lastTypedCharacter('comment-form-textarea');
-        let lastStr = string[lastStrIndex];
-        // let previousStr = string[lastStrIndex - 1];
-
-        // close on space
-        if (lastStr == ' ') {
-          this.quickMentioner.show = false;
-          this.quickEmojiPicker.show = false;
-          this.quickChannelPicker.show = false;
-          return;
-        }
-
-        // previous must be empty space to continue
-        // if (previousStr != ' ' && string.length > 1) return;
-
-        if (lastStr == '@') {
-          this.quickMentioner.show = true;
-          this.quickMentioner.starter = lastStrIndex;
-
-          this.quickEmojiPicker.show = false;
-          this.quickChannelPicker.show = false;
-        } else if (lastStr == ':') {
-          this.quickEmojiPicker.show = true;
-          this.quickEmojiPicker.starter = lastStrIndex;
-
-          this.quickMentioner.show = false;
-          this.quickChannelPicker.show = false;
-        } else if (lastStr == '#') {
-          this.quickChannelPicker.show = true;
-          this.quickChannelPicker.starter = lastStrIndex;
-
-          this.quickEmojiPicker.show = false;
-          this.quickMentioner.show = false;
-        }
-      },
-
-      /**
-       * Subscribes to the Echo channel. Prepares comment form for whispering "typing".
-       *
-       * @return void
-       */
-      subscribeToEcho() {
-        if (this.isGuest) return;
-
-        Echo.private(this.EchoChannelAddress);
-      },
-
-      /**
-       * Broadcast "typing".
-       *
-       * @return void
-       */
-      whisperTyping() {
-        if (this.isGuest) return;
-
-        if (this.isTyping) return;
-
-        if (this.editing) return;
-
-        Echo.private(this.EchoChannelAddress).whisper('typing', {
-          username: auth.username
-        });
-
-        this.isTyping = true;
-      },
-
-      /**
-       * Broadcast "finished-typing".
-       *
-       * @return void
-       */
-      whisperFinishedTyping: _.debounce(function() {
-        if (this.isGuest) return;
-
-        Echo.private(this.EchoChannelAddress).whisper('finished-typing', {
-          username: auth.username
-        });
-
-        this.isTyping = false;
-      }, 600),
-
-      handleKey(event, key) {
-        if (
-          !this.quickEmojiPicker.show &&
-          !this.quickMentioner.show &&
-          !this.quickChannelPicker.show
-        )
-          return;
-
-        event.preventDefault();
-
-        this.$eventHub.$emit('keyup:' + key);
-      },
-
-      setEditing(comment) {
-        this.clear();
-
-        this.editingComment = comment;
-        this.message = this.editingComment.content.text;
-        this.parent = this.editingComment.parent_id;
-
-        this.$refs.input.focus();
-      },
-
-      setReplying(comment) {
-        this.clear();
-
-        this.replyingComment = comment;
-        this.parent = this.replyingComment.id;
-
-        this.$refs.input.focus();
-      },
-
-      handleEscapteKeyup() {
-        if (this.quickEmojiPicker.show) {
-          this.quickEmojiPicker.show = false;
-        } else if (this.quickMentioner.show) {
-          this.quickMentioner.show = false;
-        } else if (this.quickChannelPicker.show) {
-          this.quickChannelPicker.show = false;
-        } else {
-          if (
-            !_.isEmpty(this.editingComment) ||
-            !_.isEmpty(this.replyingComment)
-          ) {
-            this.clear();
-          }
-        }
-      },
-
-      /**
-       * Like it never happened!
-       *
-       * @return void
-       */
-      clear() {
-        this.editingComment = [];
-        this.replyingComment = [];
-        this.message = '';
-        this.loading = false;
-        this.preview = false;
-        this.parent = 0;
-      },
-
-      pick(pickedStr, starterIndex, typedLength) {
-        this.insertPickedItem(
-          'comment-form-textarea',
-          pickedStr + ' ',
-          starterIndex,
-          typedLength
-        );
-      },
-
-      openEmojiPicker() {
-        this.emojiPicker = true;
-      },
-
-      closeEmojiPicker() {
-        this.emojiPicker = false;
-      },
-
-      submit(event) {
-        event.preventDefault();
-
-        // ignore if any quick pciking box is open
-        if (
-          this.quickEmojiPicker.show ||
-          this.quickMentioner.show ||
-          this.quickChannelPicker.show ||
-          !this.message.trim()
-        )
-          return;
-
-        this.closeEmojiPicker();
-
-        if (this.isGuest) {
-          this.mustBeLogin();
-          return;
-        }
-
-        this.temp = this.message;
-        this.message = '';
-
-        this.loading = true;
-
-        // we're editing, not posting a new comment
-        if (this.editing) {
-          if (this.temp == this.before) {
-            this.message = this.temp;
-            this.loading = false;
-            this.$eventHub.$emit('patchedComment', this.editingComment);
-
-            return;
-          }
-
-          this.patchComment();
-          return;
-        }
-
-        // new comment
-        this.postComment();
-      },
-
-      patchComment() {
-        put(`/comments/${this.editingComment.id}`, {
-            body: this.temp
-          })
-          .then(() => {
-            this.editingComment.content.text = this.temp;
-            this.$eventHub.$emit('patchedComment', this.editingComment);
-
-            this.clear();
-          })
-          .catch((error) => {
-            this.loading = false;
-            this.message = this.temp;
-          });
-      },
-
-      postComment() {
-        //   post(`/submissions/${this.submission}/comments`, {
-        //       parent_id: this.parent,
-        //       body: this.temp
-        //     })
-        //     .then((response) => {
-        //       Store.state.comments.likes.push(response.data.data.id);
-        //       this.$eventHub.$emit('newComment', response.data.data);
-        //
-        //       this.clear();
-        //     })
-        //     .catch((error) => {
-        //       this.loading = false;
-        //       this.message = this.temp;
-        //     });
-        // }
-        this.$emit('postComment', this.temp);
-        this.clear();
-      }
-    }
-  };
+    };
 </script>

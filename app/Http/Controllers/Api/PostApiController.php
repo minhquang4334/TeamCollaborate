@@ -19,6 +19,7 @@ class PostApiController extends ApiController
      * PostApiController constructor.
      * @param PostRepository $post
      * @param ChannelRepository $channel
+     * @param ReportRepository $report
      */
     public function __construct(PostRepository $post, ChannelRepository $channel, ReportRepository $report)
     {
