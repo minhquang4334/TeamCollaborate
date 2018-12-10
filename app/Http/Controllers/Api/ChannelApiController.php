@@ -28,7 +28,7 @@ class ChannelApiController extends ApiController
 
     /**
      * Method POST
-     * usage: http://localhost:8000/api/channel/create?invited_users=[1,2,3]&type=1&purpose=For study&description=This is my Foa&channel_id=hahha
+     * usage: http://localhost:8000/api/channel/create?type=1&purpose=For study&description=This is my Foa&channel_id=hahha&invited_users[]=1&invited_users[]=2
      * add new channel
      * return new channel information if success, else return error message
      * @param CreateChannelRequest $request
@@ -42,14 +42,17 @@ class ChannelApiController extends ApiController
                 'status'  => Channel::ACTIVE,
             ]));
             $channel_code = $str_random.$channel->id;
-			$this->channel->updateColumn($channel->id, ['channel_id' => $channel_code]);
+			      $this->channel->updateColumn($channel->id, ['channel_id' => $channel_code]);
             if($request->has('invited_users')){
                 $members = array_merge($request->get('invited_users'), [$this->currentUser()->id]);
+            }else
+                $members = [$this->currentUser()->id];
                 foreach ($members as $id){
                     $user = $this->user->getById($id);
                     $channel->users()->attach($id, ['display_name' => $user->name, 'status' => Channel::ACTIVE ]);
-                }
+//                }
             }
+
             $channel->channel_id = $channel_code;
             return $this->response->withCreated($channel);
         }catch (\Exception $e){
