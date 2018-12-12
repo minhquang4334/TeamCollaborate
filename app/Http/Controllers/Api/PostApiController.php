@@ -83,6 +83,8 @@ class PostApiController extends ApiController
     /**
      * Method post
      * @usage http://localhost:8000/api/post/add?channel_id=2&content=hahahaha&tag_users = ['1', '2', '3']&parent_id=2
+     * @usage http://localhost:8000/api/post/add?channel_id=2&content=hahahaha&tag_users[]=1&tag_users[]=2
+     * @usage http://localhost:8000/api/post/add?channel_id=6&content=hahahaha&tag_users[]= 1&tag_users[]=2&is_parent=1&tag_users[]=3
      * add new thread in specific channel
      * store file
      * check in thread has tagged user, handle this
@@ -105,10 +107,15 @@ class PostApiController extends ApiController
                     'status' => Post::ACTIVE,
                     'is_parent' => $is_parent,
                 ]));
-                $tag_users = $request->get('tag_users');
+                if($request->has('tag_users'))
+                    $tag_users = array_merge($request->get('tag_users'), [$this->currentUser()->id]);
+                else
+                    $tag_users = [$this->currentUser()->id];
                 foreach ($tag_users as $u){
                     $this->post->addFollower($post->id, $u);
                 }
+                $post->followers;
+
                 return $this->response->withCreated($post);
             }else{
                 return $this->response->withForbidden(trans('messages.user.not_in_channel'));

@@ -14,7 +14,7 @@
 
                 <div :class="{ 'form-group': true, 'has-feedback': true, 'has-error': form.errors.has('name') }">
                     <input v-model="form.name"
-                           type="text" name="name" title="Name"
+                           type="text" name="name" title="Name" id="inputName"
                            class="form-control" placeholder="Họ và tên">
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
                     <has-error :form="form" field="name"></has-error>
@@ -22,7 +22,7 @@
 
                 <div :class="{ 'form-group': true, 'has-feedback': true, 'has-error': form.errors.has('email') }">
                     <input v-model="form.email"
-                           type="text" name="email" title="Email"
+                           type="text" name="email" title="Email" id="inputEmail"
                            class="form-control" placeholder="Email">
                     <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
                     <has-error :form="form" field="email"></has-error>
@@ -117,4 +117,6 @@
       document.body.classList.add("hold-transition", "register-page")
     }
   }
+
+  setNameAndEmail();
 </script>
