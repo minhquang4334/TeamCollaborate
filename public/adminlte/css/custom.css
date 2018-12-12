@@ -3,15 +3,18 @@ html,css{
 }
 
 .message-list, .about-channel, .thread{
-    height: 75%;
+    height: 85%;
 }
 
 .new-message{
-    height: 25%;
+    height: 15%;
 }
 
 .h-90{
     height: 90%;
+}
+.h-10{
+    height: 10%;
 }
 
 .el-textarea > textarea{

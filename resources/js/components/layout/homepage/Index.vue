@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid h-100">
-        <div class="row h-100">
+        <div class="row h-100 ">
             <leftBar :channel_id="channel_id"/>
             <div class="col-md-10 p-0">
                 <headBar :channel="channel"  @showAboutChannel="showAboutChannel"/>
