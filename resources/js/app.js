@@ -19,8 +19,10 @@ import {HasError, AlertError, AlertSuccess} from 'vform'
 import ElementUI from 'element-ui';
 import locale from 'element-ui/lib/locale/lang/en';
 import VueProgressBar from 'vue-progressbar';
+import 'vue-multiselect/dist/vue-multiselect.min.css'
 
-
+import LocalStorage from './plugins/local-storage';
+import infiniteScroll from 'vue-infinite-scroll';
 require('./bootstrap');
 
 window.Vue = require('vue');
@@ -35,6 +37,9 @@ window.moment = require('moment-timezone');
 window.moment.tz.setDefault('UTC');
 
 Vue.use(ElementUI, { locale });
+Vue.use(LocalStorage);
+Vue.use(infiniteScroll);
+
 
 const VueProgressBarOptions = {
   color: '#5587d7',

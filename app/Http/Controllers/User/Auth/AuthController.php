@@ -21,8 +21,9 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        //dd($request->all());
-       // dd($this->guard()->attempt(['email' => $request->email, 'password' => $request->password]));
+    	if($request['remember']) {
+		    config(['jwt.ttl' => env('TOKEN_TTL_REMEMBER_ME',  86400 * 30)]); // 30 days
+	    }
         $credentials = $request->only('email', 'password');
         if ($token = JWTAuth::attempt($credentials)) {
             return $this->respondWithToken($token);

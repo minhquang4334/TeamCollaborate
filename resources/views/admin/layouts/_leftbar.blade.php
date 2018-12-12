@@ -16,21 +16,18 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
             <li>
-                <a href="{{config('menubar.user_manager_path')}}"><span class="fa fa-user"></span>{{config('menubar.user')}}</a>
+                <a href="{{config('menubar.users_manager_path')}}"><span class="fa fa-user"></span>{{config('menubar.users')}}</a>
             </li>
             <li>
-                <a href="{{config('menubar.admin_manager_path')}}"><span class="fa fa-user-circle-o"></span>{{config('menubar.admin')}}</a>
+                <a href="{{config('menubar.channels_manager_path')}}"><span class="fa fa-comments"></span>{{config('menubar.channels')}}</a>
             </li>
             <li>
-                <a href="{{config('menubar.product_manager_path')}}"><span class="fa fa-product-hunt"></span>{{config('menubar.product')}}</a>
+                <a href="{{config('menubar.files_manager_path')}}"><span class="fa fa-file-text"></span>{{config('menubar.files')}}</a>
             </li>
             <li>
-                <a href="{{config('menubar.category_manager_path')}}"><span class="fa fa-tags"></span>{{config('menubar.category')}}</a>
+                {{--<a href="{{config('menubar.reports_manager_path')}}"><span class="fa fa-flag"></span>{{config('menubar.reports')}}</a>--}}
+                <a href="#"><span class="fa fa-flag"></span>{{config('menubar.reports')}}</a>
             </li>
-            <li>
-                <a href="{{config('menubar.order_manager_path')}}"><span class="fa fa-file"></span>{{config('menubar.order')}}</a>
-            </li>
-
         </ul>
     </section>
     <!-- /.sidebar -->

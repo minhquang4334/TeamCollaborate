@@ -1,7 +1,7 @@
 <template>
     <div class="login-homepage-form">
         <div class="container">
-            <div class="content-login col-md-4 m-auto col-sm-8 ">
+            <div class="content-login col-md-5 m-auto col-sm-8">
                 <div class="logo-left">
                     <img src="/images/logo.jpg" class="size-img">
                 </div>
@@ -142,13 +142,13 @@
       this.loginFacebook()
     },
     beforeMount: function () {
-      $(function () {
-        $('input').iCheck({
-          checkboxClass: 'icheckbox_square-blue',
-          radioClass: 'iradio_square-blue',
-          increaseArea: '20%'
-        });
-      });
+      // $(function () {
+      //   $('input').iCheck({
+      //     checkboxClass: 'icheckbox_square-blue',
+      //     radioClass: 'iradio_square-blue',
+      //     increaseArea: '20%'
+      //   });
+      // });
 
       let classList = document.body.classList;
       while (classList.length > 0) {

@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\model\Contact;
+use App\Model\Contact;
 use Illuminate\Support\Facades\Auth;
 
 class ContactRepository {

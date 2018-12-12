@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import InputHelpers from '../mixins/InputHelpers';
+  import InputHelpers from '../../mixins/InputHelpers';
   import {get} from '../../helper/request'
   export default {
     mixins: [InputHelpers],
@@ -101,7 +101,7 @@
           return;
         }
 
-        get('/emojis').then((response) => {
+        get('/api/emojis').then((response) => {
           let temp = [];
           response.data.forEach((element, index, self) => {
             temp.push(element);

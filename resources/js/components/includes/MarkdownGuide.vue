@@ -8,7 +8,7 @@
             class="user-select"
     >
         <p>
-            Voten uses a slightly-customized and limited version of Markdown for formatting. Here is a quick and simple guide:
+            Team Collaborate uses a slightly-customized and limited version of Markdown for formatting. Here is a quick and simple guide:
         </p>
 
         <table class="table enable-user-select">
@@ -42,11 +42,11 @@
 
             <tr>
                 <td>
-                    [voten.co](https://voten.co)
+                    [team-collaborate.com](https://team-collaborate.com)
                 </td>
 
                 <td>
-                    <a href="https://voten.co" target="_blank">voten.co</a>
+                    <a href="https://team-collaborate.com" target="_blank">team-collaborate.com</a>
                 </td>
             </tr>
 
@@ -90,11 +90,11 @@
 
             <tr>
                 <td>
-                    <br> ```if (url == "voten") {<br> return "welcome"<br> }```
+                    <br> ```if (url == "team-collaborate") {<br> return "welcome"<br> }```
                 </td>
 
                 <td>
-<pre>if (url == "voten") {
+<pre>if (url == "team-collaborate") {
 return "welcome"
 }</pre>
                 </td>
@@ -105,7 +105,7 @@ return "welcome"
 </template>
 
 <script>
-  // import Helpers from '../mixins/Helpers';
+  import Helpers from '../../mixins/Helpers';
 
   export default {
     mixins: [Helpers],
@@ -119,12 +119,12 @@ return "welcome"
     },
 
     created() {
-      window.location.hash = 'markdownGuide';
+
     },
 
     methods: {
       close() {
-        this.$emit('update:visible', false);
+        this.$emit('close');
       }
     }
   };

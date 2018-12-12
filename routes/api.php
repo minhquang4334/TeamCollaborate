@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -42,4 +40,41 @@ Route::group(['namespace' => 'User', 'prefix' => 'user'], function () {
 
         });
     });
+});
+
+Route::group(['namespace' => 'Api'], function () {
+	Route::group(['middleware' => 'jwt.auth'], function() {
+		Route::get('/emojis', 'EmojiController@index');
+		Route::post('/invite-to-app', 'InviteToAppController@create');
+        Route::group(['prefix' => 'channel', 'as' => 'channel'], function (){
+            Route::post('create',['as' => 'create', 'uses' => 'ChannelApiController@create'] );
+            Route::get('info', 'ChannelApiController@getChannelInfo');
+            Route::get('my', 'ChannelApiController@getListChannelOfUser');
+            Route::get('list', 'ChannelApiController@getListChannel');
+            Route::put('update', 'ChannelApiController@update');
+            Route::delete('destroy', 'ChannelApiController@destroy');
+            Route::put('invite', 'ChannelApiController@invite');
+        });
+        Route::group(['prefix' =>'user', 'as' => 'user-info'], function (){
+            Route::put('update', 'UserApiController@changeUserProfile');
+            Route::put('change-password', 'UserApiController@changePassword');
+            Route::get('list', 'UserApiController@getListUser');
+            Route::delete('delete', 'UserApiController@deleteAccount');
+            Route::get('users', 'UserApiController@getListUserInChannel');
+            Route::put('change-name', 'UserApiController@changeDisplayName');
+            Route::post('avatar', 'UserApiController@changeUserAvatar');
+        });
+        Route::group(['prefix' => 'post', 'as' => 'post'], function (){
+            Route::post('add', 'PostApiController@add');
+            Route::get('list', 'PostApiController@getList');
+            Route::put('update', 'PostApiController@update');
+            Route::delete('destroy', 'PostApiController@destroy');
+            Route::put('pin', 'PostApiController@pin');
+            Route::get('pinned', 'PostApiController@getPinned');
+            Route::delete('unfollow', 'PostApiController@unFollow');
+            Route::post('follow', 'PostApiController@follow');
+            Route::post('report', 'PostApiController@report');
+
+        });
+	});
 });

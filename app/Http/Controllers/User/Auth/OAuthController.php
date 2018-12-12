@@ -11,15 +11,28 @@ use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+/**
+ * Class OAuthController
+ * @package App\Http\Controllers\User\Auth
+ */
 class OAuthController extends Controller
 {
     use AuthenticatesUsers;
 
+    /**
+     * redirect to Provider (google)
+     * @return mixed
+     */
     public function redirectToProvider()
     {
         return Socialite::driver('google')->stateless()->redirect();
     }
 
+    /**
+     * handler Provider Callback
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function handleProviderCallback(Request $request)
     {
         $socialUser = Socialite::driver('google')->stateless()->user();
@@ -57,10 +70,14 @@ class OAuthController extends Controller
             }
         }
 
-        $token = Auth::guard('api')->login($user);
+        $token = Auth::guard('api')->login($user, true);
         return view('login-gg-popup', ['token' => $token]);
     }
 
+    /**
+     * @param $socialUser
+     * @return mixed
+     */
     public function createUser($socialUser)
     {
         return User::create([

@@ -1,16 +1,17 @@
 <?php
 
 namespace App\Transformers;
-use App\model\User;
+use App\Model\User;
+use Illuminate\Support\Facades\Storage;
 use League\Fractal\TransformerAbstract;
 
 class UserTransformer extends TransformerAbstract {
 
     public function transform(User $user) {
         return [
+        	'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'password' => $user->password,
             'gender' => $user->gender,
             'phone_number' => $user->phone_number,
             'address' => $user->address,
@@ -18,8 +19,8 @@ class UserTransformer extends TransformerAbstract {
             'japanese_level' => $user->japanese_level,
             'japanese_certificate' => $user->japanese_certificate,
             'about_me' => $user->about_me,
-            'facebook_url' => $user->facebook_url,
-            'avatar' => $user->avatar,
+            'facebook_url' => str_after($user->facebook_url, 'https://facebook.com/'),
+            'avatar' => Storage::url($user->avatar),
             'email_verified_at' => $user->email_verified_at,
             'google_id' => $user->google_id,
             'status' => $user->status,

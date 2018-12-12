@@ -15,14 +15,14 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('post_id');
             $table->string('content');
             $table->boolean('is_parent')->default(false)->comment('false: parent post, true: children post');
             $table->integer('channel_id');
             $table->integer('parent_id')->nullable();
             $table->integer('creator');
             $table->string('user_following_post')->nullable();
-            $table->tinyInteger('status')->default(0)->comment('0: normal post, 1: pinned post');
+            $table->tinyInteger('type')->default(0)->comment('0: normal post, 1: pinned post');
+            $table->tinyInteger('status')->default(1)->comment('0: block, 1: active');
             $table->softDeletes();
             $table->timestamps();
         });

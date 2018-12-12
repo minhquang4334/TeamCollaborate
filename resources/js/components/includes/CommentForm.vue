@@ -1,6 +1,6 @@
 
 <template>
-    <div class="fixed-comment-form-wrapper"
+    <div class="fixed-comment-form-wrapper new-message"
          @keydown.down="handleKey($event, 'down')"
          @keydown.up="handleKey($event, 'up')"
          @keydown.enter="handleKey($event, 'enter')"
@@ -35,7 +35,7 @@
             <markdown :text="message.trim()"></markdown>
         </div>
 
-        <form class="chat-input-form relative">
+        <form class="chat-input-form relative" style="max-height: 50%">
             <transition name="el-zoom-in-bottom">
                 <quick-emoji-picker v-if="quickEmojiPicker.show"
                                     @close="quickEmojiPicker.show = false"
@@ -127,30 +127,32 @@
                 </button>
 
                 <button class="comment-form-guide"
-                        @click="Store.modals.markdownGuide.show = true"
+                        @click="showMarkdownGuide = true"
                         type="button">
                     Formatting Guide
                 </button>
             </div>
         </div>
+        <markdown-guide v-show="showMarkdownGuide" @close="showMarkdownGuide = false" :visible="showMarkdownGuide"/>
     </div>
 </template>
 
 <script>
-  import Markdown from '../includes/Markdown.vue';
-  import MoonLoader from '../includes/MoonLoader.vue';
-  import EmojiPicker from '../includes/EmojiPicker.vue';
-  import QuickEmojiPicker from '../includes/QuickEmojiPicker.vue';
-  import QuickChannelPicker from '../includes/QuickChannelPicker.vue';
-  import QuickMentioner from '../includes/QuickMentioner.vue';
-  import EmojiIcon from '../includes/Icons/EmojiIcon.vue';
-  import Typing from '../includes/Typing.vue';
+  import Markdown from './Markdown.vue';
+  import MoonLoader from './MoonLoader.vue';
+  import EmojiPicker from './EmojiPicker';
+  import QuickEmojiPicker from './QuickEmojiPicker.vue';
+  import QuickChannelPicker from './QuickChannelPicker';
+  import QuickMentioner from './QuickMentioner.vue';
+  import Typing from './Typing.vue';
   import Helpers from '../../mixins/Helpers';
-  import InputHelpers from '../../mixins/InputHelpers';
+  import InputHelpers from '../../mixins/InputHelpers.js';
   import {get, post, put} from '../../helper/request'
+  import EmojiIcon from "./Icons/EmojiIcon";
+  import MarkdownGuide from './MarkdownGuide'
 
   export default {
-    includes: {
+    components: {
       QuickChannelPicker,
       QuickEmojiPicker,
       QuickMentioner,
@@ -158,7 +160,8 @@
       EmojiPicker,
       EmojiIcon,
       Markdown,
-      Typing
+      Typing,
+      MarkdownGuide
     },
 
     props: ['submission', 'before', 'commentors'],
@@ -175,6 +178,7 @@
         EchoChannelAddress: 'submission.' + this.$route.params.slug,
         isTyping: false,
         preview: false,
+        showMarkdownGuide: false,
 
         quickMentioner: {
           show: false,
@@ -193,11 +197,12 @@
 
         editingComment: [],
         replyingComment: [],
-        parent: 0
+        parent: 0,
       };
     },
 
     created() {
+      console.log(Echo);
       this.subscribeToEcho();
       this.$eventHub.$on('edit-comment', this.setEditing);
       this.$eventHub.$on('reply-comment', this.setReplying);
@@ -461,20 +466,23 @@
       },
 
       postComment() {
-        post(`/submissions/${this.submission}/comments`, {
-            parent_id: this.parent,
-            body: this.temp
-          })
-          .then((response) => {
-            Store.state.comments.likes.push(response.data.data.id);
-            this.$eventHub.$emit('newComment', response.data.data);
-
-            this.clear();
-          })
-          .catch((error) => {
-            this.loading = false;
-            this.message = this.temp;
-          });
+        //   post(`/submissions/${this.submission}/comments`, {
+        //       parent_id: this.parent,
+        //       body: this.temp
+        //     })
+        //     .then((response) => {
+        //       Store.state.comments.likes.push(response.data.data.id);
+        //       this.$eventHub.$emit('newComment', response.data.data);
+        //
+        //       this.clear();
+        //     })
+        //     .catch((error) => {
+        //       this.loading = false;
+        //       this.message = this.temp;
+        //     });
+        // }
+        this.$emit('postComment', this.temp);
+        this.clear();
       }
     }
   };

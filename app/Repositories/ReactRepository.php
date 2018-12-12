@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\model\React;
+use App\Model\React;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Matcher\Not;
 

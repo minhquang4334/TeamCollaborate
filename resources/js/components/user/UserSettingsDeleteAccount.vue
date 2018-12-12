@@ -79,21 +79,27 @@
     methods: {
       destroyAccount() {
         this.loading = true;
-
-        del('/users', {
-            params: {
-              password: this.password
-            }
-          })
-          .then(() => {
+        let url = '/api/user/delete?password=' + this.password;
+        del(url)
+          .then((res) => {
             this.loading = false;
+            if(res.data.status === false) {
+                this.$message({
+                    type: 'failed',
+                    message: "Your Input Password was incorrect!!"
+                });
+            } else {
+                this.$message({
+                    type: 'success',
+                    message: "Account deleted. We'll miss you! See you again!!"
+                });
 
-            this.$message({
-              type: 'success',
-              message: "Account deleted. We'll miss you!"
-            });
+                this.$store.dispatch('auth/logout')
+                    .then(() => {
+                        this.$router.push({ name: 'login' });
+                    });
+            }
 
-            window.location = '/logout';
           })
           .catch((error) => {
             this.loading = false;

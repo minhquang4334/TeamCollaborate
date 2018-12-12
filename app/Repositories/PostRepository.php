@@ -2,10 +2,8 @@
 
 namespace App\Repositories;
 
-use App\model\Notification;
-use App\model\Post;
-use Illuminate\Support\Facades\Auth;
-use Mockery\Matcher\Not;
+use App\Model\Follow;
+use App\Model\Post;
 
 class PostRepository {
     use BaseRepository;
@@ -22,6 +20,25 @@ class PostRepository {
     public function __construct(Post $post)
     {
         $this->model = $post;
+    }
+
+    public function list($channelId, $number, $limit = 10, $sort = 'desc', $sortColumn = 'created_at'){
+        return $this->model->where('channel_id', $channelId)->limit($limit)->offset($number)->orderBy($sortColumn, $sort)->get();
+    }
+
+    public function removeFollower($post_id, $user_id){
+        $post =  $this->getById($post_id);
+        return $post->followers()->where('user_id', $user_id)->get();//->each->delete();
+    }
+
+    public function addFollower($post_id, $user_id){
+        $follow = new Follow();
+        if($this->getById($post_id)->is_parent && $follow->where('post_id', $post_id)->where('user_id', $user_id)->count() == 0) {
+            $follow->fill(['post_id' => $post_id,
+                'user_id' => $user_id]);
+            $follow->save();
+        }
+        return $follow;
     }
 
 }

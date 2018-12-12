@@ -2,29 +2,25 @@
 
 return [
 
-    'admin' => "Admin Manager",
+    'channels' => "Channels Manager",
 
-    'user' => "Users Manager",
+    'users' => "Users Manager",
 
-    'product' => "Products Manager",
+    'files' => "Files Manager",
 
-    'category' => "Categories Manager",
+    'reports' => "Reports Manager",
 
-    'order' => "Orders manager",
+    'channels_manager_path' => "/admin/channels-manager",
 
-    'admin_manager_path' => "/admin/admin-manager",
+    'users_manager_path' => "/admin/users-manager",
 
-    'user_manager_path' => "/admin/user-manager",
+    'files_manager_path' => "/admin/files-manager",
 
-    'product_manager_path' => "/admin/product-manager",
+    'reports_manager_path' => "/admin/reports-manager",
 
-    'category_manager_path' => "/admin/categories-manager",
+    'page_name' => 'Team Collaborate',
 
-    'order_manager_path' => "/admin/order-manager",
-
-    'page_name' => 'Sales System',
-
-    'copy_right' => 'Copyright © AS Team K60 - Team 03. All rights reserved.',
+    'copy_right' => 'Copyright © AS Team K60 - Team 02. All rights reserved.',
 
     'version' => '1.0',
 ];

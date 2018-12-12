@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Transformers;
-use App\model\SocialAccount;
+use App\Model\SocialAccount;
 use League\Fractal\TransformerAbstract;
 
 class SocialAccountTransformer extends TransformerAbstract {

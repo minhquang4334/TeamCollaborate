@@ -1,6 +1,6 @@
 <?php
 
-namespace App\model;
+namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,10 +9,12 @@ class Post extends Model
     //
     CONST NORMAL = 0;
     CONST PINNED = 1;
+    CONST BLOCK = 0;
+    CONST ACTIVE = 1;
 
     protected $fillable = [
       'content', 'is_parent', 'channel_id', 'parent_id',
-        'creator', 'user_following_post', 'status', 'post_id'
+        'creator', 'user_following_post', 'status', 'type'
     ];
 
     public function files() {
@@ -38,4 +40,9 @@ class Post extends Model
     public function parent() {
         return $this->belongsTo(Post::class, 'parent_id');
     }
+
+    public function followers() {
+		return $this->hasMany(Follow::class, 'post_id');
+    }
+
 }

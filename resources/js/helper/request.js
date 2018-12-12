@@ -46,13 +46,13 @@ export function patch(url, payload) {
   })
 }
 
-export function put(url, payload) {
+export function put(url, payload, isFormData = false) {
   return axios({
     method: 'PUT',
     url:  url,
     data: payload,
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
       'Authorization': "Bearer " + store.state.auth.token,
     },
   })
