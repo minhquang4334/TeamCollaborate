@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User\Auth;
 
+use App\Events\OauthRegistered;
 use App\Http\Requests\User\RegisterRequest;
 use App\Http\Controllers\Controller;
 use App\Model\User;
@@ -21,7 +22,7 @@ class RegisterController extends Controller
         ]);
 
         $token = JWTAuth::fromUser($user);
-
+		event(new OauthRegistered($user));
         return response()->json([
             'message' => trans('messages.user.register_success'),
             'data' => [
