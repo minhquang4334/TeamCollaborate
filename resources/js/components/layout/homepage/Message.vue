@@ -27,6 +27,7 @@
                                         <ul class="nav flex-column">
                                             <li class="nav-item" @click="showProfile"><a href="#" >View profile</a></li>
                                             <li class="nav-item"><a href="#" >Direct Message</a></li>
+                                            <li class="nav-item"><a href="#" @click="removeUser">Remove User </a></li>
                                         </ul>
                                       </div>
                                     </div>
@@ -418,6 +419,10 @@
         showProfile(){
             this.$emit('showProfile');
         },
+        removeUser(){
+            this.$emit('removeUser');
+        },
+
 
       doubleClicked() {
         if (this.isGuest) return;

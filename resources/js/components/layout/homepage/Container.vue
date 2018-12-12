@@ -1,14 +1,38 @@
 <template>
     <div class="row px-3 h-90">
         <div class="col-md-8 h-100 border-right px-0">
-            <message-list :listMessages="listMessages" @showComment="showComment" @showProfile="showProfile"/>
+            <message-list :listMessages="listMessages" @showComment="showComment" @showProfile="showProfile" @removeUser="removeUser"/>
             <comment-form @postComment="addNewPost" :commentors="commentors" :channel_id="channel_id"/>
         </div>
         <div class="col-md-4 h-100 d-none d-md-block">
-            <about-channel v-if="rightBox===1" :channelDetail="channelDetail"/>
+            <about-channel v-if="rightBox===1" :channelDetail="channelDetail" @showProfile="showProfile" @removeUser="removeUser"/>
             <thread v-else-if="rightBox===2"/>
             <profile v-else/>
 
+        </div>
+        <div id="removeUser" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                        <h4 class="modal-title">Remove User</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>If you remove user from this channel, they will no longer be able to see any of its messages.
+                            To rejoin the private channel, they will have to be re-invited.
+                        </p>
+                        <p>Are you sure you wish to do this?`</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" >OK</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </template>
@@ -117,6 +141,9 @@
             },
             showProfile() {
                 this.$emit('showProfile');
+            },
+            removeUser() {
+                $("#removeUser").modal("show");
             },
 
         }
