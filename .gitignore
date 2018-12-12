@@ -15,3 +15,5 @@ npm-debug.log
 .rnd
 /public/admin/css/app.css
 /public/admin/css/app.js
+.idea
+*/.idea

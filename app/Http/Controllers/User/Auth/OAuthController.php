@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\User\Auth;
 
+use App\Events\OauthRegistered;
 use App\Model\SocialAccount;
 use App\Model\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -52,7 +54,7 @@ class OAuthController extends Controller
             $user = User::where('email', $socialUser->getEmail())->first();
             if (!$user) {
                 $user = $this->createUser($socialUser);
-
+				event(new OauthRegistered($user));
                 $user->socialAccount()->create([
                     'google_id' => $socialUser->getId(),
                     'access_token' => $socialUser->token,

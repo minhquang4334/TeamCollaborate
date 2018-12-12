@@ -219,7 +219,7 @@ class UserApiController extends ApiController
 		    }
 
 		    // update user's avatar
-		    $this->user->updateColumn($this->currentUser()->id, ['avatar' => $imageAddress,]);
+		    $this->user->updateColumn($this->currentUser()->id, ['avatar' => ('storage/'.$imageAddress),]);
 		    return response()->json(['image_address' => Storage::url($imageAddress)], 200);
 
 	    }

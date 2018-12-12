@@ -39,7 +39,7 @@ const auth = {
     [types.FETCH_USER_SUCCESS](state, {user}) {
       state.user = user;
       if(state.user.avatar) {
-        state.user.avatar = 'storage/' + state.user.avatar
+        state.user.avatar = state.user.avatar
       }
     },
     [types.FETCH_USER_FAILURE](state) {

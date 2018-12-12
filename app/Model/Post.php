@@ -21,6 +21,10 @@ class Post extends Model
         return $this->hasMany(File::class,'post_id');
     }
 
+	public function creator() {
+		return $this->belongsTo(User::class,'creator');
+	}
+
     public function unreads() {
         return $this->hasMany(Unread::class, 'post_id');
     }
