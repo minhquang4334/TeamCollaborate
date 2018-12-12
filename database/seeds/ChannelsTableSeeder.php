@@ -12,31 +12,13 @@ class ChannelsTableSeeder extends Seeder
     public function run()
     {
         DB::table('channels')->insert([
-            'type' => '0',
+            'type' => \App\Model\Channel::PUBLIC,
             'creator' => '1',
-            'purpose' => 'for fun',
+            'purpose' => 'This channel is for workspace-wide communication and announcements. All members are in this channel.',
             'description' => 'No description',
-            'name' => 'Web Kaihatsu',
-            'status' => '0',
-            'channel_id' => 'ch100'
-        ]);
-        DB::table('channels')->insert([
-            'type' => '0',
-            'creator' => '2',
-            'purpose' => 'for fun',
-            'description' => 'No description',
-	        'name' => 'Structure Programming',
-            'status' => '0',
-            'channel_id' => 'ch101'
-        ]);
-        DB::table('channels')->insert([
-            'type' => '0',
-            'creator' => '2',
-            'purpose' => 'for fun',
-            'description' => 'No description',
-	        'name' => 'IT nihongo',
-            'status' => '0',
-            'channel_id' => 'ch102'
+            'name' => 'General',
+            'status' => \App\Model\Channel::ACTIVE,
+            'channel_id' => \App\Model\Channel::GENERAL_CHANNEL_ID
         ]);
     }
 }

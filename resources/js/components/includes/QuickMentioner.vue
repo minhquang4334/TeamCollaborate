@@ -153,6 +153,7 @@
                     '@' + user.name,
                     this.starter,
                     this.searched.length,
+                    'mention',
                     user
                 );
 

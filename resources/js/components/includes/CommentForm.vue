@@ -391,15 +391,16 @@
                 this.parent = 0;
             },
 
-            pick(pickedStr, starterIndex, typedLength, user) {
-                console.log(user);
+            pick(pickedStr, starterIndex, typedLength, type = '', user = null) {
                 this.insertPickedItem(
                     'comment-form-textarea',
                     pickedStr + ' ',
                     starterIndex,
                     typedLength
                 );
-                this.list_tag_users.push(user.id);
+                if(type === 'mention') {
+                  this.list_tag_users.push(user.id);
+                }
             },
 
             openEmojiPicker() {

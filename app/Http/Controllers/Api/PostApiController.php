@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Model\Channel;
 use App\Model\Post;
 use App\Model\Report;
 use App\Repositories\ChannelRepository;
@@ -40,10 +41,13 @@ class PostApiController extends ApiController
      */
     public function getList(Request $request) {
         try{
-            $channelId = $request->get('channel_id');
+	        $channel_id = $request->get('channel_id');
+	        if(!$channel_id) {
+		        $channel_id = Channel::GENERAL_CHANNEL_ID;
+	        }
             $number = $request->get('number_items');
             $limit = $request->has('limit')?$request->get('limit'):$this->number_post_limit;
-            $channel = $this->channel->getChannelById($channelId);
+            $channel = $this->channel->getChannelById($channel_id);
             $user = $this->currentUser();
             if($user->channels->contains($channel)) {
                 $posts = $this->post->list($channel->id, $number, $limit);
@@ -95,7 +99,11 @@ class PostApiController extends ApiController
     public function add(Request $request) {
         try {
             $user = $this->currentUser();
-            $channel = $this->channel->getChannelById($request->get('channel_id'));
+            $channel_id = $request->get('channel_id');
+            if(!$channel_id) {
+            	$channel_id = Channel::GENERAL_CHANNEL_ID;
+            }
+            $channel = $this->channel->getChannelById($channel_id);
             if($user->channels->contains($channel->id)) {
                 $allow = ['content', 'channel_id', 'parent_id'];
                 $input = array_filter(array_intersect_key($request->all(), array_flip($allow)));
@@ -138,13 +146,16 @@ class PostApiController extends ApiController
     public function destroy(Request $request) {
         try{
             $id = $request->get('id');
-            $post = $this->post->getById($id);
-            if($post->creator == $this->currentUser()->id) {
-                $this->post->destroy($id);
-                return $this->response->withUpdated($post);
-            }else{
-                return $this->response->withForbidden(trans('messages.user.permission_deny'));
+            if(!$id) {
+	            $post = $this->post->getById($id);
+	            if($post->creator == $this->currentUser()->id) {
+		            $this->post->destroy($id);
+		            return $this->response->withUpdated($post);
+	            }else{
+		            return $this->response->withForbidden(trans('messages.user.permission_deny'));
+	            }
             }
+	        return $this->response->withForbidden(trans('messages.user.permission_deny'));
         }catch (\Exception $e){
             return $this->response->withInternalServer($e->getMessage());
         }
@@ -259,6 +270,10 @@ class PostApiController extends ApiController
      */
     public function report(Request $request) {
         try{
+        	$channel_id = $request->get('channel_id');
+        	if(!$channel_id) {
+		        $channel_id = Channel::GENERAL_CHANNEL_ID;
+	        }
             $report = $this->report->store(array_merge($request->all(), [
                 'report_creator_id' => $this->currentUser()->id,
                 'status' => Report::YET,
