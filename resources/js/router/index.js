@@ -26,7 +26,7 @@ let routes = [
     path: '/login', name: 'login', component: Login, beforeEnter: middlewares.guest
   },
   {
-    path: '/home', name: 'homeIndex', component: HomeIndex, beforeEnter: middlewares.auth
+    path: '/general', name: 'homeIndex', component: HomeIndex, beforeEnter: middlewares.auth
   },
   {
     path: '/channel/:id', name: 'ChannelDetail', component: ChannelDetail, beforeEnter: middlewares.auth

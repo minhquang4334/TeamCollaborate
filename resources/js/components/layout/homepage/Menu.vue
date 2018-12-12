@@ -4,7 +4,7 @@
             <a class="nav-link" style="cursor:pointer" @click="newchannel">CHANNELS<span class="fas fa-plus-circle float-right"></span></a>
         </li>
         <li class="nav-item cursor-pointer"
-            :class="(channel_id === channel.channel_id) ? 'active' : ''"
+            :class="activeChannel(channel) ? 'active' : ''"
             v-for="(channel, index) in listChannels"
             :key="index"
             @click="toChannelDetail(channel.channel_id)">
@@ -91,7 +91,14 @@
                         id: channel_id
                     }
                 })
-            }
+            },
+
+          activeChannel(channel) {
+            if((channel.name === 'General') && !this.channel_id)
+              return true;
+            return this.channel_id === channel.channel_id;
+          }
+
 
 
 

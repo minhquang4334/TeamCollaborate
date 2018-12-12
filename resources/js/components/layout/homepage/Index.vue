@@ -23,7 +23,7 @@
   export default {
     data() {
       return {
-        channel_id: this.$route.params.id,
+        channel_id: this.$route.params.id ? this.$route.params.id : 0,
         channel: {},
         isAboutChannel: true,
       }
@@ -49,14 +49,12 @@
 
     methods: {
       getChannelDetail() {
-        if(this.channel_id) {
           let url = '/api/channel/info?id=' + this.channel_id;
           get(url).then(res => {
             this.channel = res.data.data;
           }).catch((err) => {
             console.log(err);
           })
-        }
       },
 
       showAboutChannel(){

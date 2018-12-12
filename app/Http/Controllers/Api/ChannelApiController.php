@@ -70,7 +70,11 @@ class ChannelApiController extends ApiController
      */
     public function getChannelInfo(Request $request) {
         try{
-            $channel = $this->channel->getChannelById($request->get('id'));
+        	$channel_id = $request->get('id');
+        	if(!$channel_id) {
+		        $channel_id = Channel::GENERAL_CHANNEL_ID;
+	        }
+            $channel = $this->channel->getChannelById($channel_id);
             return $this->response->withCreated($channel);
         }catch (\Exception $e){
             return $this->response->withInternalServer($e->getMessage());
@@ -151,13 +155,18 @@ class ChannelApiController extends ApiController
     public function destroy(Request $request) {
         try{
             $id = $request->get('id');
-            $channel = $this->channel->getById($id);
-            if($channel->creator == $this->currentUser()->id) {
-                $this->channel->destroy($id);
-                return $this->response->withUpdated($channel);
-            }else{
-                return $this->response->withForbidden(trans('messages.user.permission_deny'));
+            if(!$id) {
+	            $channel = $this->channel->getById($id);
+	            if($channel->creator == $this->currentUser()->id) {
+		            $this->channel->destroy($id);
+		            return $this->response->withUpdated($channel);
+	            }else{
+		            return $this->response->withForbidden(trans('messages.user.permission_deny'));
+	            }
+            } else {
+	            return $this->response->withForbidden(trans('messages.user.permission_deny'));
             }
+
         }catch (\Exception $e){
             return $this->response->withBadRequest($e->getMessage());
         }

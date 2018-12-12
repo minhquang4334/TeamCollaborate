@@ -20,7 +20,7 @@ class UserTransformer extends TransformerAbstract {
             'japanese_certificate' => $user->japanese_certificate,
             'about_me' => $user->about_me,
             'facebook_url' => str_after($user->facebook_url, 'https://facebook.com/'),
-            'avatar' => Storage::url($user->avatar),
+            'avatar' => ($user->avatar),
             'email_verified_at' => $user->email_verified_at,
             'google_id' => $user->google_id,
             'status' => $user->status,

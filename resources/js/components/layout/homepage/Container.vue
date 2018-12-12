@@ -22,7 +22,7 @@
 
         data() {
             return {
-                channel_id: this.$route.params.id,
+                channel_id: this.$route.params.id ? this.$route.params.id : 0,
                 commentors: [],
                 number_items: 0,
                 channelDetail: {

@@ -122,7 +122,7 @@
       return {
         currentUser: this.$store.state.auth.user,
         isVertical: false,
-        channel_id: this.channel.id,
+        channel_id: this.$route.params.id ? this.$route.params.id : 0,
       }
     },
 
