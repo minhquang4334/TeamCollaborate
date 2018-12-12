@@ -8,10 +8,10 @@
             v-for="(channel, index) in listChannels"
             :key="index"
             @click="toChannelDetail(channel.channel_id)">
-            <a class="nav-link" href="pages/tables/basic-table.html">
+            <span class="nav-link">
                 <span v-bind:class="channelIconClass(channel.type)"></span>
                 <span class="menu-title">{{ channel.name}}</span>
-            </a>
+            </span>
         </li>
         <li class="nav-item nav-category">
             <a class="nav-link" style="cursor:pointer" @click="directMessage">DIRECT MESSAGE<span class="fas fa-plus-circle float-right"></span></a>

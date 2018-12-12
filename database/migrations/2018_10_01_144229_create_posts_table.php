@@ -16,7 +16,7 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('content');
-            $table->boolean('is_parent')->default(false)->comment('false: parent post, true: children post');
+            $table->boolean('is_parent')->default(true)->comment('false: parent post, true: children post');
             $table->integer('channel_id');
             $table->integer('parent_id')->nullable();
             $table->integer('creator');

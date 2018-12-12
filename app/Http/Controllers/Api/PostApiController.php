@@ -19,6 +19,7 @@ class PostApiController extends ApiController
      * PostApiController constructor.
      * @param PostRepository $post
      * @param ChannelRepository $channel
+     * @param ReportRepository $report
      */
     public function __construct(PostRepository $post, ChannelRepository $channel, ReportRepository $report)
     {
@@ -42,10 +43,10 @@ class PostApiController extends ApiController
             $channelId = $request->get('channel_id');
             $number = $request->get('number_items');
             $limit = $request->has('limit')?$request->get('limit'):$this->number_post_limit;
-            $channel = $this->channel->getById($channelId);
+            $channel = $this->channel->getChannelById($channelId);
             $user = $this->currentUser();
             if($user->channels->contains($channel)) {
-                $posts = $this->post->list($channelId, $number, $limit);
+                $posts = $this->post->list($channel->id, $number, $limit);
                 return $this->response->withArray(Post::hydrate($posts));
             }else{
                 return $this->response->withForbidden(trans('messages.user.not_in_channel'));
@@ -81,8 +82,8 @@ class PostApiController extends ApiController
 
     /**
      * Method post
+     * @usage http://localhost:8000/api/post/add?channel_id=2&content=hahahaha&tag_users = ['1', '2', '3']&parent_id=2
      * @usage http://localhost:8000/api/post/add?channel_id=2&content=hahahaha&tag_users[]=1&tag_users[]=2
-
      * @usage http://localhost:8000/api/post/add?channel_id=6&content=hahahaha&tag_users[]= 1&tag_users[]=2&is_parent=1&tag_users[]=3
      * add new thread in specific channel
      * store file
@@ -94,13 +95,17 @@ class PostApiController extends ApiController
     public function add(Request $request) {
         try {
             $user = $this->currentUser();
-            $channel = $this->channel->getById($request->get('channel_id'));
-            if($user->channels->contains($channel)) {
-                $allow = ['content', 'channel_id', 'type', 'is_parent'];
+            $channel = $this->channel->getChannelById($request->get('channel_id'));
+            if($user->channels->contains($channel->id)) {
+                $allow = ['content', 'channel_id', 'parent_id'];
                 $input = array_filter(array_intersect_key($request->all(), array_flip($allow)));
-                $post = $this->post->store(array_merge($input, [
+                $is_parent = $request->get('parent_id') ? true : false;
+                $post = $this->post->store(array_merge([], [
+                	'content' => $request->get('content'),
+                	'channel_id' => $channel->id,
                     'creator' => $this->currentUser()->id,
                     'status' => Post::ACTIVE,
+                    'is_parent' => $is_parent,
                 ]));
                 if($request->has('tag_users'))
                     $tag_users = array_merge($request->get('tag_users'), [$this->currentUser()->id]);
