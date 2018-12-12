@@ -111,8 +111,6 @@
             showComment() {
                 this.$emit('showComment');
             },
-
         }
-
     }
 </script>

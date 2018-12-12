@@ -36,10 +36,10 @@
                         Leave Channel
                     </p>
                 </a>
-                <a class="dropdown-item">
+                <a class="dropdown-item" v-show="currentUser.id === channel.creator" data-toggle="modal" data-target="#deleteChannel">
                     <p>
                         <span class="fas fa-trash-alt mr-2"></span>
-                        Remove Channel
+                        Delete Channel
                     </p>
                 </a>
 
@@ -108,10 +108,31 @@
                 </div>
             </span>
         </div>
+        <div class="modal fade" id="deleteChannel" ref="deleteChannel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Are you want delete this channel?
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click.prevent="deleteChannel">Delete</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </nav>
 </template>
 <script>
-  import {get} from '../../../helper/request.js'
+  import {get, del} from '../../../helper/request.js'
   import menuList from "./Menu.vue"
 
 
@@ -171,6 +192,28 @@
       showAboutChannel: function () {
           this.$emit('showAboutChannel');
       },
+
+      deleteChannel() {
+        if(this.channel.name !== 'General') {
+          let url = '/api/channel/destroy?id=' + this.channel.channel_id;
+          del(url).then(res => {
+            console.log('res: ', res);
+            this.$message({
+              type: 'success',
+              message: 'Delete Channel ' + this.channel.name + ' success!!'
+            })
+            this.$router.push({
+              name: 'homeIndex'
+            })
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: 'You cant delete this channel!!'
+          })
+        }
+        $('#deleteChannel').modal('toggle');
+      }
 
     },
   }

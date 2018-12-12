@@ -51,4 +51,8 @@ class Channel extends Model
     public function getPostsCount(){
         return $this->posts()->whereChannelId($this->id)->count();
     }
+
+    public function scopeProtected($query) {
+	    return $query->where('type', Channel::PROTECTED);
+    }
 }

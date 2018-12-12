@@ -11,7 +11,7 @@ class CreateChannelRequest extends JsonFormRequest
         return [
             'purpose'       => 'required',
             'description'   => 'nullable',
-            'type'          => 'nullable|integer|between:0,1',
+            'type'          => 'nullable|integer|between:0,2',
         ];
     }
 }

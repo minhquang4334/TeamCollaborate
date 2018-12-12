@@ -36,6 +36,15 @@ class ChannelApiController extends ApiController
      */
     public function create(CreateChannelRequest $request) {
         try{
+        	$type = $request->get('type') ? $request->get('type') : 0;
+        	if($type === Channel::PROTECTED) {
+        		$invited_users = $request->get('invited_users');
+        		array_push($invited_users, $this->currentUser()->id);
+        		$findChannelId = $this->channel->findSameChannelWithDirectMessage($invited_users);
+        		if($findChannelId) {
+        			return $this->response->withCreated($this->channel->getById($findChannelId));
+		        }
+	        }
 	        $str_random = strtoupper(str_random(config('const.length_channel_code')));
             $channel = $this->channel->store(array_merge($request->all(), [
                 'creator' => $this->currentUser()->id,
@@ -155,10 +164,10 @@ class ChannelApiController extends ApiController
     public function destroy(Request $request) {
         try{
             $id = $request->get('id');
-            if(!$id) {
-	            $channel = $this->channel->getById($id);
+            if($id) {
+	            $channel = $this->channel->getChannelById($id);
 	            if($channel->creator == $this->currentUser()->id) {
-		            $this->channel->destroy($id);
+		            $this->channel->destroy($channel->id);
 		            return $this->response->withUpdated($channel);
 	            }else{
 		            return $this->response->withForbidden(trans('messages.user.permission_deny'));
