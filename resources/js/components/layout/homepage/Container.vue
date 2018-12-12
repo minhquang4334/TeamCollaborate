@@ -1,12 +1,14 @@
 <template>
     <div class="row px-3 h-90">
-        <div class="col-md-8 h-100 border-right">
-            <message-list :listMessages="listMessages" @showComment="showComment"/>
+        <div class="col-md-8 h-100 border-right px-0">
+            <message-list :listMessages="listMessages" @showComment="showComment" @showProfile="showProfile"/>
             <comment-form @postComment="addNewPost" :commentors="commentors" :channel_id="channel_id"/>
         </div>
         <div class="col-md-4 h-100 d-none d-md-block">
-            <about-channel v-if="isAboutChannel" :channelDetail="channelDetail"/>
-            <thread v-else/>
+            <about-channel v-if="rightBox===1" :channelDetail="channelDetail"/>
+            <thread v-else-if="rightBox===2"/>
+            <profile v-else/>
+
         </div>
     </div>
 </template>
@@ -15,10 +17,11 @@
     import MessageList from "./MessageList.vue"
     import AboutChannel from "./AboutChannel.vue"
     import Thread from "./Thread.vue"
+    import Profile from "./Profile.vue"
     import {get} from "../../../helper/request"
 
     export default {
-        props: ['channel', 'isAboutChannel'],
+        props: ['channel', 'rightBox'],
 
         data() {
             return {
@@ -42,7 +45,8 @@
             MessageList,
             AboutChannel,
             Thread,
-            CommentForm
+            CommentForm,
+            Profile
         },
 
         watch: {
@@ -110,6 +114,9 @@
 
             showComment() {
                 this.$emit('showComment');
+            },
+            showProfile() {
+                this.$emit('showProfile');
             },
 
         }

@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed-comment-form-wrapper new-message position-relative p-0"
+    <div class="fixed-comment-form-wrapper new-message position-relative px-3"
          @keydown.down="handleKey($event, 'down')"
          @keydown.up="handleKey($event, 'up')"
          @keydown.enter="handleKey($event, 'enter')"
@@ -39,6 +39,14 @@
         </div>
 
         <form class="chat-input-form relative" style="max-height: 75%">
+
+            <div class="border-right" style="width:50px">
+                <a  class="position-absolute btn h-100">
+                    <i class="fas fa-plus"></i>
+                </a>
+                <input type="file" id="addFile" @change.prevent="fileSelected" class="h-100 w-100" style="opacity:0">
+            </div>
+
             <transition name="el-zoom-in-bottom">
                 <quick-emoji-picker v-if="quickEmojiPicker.show"
                                     @close="quickEmojiPicker.show = false"
@@ -137,7 +145,35 @@
             </div>
         </div>
         <markdown-guide v-show="showMarkdownGuide" @close="showMarkdownGuide = false" :visible="showMarkdownGuide"/>
+        <div class="modal" id="fileModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Upload a file</h4>
+                        <button type="button" @click="clearFile" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <textarea name="" id="" class="w-100" cols="30" rows="5" style="max-height:300px"></textarea>
+                        <p>Filename</p>
+                        <span class="list-group-item">file.txt</span>
+                        <img src="#" id="previewImage" alt="">
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click="clearFile" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" >Send</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
+
 </template>
 
 <script>
@@ -241,6 +277,23 @@
         },
 
         methods: {
+            fileSelected(e){
+                let file=e.target.files;
+                $("#fileModal").modal("show");
+                if(file && file[0]){
+                    var reader = new FileReader();
+
+                    reader.onload = function(event) {
+                        $('#previewImage').attr('src', event.target.result);
+                    }
+
+                }
+            },
+
+            clearFile(){
+                $("#addFile").val('');
+            },
+
             typed(string) {
                 // close on empty input
                 if (!string.trim()) {

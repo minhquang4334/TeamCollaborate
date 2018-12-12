@@ -42,12 +42,12 @@
             <div id="memberlist" class="collapse" data-parent="#accordion">
                 <div class="card-body">
                     <div class="list-group">
-                        <span
-                                class="fas fa-user list-group-item list-group-item-action cursor-pointer"
+                        <li
+                                class="list-group-item list-group-item-action cursor-pointer"
                                 v-for="(user, index) in channelDetail.listUsers" :key="index">
-
+                            <img :src="user.avatar" class="rounded-circle mr-2" style="width: 30px;height:30px" alt="profile-img">
                             {{user.name}}
-                        </span>
+                        </li>
                     </div>
                     <a class="dropdown-item mt-3" data-toggle="modal" data-target="#inviteModal">
                         <p>
