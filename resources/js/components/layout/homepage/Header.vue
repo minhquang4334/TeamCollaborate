@@ -1,6 +1,6 @@
 <template>
 
-    <nav class="navbar navbar-expand-md bg-light navbar-light">
+    <nav class="navbar navbar-expand-md bg-light navbar-light h-10">
         <!-- Brand -->
         <div class="navbar-brand ml-3">
             <strong id="Channelname" v-if="inChannel">{{channel.name}}</strong>

@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed-comment-form-wrapper new-message"
+    <div class="fixed-comment-form-wrapper new-message position-relative p-0"
          @keydown.down="handleKey($event, 'down')"
          @keydown.up="handleKey($event, 'up')"
          @keydown.enter="handleKey($event, 'enter')"
@@ -30,11 +30,15 @@
         </div>
 
         <div v-if="preview && message"
-             class="form-wrapper margin-bottom-1 preview">
+             class="form-wrapper margin-bottom-1 preview position-absolute w-100 overflow-auto" style="top:-200px;left:0;z-index:1000;height: 200px">
+            <button type="button" class="close align-right" @click.prevent="preview =! preview" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
             <markdown :text="message.trim()"></markdown>
+
         </div>
 
-        <form class="chat-input-form relative" style="max-height: 50%">
+        <form class="chat-input-form relative" style="max-height: 75%">
             <transition name="el-zoom-in-bottom">
                 <quick-emoji-picker v-if="quickEmojiPicker.show"
                                     @close="quickEmojiPicker.show = false"

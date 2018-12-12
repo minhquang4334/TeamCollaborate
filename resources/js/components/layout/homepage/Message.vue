@@ -1,6 +1,6 @@
 
 <template>
-    <transition name="el-fade-in-linear">
+    <transition name="el-fade-in-linear ">
         <div class="comment v-comment-wrapper"
              v-show="visible"
              @mouseover="seen"
