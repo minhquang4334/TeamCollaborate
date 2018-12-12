@@ -28,6 +28,10 @@
                   console.log("Exists!");
                   let url = window.location.href;
                   let x = url.split('?');
+                  if(x.length < 2){
+                     clearInterval(checkExist);
+                     return;
+                  }
                   let data = x[x.length-1].split('---');
                   document.getElementById('inputEmail').value = atob(data[0]);
                   document.getElementById('inputName').value = atob(data[1]);
