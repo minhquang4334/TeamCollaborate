@@ -1,6 +1,6 @@
 
 <template>
-    <transition name="el-fade-in-linear ">
+    <transition name="el-fade-in-linear">
         <div class="comment v-comment-wrapper"
              v-show="visible"
              @mouseover="seen"
@@ -15,11 +15,26 @@
                                          class="avatar user-select">
                                 <img v-bind:src="list.creator.data.avatar">
                             </router-link>
+                            <span class="dropdown" data-toggle="collapse" data-target="">
+                                <a style="cursor: pointer" data-toggle="dropdown">
+                                    <strong class="ml-3">@{{ list.creator.data.name }}</strong>
+                                </a>
+                                <div  class="dropdown-menu navbar-dropdown dropdownAnimation p-0" style="width:300px">
+                                    <div class="card" >
+                                      <img class="card-img-top" v-bind:src="list.creator.data.avatar" alt="Card image cap">
+                                      <div class="card-body">
+                                        <h5 class="card-title">{{ list.creator.data.name }}</h5>
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item" @click="showProfile"><a href="#" >View profile</a></li>
+                                            <li class="nav-item"><a href="#" >Direct Message</a></li>
+                                            <li class="nav-item"><a href="#" @click="removeUser">Remove User </a></li>
+                                        </ul>
+                                      </div>
+                                    </div>
 
-                            <router-link :to="'/' + '@' + list.creator.data.name"
-                                         class="author user-select">
-                                @{{ list.creator.data.name }}
-                            </router-link>
+                                </div>
+
+                            </span>
 
                             <span class="separator">
 								&#183;
@@ -139,7 +154,7 @@
                     </div>
                 </div>
 
-                <div class="text">
+                <div class="text ml-5">
                     <markdown :text="list.content"></markdown>
 
                 </div>
@@ -401,6 +416,13 @@
         showComment(){
             this.$emit('comment');
         },
+        showProfile(){
+            this.$emit('showProfile');
+        },
+        removeUser(){
+            this.$emit('removeUser');
+        },
+
 
       doubleClicked() {
         if (this.isGuest) return;

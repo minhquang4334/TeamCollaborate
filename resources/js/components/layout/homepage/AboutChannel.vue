@@ -42,13 +42,24 @@
             <div id="memberlist" class="collapse" data-parent="#accordion">
                 <div class="card-body">
                     <div class="list-group">
-                        <span
-                                class="fas fa-user list-group-item list-group-item-action cursor-pointer"
+                        <li
+                                class="list-group-item list-group-item-action cursor-pointer"
                                 v-for="(user, index) in channelDetail.listUsers" :key="index">
-
+                            <span class="dropdown float-right">
+                                <a href="#" role="button"data-toggle="dropdown" class="text-dark" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" @click="showProfile" href="#">View Profile</a>
+                                    <a class="dropdown-item" href="#">Direct Message</a>
+                                    <a class="dropdown-item" @click="removeUser" href="#">Remove User</a>
+                                </div>
+                            </span>
+                            <img :src="user.avatar" class="rounded-circle mr-2" style="width: 30px;height:30px" alt="profile-img">
                             {{user.name}}
-                        </span>
+                        </li>
                     </div>
+
                     <a class="dropdown-item mt-3" data-toggle="modal" data-target="#inviteModal">
                         <p>
                             <span class="fas fa-hand-holding-heart mr-2"></span>
@@ -185,7 +196,17 @@
         return {
 
         }
-      }
+      },
+
+        methods:{
+
+            showProfile(){
+                this.$emit('showProfile');
+            },
+            removeUser(){
+                this.$emit('removeUser');
+            },
+        }
     }
 
 </script>
