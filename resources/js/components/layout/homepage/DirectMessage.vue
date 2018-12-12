@@ -5,15 +5,39 @@
                 <h2 class="text-center mb-5">Direct Message</h2>
                 <div class="w-100 row">
                     <div class="col-11 p-0">
-                        <multiselect v-model="value" tag-placeholder="Add this as new tag" placeholder="Search or add a tag" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
+                        <multiselect
+                                v-model="selected"
+                                tag-placeholder="Add this as new user"
+                                placeholder="Search or add a user"
+                                label="name"
+                                :options="options"
+                                :multiple="true"
+                                open-direction="bottom"
+                                :searchable="true"
+                                :loading="isLoading"
+                                :internal-search="false"
+                                :clear-on-select="true"
+                                :close-on-select="true"
+                                track-by="id"
+                                :show-no-results="false"
+                                :hide-selected="true"
+                                title="name"
+                                :max-height="600"
+                                @search-change="asyncFind"
+                                :options-limit="10"
+                                />
+                        <template slot="tag" slot-scope="{ option, remove }"><span class="custom__tag"><span>{{ option.name }}</span><span class="custom__remove" @click="remove(option)">❌</span></span></template>
+                        <template slot="clear" slot-scope="props">
+                            <div class="multiselect__clear" v-if="selectedCountries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
+                        </template>
                     </div>
-                    <div class="col-1 px-0 ">
-                        <button type="button" class="btn btn-secondary h-100">Send</button>
+                    <div class="col-1 px-0">
+                        <button type="button" class="btn btn-success h-100 margin-left-10">Go to</button>
                     </div>
                 </div>
                 <p class="text-muted">
                     entry name or email of user! press enter to add selection or
-                    <router-link :to="{name: 'homeIndex'}" >Back</router-link>
+                    <router-link :to="{name: 'homeIndex'}">Back</router-link>
                 </p>
             </div>
         </div>
@@ -21,33 +45,37 @@
 </template>
 
 <script>
-    import Multiselect from 'vue-multiselect'
+  import {get} from '../../../helper/request'
+  export default {
+    components: {
+    },
+    data() {
+      return {
+        currentUser: this.$store.state.auth.user,
 
-    export default {
-        components: {
-            Multiselect
-        },
-        data () {
-            return {
-                value: [
-                    { name: 'Javascript', code: 'js' }
-                ],
-                options: [
-                    { name: 'Vue.js', code: 'vu' },
-                    { name: 'Javascript', code: 'js' },
-                    { name: 'Open Source', code: 'os' }
-                ]
-            }
-        },
-        methods: {
-            addTag (newTag) {
-                const tag = {
-                    name: newTag,
-                    code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
-                }
-                this.options.push(tag)
-                this.value.push(tag)
-            }
-        }
+        options: [
+
+        ],
+
+        selected: [],
+
+        isLoading: false
+      }
+    },
+    methods: {
+      asyncFind (query) {
+        this.isLoading = true;
+        let url = '/api/user/list?search_name=' + query
+        get(url).then((response) => {
+          console.log(response);
+          this.options = response.data.data
+          this.isLoading = false
+        })
+      },
+
+      clearAll () {
+        this.selected = []
+      }
     }
+  }
 </script>

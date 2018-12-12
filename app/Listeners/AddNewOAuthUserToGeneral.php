@@ -31,7 +31,7 @@ class AddNewOAuthUserToGeneral
 		$user = $event->user;
 		if(!$user->avatar) {
 			$user->avatar = config('const.default_avatar');
-			$user->store();
+			$user->save();
 		}
 		$channel = $this->channel->getChannelById(Channel::GENERAL_CHANNEL_ID);
 		$channel->users()->attach($user->id, ['display_name' => $user->name, 'status' => Channel::ACTIVE ]);

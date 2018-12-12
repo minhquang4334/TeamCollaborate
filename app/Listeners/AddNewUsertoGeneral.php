@@ -28,6 +28,7 @@ class AddNewUsertoGeneral
 	 */
 	public function handle(Registered $event)
 	{
+		dd(1);
 		$user = $event->user;
 		if(!$user->avatar) {
 			$user->avatar = config('const.default_avatar');
