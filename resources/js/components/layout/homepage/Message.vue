@@ -26,14 +26,14 @@
                 <div class="v-comment-info">
                     <div class="display-flex">
                         <div class="left">
-                            <router-link :to="'/' + '@' + list.author.username"
+                            <router-link :to="'/' + '@' + list.creator.data.name"
                                          class="avatar user-select">
-                                <img v-bind:src="list.author.avatar">
+                                <img v-bind:src="list.creator.data.avatar">
                             </router-link>
 
-                            <router-link :to="'/' + '@' + list.author.username"
+                            <router-link :to="'/' + '@' + list.creator.data.name"
                                          class="author user-select">
-                                @{{ list.author.username }}
+                                @{{ list.creator.data.name }}
                             </router-link>
 
                             <span class="separator">
@@ -155,7 +155,7 @@
                 </div>
 
                 <div class="text">
-                    <markdown :text="list.content.text"></markdown>
+                    <markdown :text="list.content"></markdown>
                 </div>
             </div>
 
@@ -350,7 +350,7 @@
       },
 
       date() {
-        return moment(this.list.created_at)
+        return moment(this.list.created_at.date)
           .utc(moment().format('Z'))
           .fromNow(true);
       },
@@ -361,7 +361,7 @@
        * @return String
        */
       longDate() {
-        return this.parseFullDate(this.list.created_at);
+        return this.parseFullDate(this.list.created_at.date);
       },
 
       /**

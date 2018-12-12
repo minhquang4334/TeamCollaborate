@@ -22,8 +22,8 @@ class PostRepository {
         $this->model = $post;
     }
 
-    public function list($channelId, $number, $limit = 10, $sort = 'desc', $sortColumn = 'created_at'){
-        return $this->model->where('channel_id', $channelId)->limit($limit)->offset($number)->orderBy($sortColumn, $sort)->get();
+    public function list($channelId, $number = 10, $limit = 10, $sort = 'desc', $sortColumn = 'created_at'){
+        return $this->model->where('channel_id', $channelId)->orderBy($sortColumn, $sort)->get()->toArray();
     }
 
     public function removeFollower($post_id, $user_id){

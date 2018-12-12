@@ -198,6 +198,7 @@
                 replyingComment: [],
                 parent: 0,
                 list_tag_users: [],
+                channel_id: this.$route.params.id
             };
         },
 
@@ -391,6 +392,7 @@
             },
 
             pick(pickedStr, starterIndex, typedLength, user) {
+                console.log(user);
                 this.insertPickedItem(
                     'comment-form-textarea',
                     pickedStr + ' ',
@@ -467,24 +469,23 @@
             },
 
             postComment() {
-                //   post(`/submissions/${this.submission}/comments`, {
-                //       parent_id: this.parent,
-                //       body: this.temp
-                //     })
-                //     .then((response) => {
-                //       Store.state.comments.likes.push(response.data.data.id);
-                //       this.$eventHub.$emit('newComment', response.data.data);
-                //
-                //       this.clear();
-                //     })
-                //     .catch((error) => {
-                //       this.loading = false;
-                //       this.message = this.temp;
-                //     });
-                // }
-                this.$emit('postComment', this.temp);
+                post(`/api/post/add`, {
+                    parent_id: this.parent,
+                    content: this.temp,
+                    channel_id: this.channel_id,
+                    tag_users: this.list_tag_users,
+                })
+                .then((response) => {
+                    this.$eventHub.$emit('newComment', response.data.data);
+
+                    this.clear();
+                })
+                .catch((error) => {
+                    this.loading = false;
+                    this.message = this.temp;
+                });
                 this.clear();
             }
         }
-    };
+    }
 </script>

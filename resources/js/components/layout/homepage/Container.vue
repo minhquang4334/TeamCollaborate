@@ -2,7 +2,7 @@
     <div class="row p-3 h-100">
         <div class="col-md-8 h-100 border-right">
             <message-list :listMessages="listMessages" @showComment="showComment"/>
-            <comment-form @postComment="addNewPost" :commentors="commentors"/>
+            <comment-form @postComment="addNewPost" :commentors="commentors" :channel_id="channel_id"/>
         </div>
         <div class="col-md-4 h-100 d-none d-md-block">
             <about-channel v-if="isAboutChannel" :channelDetail="channelDetail"/>
@@ -22,7 +22,7 @@
 
         data() {
             return {
-                channel_id: this.channel.channel_id,
+                channel_id: this.$route.params.id,
                 commentors: [],
                 number_items: 0,
                 channelDetail: {
@@ -33,58 +33,7 @@
                     channelName: '',
                 },
                 listMessages: [
-                    {
-                        id: 1,
-                        author: {
-                            avatar: '/images/default-avatar.png',
-                            username: 'admin'
-                        },
-                        content: {
-                            text: ':kissing: hahahha cai do ngu nhat the gioi'
-                        },
-                        children: [],
-                        parent_id: null,
-                        created_at: '2018-11-09 05:54:55'
-                    },
-                    {
-                        id: 2,
-                        author: {
-                            avatar: '/images/default-avatar.png',
-                            username: 'admin'
-                        },
-                        content: {
-                            text: ':kissing: hahahha cai do ngu nhat the gioi'
-                        },
-                        children: [],
-                        parent_id: null,
-                        created_at: '2018-11-09 05:54:55'
-                    },
-                    {
-                        id: 3,
-                        author: {
-                            avatar: '/images/default-avatar.png',
-                            username: 'admin'
-                        },
-                        content: {
-                            text: ':kissing: hahahha cai do ngu nhat the gioi'
-                        },
-                        children: [],
-                        parent_id: null,
-                        created_at: '2018-11-09 05:54:55'
-                    },
-                    {
-                        id: 4,
-                        author: {
-                            avatar: '/images/default-avatar.png',
-                            username: 'admin'
-                        },
-                        content: {
-                            text: ':kissing: hahahha cai do ngu nhat the gioi'
-                        },
-                        children: [],
-                        parent_id: null,
-                        created_at: '2018-11-09 05:54:55'
-                    }
+
                 ]
             }
         },
@@ -104,6 +53,7 @@
 
         mounted() {
             let self = this;
+            self.getListPosts();
         },
 
         methods: {
@@ -111,7 +61,6 @@
                 this.channelDetail.channelPurpose = this.channel.purpose;
                 this.channelDetail.listUsers = this.channel.users.data;
                 this.channelDetail.channelName = this.channel.name;
-                this.channel_id = this.channel.id;
                 this.commentors = this.channel.users.data;
 
             },
@@ -142,6 +91,7 @@
                 let url = '/api/post/list?' + query;
                 get(url).then((res) => {
                     console.log(res);
+                    this.listMessages = res.data.data;
                 }).catch((err) => {
                     this.$message({
                         type: 'failed',

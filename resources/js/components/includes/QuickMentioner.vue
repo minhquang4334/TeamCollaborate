@@ -153,7 +153,7 @@
                     '@' + user.name,
                     this.starter,
                     this.searched.length,
-                    this.user
+                    user
                 );
 
                 this.close();
