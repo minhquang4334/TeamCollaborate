@@ -191,6 +191,9 @@ class ChannelApiController extends ApiController
     public function invite(Request $request) {
         try{
             $channelId = $request->get('channel_id');
+            if($channelId === Channel::GENERAL_CHANNEL_ID) {
+	            return $this->response->withForbidden(trans('messages.user.permission_deny'));
+            }
             $userId = $request->get('user_id');
             $channel = $this->channel->getById($channelId);
             if($this->currentUser()->channels->contains($channel)){
@@ -204,4 +207,30 @@ class ChannelApiController extends ApiController
             return $this->response->withBadRequest($e->getMessage());
         }
     }
+
+	/**
+	 * Method PUT
+	 * usage: http://localhost:8000/api/channel/leave?channel_id=1
+	 * invite a user to specific channel
+	 * @param Request $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function leave(Request $request) {
+		try{
+			$channelId = $request->get('channel_id');
+			if($channelId === Channel::GENERAL_CHANNEL_ID) {
+				return $this->response->withForbidden(trans('messages.user.permission_deny'));
+			}
+			$currentUserId = $this->currentUser()->id;
+			$channel = $this->channel->getChannelById($channelId);
+			if($this->currentUser()->channels->contains($channel)){
+				$channel->users()->detach($currentUserId);
+				return $this->response->withUpdated($channel);
+			}else{
+				return $this->response->withForbidden(trans('messages.user.permission_deny'));
+			}
+		}catch (\Exception $e){
+			return $this->response->withBadRequest($e->getMessage());
+		}
+	}
 }

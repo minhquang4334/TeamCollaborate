@@ -185,6 +185,10 @@
         return {
 
         }
+      },
+
+      mounted() {
+        $('#channeldetail').collapse('toggle');
       }
     }
 
