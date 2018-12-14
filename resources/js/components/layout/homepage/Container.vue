@@ -1,10 +1,11 @@
 <template>
     <div class="row px-3 h-90">
-        <div class="col-md-8 h-100 border-right px-0">
+        <div class="col-md-7 h-100 border-right px-0">
             <message-list
                     :listMessages="listMessages"
                     @showComment="showComment"
                     @showProfile="showProfile"
+                    :creator-id="channel.creator"
                     @removeUser="removeUser"/>
             <comment-form
                     @postComment="addNewPost"
@@ -14,11 +15,13 @@
                     :comment_form_textarea="`post-form-textarea`"
             />
         </div>
-        <div class="col-md-4 h-100 d-none d-md-block">
+        <div class="col-md-5 h-100 d-none d-md-block">
             <about-channel v-if="rightBox === 1" :channelDetail="channelDetail" @showProfile="showProfile"
                            @removeUser="removeUser"/>
             <div v-else-if="rightBox === 2" class="border-right">
-                <thread class="h-80 max-h550 overflow-auto" :thread="threadDetail" />
+                <thread class="h-80 max-h550 overflow-auto"
+                        :thread="threadDetail"
+                        :creator-id="channel.creator"/>
                 <comment-form
                         class="margin-top-10"
                         @postComment="addNewPost"
@@ -166,7 +169,7 @@
                   lastMessage = this.listMessages[this.listMessages.length - 2];
                 }
                 else {
-                  lastMessage = this.listMessages.pop();
+                  lastMessage = this.listMessages[this.listMessages.length - 1];
                 }
                 if(document.getElementById('comment' + lastMessage.id)) {
                   document.getElementById('comment' + lastMessage.id).scrollIntoView();

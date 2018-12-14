@@ -45,6 +45,11 @@
 
     created() {
       this.getChannelDetail();
+      this.$eventHub.$on('remove-parent-comment', this.showAboutChannel);
+    },
+
+    beforeDestroy() {
+      this.$eventHub.$off('remove-parent-comment', this.showAboutChannel);
     },
 
     methods: {

@@ -24,7 +24,7 @@
                 </h4>
 
                 <div class="text"
-                     v-text="editing ? str_limit(editingComment.content.text, 60) : str_limit(replyingComment.content.text, 60)">
+                     v-text="editing ? str_limit(editingComment.content, 60) : str_limit(replyingComment.content, 60)">
                 </div>
             </div>
         </div>
@@ -424,12 +424,13 @@
 
       setEditing(comment) {
         this.clear();
+        if(!this.parent_id) {
+          this.editingComment = comment;
+          this.message = this.editingComment.content;
+          this.parent = this.editingComment.parent_id;
 
-        this.editingComment = comment;
-        this.message = this.editingComment.content.text;
-        this.parent = this.editingComment.parent_id;
-
-        this.$refs.input.focus();
+          this.$refs.input.focus();
+        }
       },
 
       setReplying(comment) {
@@ -535,11 +536,12 @@
       },
 
       patchComment() {
-        put(`/comments/${this.editingComment.id}`, {
-          body: this.temp
+        put(`/api/post/edit`, {
+          content: this.temp,
+          post_id: this.editingComment.id
         })
           .then(() => {
-            this.editingComment.content.text = this.temp;
+            this.editingComment.content = this.temp;
             this.$eventHub.$emit('patchedComment', this.editingComment);
 
             this.clear();

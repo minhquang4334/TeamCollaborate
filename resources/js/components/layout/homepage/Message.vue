@@ -4,7 +4,8 @@
              v-show="visible"
              @mouseover="seen"
              :id="'comment' + list.id"
-             :class="highlightClass">
+             :class="bookmarked ? `background-bookmark` : ``"
+             >
             <div class="content"
                  @dblclick="doubleClicked">
                 <div class="v-comment-info">
@@ -39,15 +40,14 @@
                             <span class="separator">
 								&#183;
 							</span>
+                            <a class="like-button"
+                               @click="like">
+                                <i class="v-icon"
+                                   :class="liked ? 'v-heart-filled go-red animated bounceIn' : 'v-heart go-gray'"></i>
+
+                                <span class="count">{{ points }}</span>
+                            </a>
                             <template v-if="!is_children">
-                                <a class="like-button"
-                                   @click="like">
-                                    <i class="v-icon"
-                                       :class="liked ? 'v-heart-filled go-red animated bounceIn' : 'v-heart go-gray'"></i>
-
-                                    <span class="count">{{ points }}</span>
-                                </a>
-
                                 <a class="like-button"
                                    @click.prevent="showComment">
                                     <i class="far fa-comment-dots text-muted"></i>
@@ -56,6 +56,7 @@
                                 <el-tooltip :content="bookmarked ? 'Unbookmark' : 'Bookmark'"
                                             placement="top"
                                             transition="false"
+                                            v-show="isShowBookMark"
                                             :open-delay="500">
                                     <i class="v-icon margin-left-1"
                                        :class="{ 'go-yellow v-unbookmark': bookmarked, 'v-bookmark': !bookmarked }"
@@ -179,7 +180,10 @@
                        @click="loadMoreComments">
                 Load More Comments ({{ children.length - childrenLimit }} more replies)
             </el-button>
-
+            <report-comment
+                    @close="closeReport"
+                    :visible="isReportComment"
+                    :comment="commentReport"/>
         </div>
     </transition>
 </template>
@@ -187,16 +191,18 @@
 
 <script>
   import Markdown from '../../includes/Markdown.vue';
+  import ReportComment from '../../includes/ReportComment.vue';
   import Helpers from '../../../mixins/Helpers';
   import {get, put, post, del} from '../../../helper/request'
 
   export default {
     name: 'message',
 
-    props: ['list', 'comments-order', 'full', 'is_children'],
+    props: ['list', 'comments-order', 'full', 'is_children', 'creatorId'],
 
     components: {
-      Markdown
+      Markdown,
+      ReportComment
     },
 
     mixins: [Helpers],
@@ -209,11 +215,17 @@
         reply: false,
         childrenLimit: 6,
         highlighted: false,
-        children: []
+        currentUser: this.$store.state.auth.user,
+        children: [],
+        commentReport: {},
+        isReportComment: false,
+        react: []
+
       };
     },
 
     created() {
+
       if (_.isUndefined(this.children)) {
         this.children = [];
       }
@@ -232,6 +244,7 @@
     watch: {
       'list': function() {
         this.loadComment();
+        this.react = this.list.react.data;
       }
     },
 
@@ -242,10 +255,18 @@
         if(this.is_children) {
           this.loadComment()
         }
+        this.react = this.list.react.data;
       });
     },
 
     computed: {
+      isShowBookMark: function() {
+        if(this.creatorId === 0) {
+          return true;
+        }
+        return this.creatorId === this.currentUser.id;
+      },
+
       isShowChild: function() {
         return this.children.length > 0;
       },
@@ -253,26 +274,17 @@
       url() {
       },
 
-      liked: {
-        get() {
-          try {
-            return this.$store.state.comments.likes.indexOf(this.list.id) !== -1;
-          } catch (error) {
-            return false;
-          }
-        },
-
-        set() {
-          if (this.liked) {
-            this.list.likes_count--;
-            let index = this.$store.state.comments.likes.indexOf(this.list.id);
-            this.$store.state.comments.likes.splice(index, 1);
-
-            return;
-          }
-
-          this.list.likes_count++;
-          this.$store.state.comments.likes.push(this.list.id);
+      liked: function() {
+        if(this.react) {
+          let check = false;
+          this.react.forEach((r) => {
+            console.log('adsd: ',r);
+            console.log('curr: ',this.currentUser);
+            if((r.user_id === this.currentUser.id) && (r.react_code === 'like')) {
+              check = true;
+            }
+          })
+          return check
         }
       },
 
@@ -280,21 +292,8 @@
         this.$emit('comment');
       },
 
-      bookmarked: {
-        get() {
-          return this.$store.state.bookmarks.comments.indexOf(this.list.id) !== -1;
-        },
-
-        set() {
-          if (this.$store.state.bookmarks.comments.indexOf(this.list.id) !== -1) {
-            let index = this.$store.state.bookmarks.comments.indexOf(this.list.id);
-            this.$store.state.bookmarks.comments.splice(index, 1);
-
-            return;
-          }
-
-          this.$store.state.bookmarks.comments.push(this.list.id);
-        }
+      bookmarked: function () {
+        return this.list.type === 1;
       },
 
       isParent() {
@@ -322,7 +321,8 @@
       },
 
       points() {
-        return this.list.likes_count;
+        let listLike = this.list.react.data.filter((r) => r.react_code === 'like');
+        return listLike.length;
       },
 
       /**
@@ -331,7 +331,7 @@
        * @return Boolean
        */
       owns() {
-        return auth.id == this.list.user_id;
+        return this.currentUser.id === this.list.creator.data.id;
       },
 
       /**
@@ -537,6 +537,7 @@
         // add broadcasted (used for styling)
         // comment.broadcasted = true;
         if((comment.parent_id === this.list.id) && this.is_children) {
+          this.list.number_children_posts ++;
           this.children.unshift(comment);
           this.$nextTick(function () {
             if(document.getElementById('comment' + comment.id)) {
@@ -556,7 +557,7 @@
         if (this.list.id != comment.id) return;
 
         this.editing = false;
-        this.list.content.text = comment.content.text;
+        this.list.content = comment.content;
         this.list.edited_at = this.now();
       },
 
@@ -569,8 +570,16 @@
           return;
         }
 
-        Store.modals.reportComment.show = true;
-        Store.modals.reportComment.comment = this.list;
+        this.isReportComment = true;
+        if(this.isReportComment) {
+          this.commentReport = this.list;
+        } else {
+          this.commentReport = {}
+        }
+      },
+
+      closeReport() {
+        this.isReportComment = false;
       },
 
       /**
@@ -596,10 +605,15 @@
             return;
           }
 
-          this.bookmarked = !this.bookmarked;
+          this.list.type = (this.list.type === 1) ? 0 : 1;
+          let payload = {
+            post_id: this.list.id,
+            type: this.list.type
+          }
 
-          post(`/comments/${this.list.id}/bookmark`).catch(() => {
-            this.bookmarked = !this.bookmarked;
+          post(`/api/post/pin`, payload)
+            .catch(() => {
+              this.list.type = (this.list.type === 1) ? 0 : 1;
           });
         },
         200,
@@ -613,11 +627,39 @@
             return;
           }
 
-          this.liked = !this.liked;
-
-          post(`/comments/${this.list.id}/like`).catch(error => {
+          post(`/api/post/like`, {
+            post_id: this.list.id,
+            react_code: 'like'
+          })
+            .then((res) => {
+              console.log('like: ', res);
+              if(!this.liked) {
+                let newReact = {
+                  user_id: this.currentUser.id,
+                  post_id: this.list.id,
+                  react_code: 'like'
+                }
+                this.react.push(newReact)
+              } else {
+                let removeReact = this.react.filter((r) => {
+                  return (this.currentUser.id === r.user_id) && (r.react_code === 'like');
+                })
+                if(removeReact.length) {
+                  let rm = removeReact[0];
+                  let index = this.react.indexOf(rm);
+                  if(index > -1) {
+                    this.react.splice(index, 1);
+                  }
+                }
+              }
+            })
+            .catch(error => {
+              this.$message({
+                type: 'error',
+                message: 'Something error!! :', error
+              })
             this.liked = !this.liked;
-          });
+          })
         },
         200,
         {leading: true, trailing: false}
@@ -631,7 +673,24 @@
       destroy() {
         this.visible = false;
 
-        del(`/comments/${this.list.id}`).catch(() => (this.visible = true));
+        del(`/api/post/destroy?post_id=${this.list.id}`).then(() => {
+            this.$message({
+              type: 'success',
+              message: 'Delete Success'
+            })
+          })
+          .catch((err) => {
+            this.$message({
+              type: 'error',
+              message: 'Something error: ', err
+            })
+            this.visible = true
+          }).finally(() => {
+            if(this.is_children && !this.list.is_parent) {
+              this.$eventHub.$emit('remove-parent-comment');
+            }
+          this.$eventHub.$emit('deletedComment', this.list);
+        });
       },
 
       /**
@@ -640,8 +699,17 @@
        * @return void
        */
       deletedComment(comment) {
+        if(comment.parent_id === this.list.id && !this.is_children) {
+          this.list.number_children_posts --;
+        }
         if (comment.id != this.list.id) return;
         this.visible = false;
+        if(this.is_children) {
+          if(!comment.is_parent) {
+            this.$eventHub.$emit('remove-parent-comment');
+            return;
+          }
+        }
       },
 
       /**
@@ -662,12 +730,20 @@
       disapprove() {
         this.visible = false;
         post(`/comments/${this.list.id}/disapprove`).catch(() => (this.visible = true));
-      }
+      },
     }
   };
 </script>
 
 <style lang="scss" scoped>
+    .background-bookmark {
+        background: #f9f9f9 !important;
+        border: 2px dashed #e9e9e9 !important;
+        padding-bottom: 0.7em !important;
+        padding-right: 1em !important;
+        border-left: 2px dashed #e9e9e9 !important;
+    }
+
     .comment {
         .v-comment-info {
             display: flex;

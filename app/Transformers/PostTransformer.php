@@ -7,7 +7,7 @@ use League\Fractal\TransformerAbstract;
 class PostTransformer extends TransformerAbstract {
 
 	protected $defaultIncludes  = [
-		'creator'
+		'creator', 'react'
 	];
 
     public function transform(Post $post) {
@@ -31,6 +31,13 @@ class PostTransformer extends TransformerAbstract {
 	{
 		if ($user = $post->creator()->first()) {
 			return $this->item($user, new UserTransformer());
+		}
+	}
+
+	public function includeReact(Post $post)
+	{
+		if ($react = $post->reacts()->get()) {
+			return $this->collection($react, new ReactTransformer());
 		}
 	}
 }

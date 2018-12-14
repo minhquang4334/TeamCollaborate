@@ -4,6 +4,7 @@
                 :list="thread"
                 :comments-order="'hot'"
                 :full="true"
+                :creatorId="creatorId"
                 :is_children="true"
                 @showProfile="showProfile"
                 @removeUser="removeUser"/>
@@ -13,12 +14,7 @@
     import CommentForm from '../../includes/CommentForm'
     import MessageItem from "./Message.vue"
     export default {
-      props: {
-        thread: {
-          type: Object,
-          required: true
-        }
-      },
+      props: ['thread', 'creatorId'],
       components: {
         CommentForm,
         MessageItem
