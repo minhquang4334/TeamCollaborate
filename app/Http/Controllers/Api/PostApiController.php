@@ -7,6 +7,7 @@ use App\Model\Post;
 use App\Model\Report;
 use App\Repositories\ChannelRepository;
 use App\Repositories\PostRepository;
+use App\Repositories\ReactRepository;
 use App\Repositories\ReportRepository;
 use Illuminate\Http\Request;
 
@@ -16,18 +17,21 @@ class PostApiController extends ApiController
     protected $channel;
     protected $report;
     protected $number_post_limit;
+    protected $react;
     /**
      * PostApiController constructor.
      * @param PostRepository $post
      * @param ChannelRepository $channel
      * @param ReportRepository $report
+     * @param ReactRepository $react
      */
-    public function __construct(PostRepository $post, ChannelRepository $channel, ReportRepository $report)
+    public function __construct(PostRepository $post, ChannelRepository $channel, ReportRepository $report, ReactRepository $react)
     {
         parent::__construct();
         $this->post = $post;
         $this->channel = $channel;
         $this->report = $report;
+        $this->react = $react;
     }
 
     /**
@@ -197,7 +201,7 @@ class PostApiController extends ApiController
 
     /**
      * Method delete
-     * @usage http://localhost:8000/api/post/destroy?id=1
+     * @usage http://localhost:8000/api/post/destroy?post_id=1
      * destroy a thread
      * remove file in thread
      * remove tagged user in thread
@@ -207,10 +211,15 @@ class PostApiController extends ApiController
      */
     public function destroy(Request $request) {
         try{
-            $id = $request->get('id');
-            if(!$id) {
+            $id = $request->get('post_id');
+            if($id) {
 	            $post = $this->post->getById($id);
+
+
 	            if($post->creator == $this->currentUser()->id) {
+		            if(!$post->is_parent) {
+			            $post->children()->delete();
+		            }
 		            $this->post->destroy($id);
 		            return $this->response->withUpdated($post);
 	            }else{
@@ -272,7 +281,7 @@ class PostApiController extends ApiController
 
     /**
      * @Method PUT
-     * @usage http://localhost:8000/api/post/pin?post_id=9
+     * @usage http://localhost:8000/api/post/pin?post_id=9&type=1
      * pin a thread to a channel
      * return true if success, else return false
      * @param Request $request
@@ -281,15 +290,20 @@ class PostApiController extends ApiController
     public function pin(Request $request) {
         try {
             $user = $this->currentUser();
-            $channelId = $this->post->getById($request->get('post_id'))->channel_id;
-            $channel = $this->channel->getById($channelId);
-            if($user->channels->contains($channel)) {
-                $post = $this->post->updateColumn($request->get('post_id'),[
-                    'type' => Post::PINNED,]);
-                return $this->response->withMessage(trans('messages.user.pin_success'));
-            }else{
-                return $this->response->withForbidden(trans('messages.user.not_in_channel'));
+            $post = $this->post->getById($request->get('post_id'));
+            if($post->id) {
+	            $channelId = $post->channel_id;
+	            $channel = $this->channel->getById($channelId);
+	            if($user->channels->contains($channel)) {
+	            	$type = ($request->get('type') === 1) ? Post::PINNED : Post::NORMAL;
+		            $post = $this->post->updateColumn($post->id,[
+			            'type' => $type,]);
+		            return $this->response->withMessage(trans('messages.user.pin_success'));
+	            }else{
+		            return $this->response->withForbidden(trans('messages.user.not_in_channel'));
+	            }
             }
+	        return $this->response->withForbidden( trans('messages.user.post_not_exist'));
         }catch (\Exception $e){
             return $this->response->withInternalServer($e->getMessage());
         }
@@ -297,16 +311,16 @@ class PostApiController extends ApiController
 
     /**
      * Method PUT
-     * @usage http://localhost:8000/api/post/list?id=1&content=xxx
+     * @usage http://localhost:8000/api/post/edit?id=1&content=xxx
      * edit a thread
      * return new information of thread
      * update tagged user list, if it was changed
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request) {
+    public function edit(Request $request) {
         try{
-            $id = $request->get('id');
+            $id = $request->get('post_id');
             $post = $this->post->getById($id);
             if($post->creator == $this->currentUser()->id) {
                 $allow = ['content'];
@@ -324,7 +338,7 @@ class PostApiController extends ApiController
 
     /**
      * @Method post
-     * @usage http://localhost:8000/api/post/report?post_id=2&channel_id=1&description=Taji no ngu
+     * @usage http://localhost:8000/api/post/report?post_id=2&description=Taji no ngu
      * report a thread
      * return report information
      * @param Request $request
@@ -332,18 +346,59 @@ class PostApiController extends ApiController
      */
     public function report(Request $request) {
         try{
-        	$channel_id = $request->get('channel_id');
-        	if(!$channel_id) {
-		        $channel_id = Channel::GENERAL_CHANNEL_ID;
+	        $post_id = $request->get('post_id');
+        	if($post_id) {
+		        $description = $request->get('description') ? $request->get('description') : '';
+		        $subject = $request->get('subject') ? $request->get('subject') : '';
+		        $channel_id = $this->post->getById($post_id)->channel_id;
+		        $report = $this->report->store(array_merge($request->all(), [
+			        'report_creator_id' => $this->currentUser()->id,
+			        'status' => Report::YET,
+			        'description' => $description,
+			        'subject' => $subject,
+			        'channel_id' => $channel_id,
+			        'post_id' => $post_id
+		        ]));
+		        return $this->response->withCreated($report);
 	        }
-            $report = $this->report->store(array_merge($request->all(), [
-                'report_creator_id' => $this->currentUser()->id,
-                'status' => Report::YET,
-            ]));
-            return $this->response->withCreated($report);
+	        return $this->response->withForbidden( trans('messages.user.post_not_exist'));
         }catch (\Exception $e){
             return $this->response->withInternalServer($e->getMessage());
         }
+    }
+
+	/**
+	 * @Method post
+	 * @usage http://localhost:8000/api/post/like?post_id=2&react_code='like'
+	 * report a thread
+	 * return report information
+	 * @param Request $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+    public function like(Request $request) {
+	    try{
+		    $post_id = $request->get('post_id');
+		    $react_code = $request->get('react_code') ? $request->get('react_code') : 'like';
+		    $user_id = $this->currentUser()->id;
+		    if($post_id) {
+		    	$same_react_id = $this->react->isHaveSameUserReact($user_id, $post_id, $react_code);
+			    if($same_react_id) {
+			    	$react = $this->react->getById($same_react_id);
+				    $react->destroy($same_react_id);
+				    return $this->response->withUpdated($react);
+			    } else {
+				    $react = $this->react->store(array_merge($request->all(), [
+					    'user_id' => $user_id,
+					    'react_code' => $react_code,
+					    'post_id' => $post_id
+				    ]));
+				    return $this->response->withCreated($react);
+			    }
+		    }
+		    return $this->response->withForbidden( trans('messages.user.post_not_exist'));
+	    }catch (\Exception $e){
+		    return $this->response->withInternalServer($e->getMessage());
+	    }
     }
 
 }

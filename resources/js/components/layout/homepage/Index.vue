@@ -4,7 +4,12 @@
             <leftBar :channel_id="channel_id"/>
             <div class="col-md-10 p-0">
                 <headBar :channel="channel"  @showAboutChannel="showAboutChannel"/>
-                <container :channel="channel" :rightBox="rightBox" @showComment="showComment" @showProfile="showProfile"/>
+                <container
+                        :channel="channel"
+                        :rightBox="rightBox"
+                        @showComment="showComment"
+                        @showProfile="showProfile"
+                        :profileUser="profileUser"/>
             </div>
         </div>
 
@@ -26,6 +31,7 @@
         channel_id: (this.$route.params.id) ? this.$route.params.id : 0,
         channel: {},
         rightBox: 1,
+        profileUser: {}
       }
     },
 
@@ -45,6 +51,11 @@
 
     created() {
       this.getChannelDetail();
+      this.$eventHub.$on('remove-parent-comment', this.showAboutChannel);
+    },
+
+    beforeDestroy() {
+      this.$eventHub.$off('remove-parent-comment', this.showAboutChannel);
     },
 
     methods: {
@@ -65,8 +76,9 @@
          this.rightBox = 2;
       },
 
-      showProfile(){
+      showProfile(user){
          this.rightBox = 3;
+         this.profileUser = user;
       }
     }
 

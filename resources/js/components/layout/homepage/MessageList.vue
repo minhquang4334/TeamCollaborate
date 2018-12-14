@@ -3,6 +3,7 @@
         <message-item
                 :list="c"
                 :comments-order="'hot'"
+                :creatorId="creatorId"
                 :full="true"
                 v-for="c in listMessages"
                 :key="c.id"
@@ -16,7 +17,7 @@
   import MessageItem from "./Message.vue"
 
   export default {
-    props: ['listMessages'],
+    props: ['listMessages', 'creatorId'],
     data() {
       return {}
     },
@@ -34,8 +35,8 @@
         this.$emit("showComment", list)
       },
 
-      showProfile() {
-        this.$emit("showProfile")
+      showProfile(user) {
+        this.$emit("showProfile", user)
       },
 
       removeUser() {

@@ -53,7 +53,7 @@ Route::group(['namespace' => 'Api'], function () {
             Route::get('list', 'ChannelApiController@getListChannel');
             Route::put('update', 'ChannelApiController@update');
             Route::delete('destroy', 'ChannelApiController@destroy');
-            Route::put('invite', 'ChannelApiController@invite');
+            Route::post('invite', 'ChannelApiController@invite');
             Route::put('leave', 'ChannelApiController@leave');
         });
         Route::group(['prefix' =>'user', 'as' => 'user-info'], function (){
@@ -70,11 +70,13 @@ Route::group(['namespace' => 'Api'], function () {
             Route::get('list', 'PostApiController@getList');
             Route::put('update', 'PostApiController@update');
             Route::delete('destroy', 'PostApiController@destroy');
-            Route::put('pin', 'PostApiController@pin');
+            Route::post('pin', 'PostApiController@pin');
+            Route::put('edit', 'PostApiController@edit');
             Route::get('pinned', 'PostApiController@getPinned');
             Route::delete('unfollow', 'PostApiController@unFollow');
             Route::post('follow', 'PostApiController@follow');
             Route::post('report', 'PostApiController@report');
+            Route::post('like', 'PostApiController@like');
             Route::get('list-comment', 'PostApiController@getListComment');
 
         });

@@ -52,11 +52,15 @@
 
     created() {
       this.$eventHub.$on('leaveChannel', this.leaveChannel);
+      this.$eventHub.$on('deleteChannel', this.leaveChannel);
+      this.$eventHub.$on('newDirectMessage', this.newChannel);
       this.getListChannel();
     },
 
     beforeDestroy() {
       this.$eventHub.$off('newComment', this.leaveChannel);
+      this.$eventHub.$off('newDirectMessage', this.newChannel);
+      this.$eventHub.$off('deleteChannel', this.leaveChannel);
     },
 
     computed: {},
@@ -91,6 +95,18 @@
 
       getListDirectMessage() {
 
+      },
+
+      newChannel(channel) {
+        if(channel.type === 2) {
+          if(this.listDirectMessages.filter((c) => c.id === channel.id).length === 0) {
+            this.listDirectMessages.unshift(channel);
+          }
+        } else {
+          if(this.listChannels.filter((c) => c.id === channel.id).length === 0) {
+            this.listChannels.unshift(channel);
+          }
+        }
       },
 
       toChannelDetail(channel) {

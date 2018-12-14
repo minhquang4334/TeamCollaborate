@@ -30,6 +30,8 @@ class UserTransformer extends TransformerAbstract {
             'grade' => $user->grade,
             'role' => $user->role,
             'is_admin' => $user->is_admin,
+	        'created_at' => $user->created_at,
+	        'updated_at' => $user->updated_at,
         ];
     }
 }
