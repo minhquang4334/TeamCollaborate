@@ -26,9 +26,9 @@
                                       <div class="card-body">
                                         <h5 class="card-title">{{ list.creator.data.name }}</h5>
                                         <ul class="nav flex-column">
-                                            <li class="nav-item" @click="showProfile"><a href="#">View profile</a></li>
-                                            <li class="nav-item"><a href="#">Direct Message</a></li>
-                                            <li class="nav-item"><a href="#" @click="removeUser">Remove User </a></li>
+                                            <li class="nav-item cursor-pointer lighter-on-hover" @click.prevent="showProfile(list.creator.data)"><span>View profile</span></li>
+                                            <li class="nav-item cursor-pointer lighter-on-hover" v-show="showDirectMess"><span @click="directMess(list.creator.data)">Direct Message</span></li>
+                                            <li class="nav-item cursor-pointer lighter-on-hover" v-show="showDeleteUser"><span href="#" @click="removeUser(list.creator.data)">Remove User </span></li>
                                         </ul>
                                       </div>
                                     </div>
@@ -400,6 +400,14 @@
         );
       },
 
+      showDirectMess() {
+        return this.list.creator.data.id !== this.currentUser.id;
+      },
+
+      showDeleteUser() {
+        return this.currentUser.id === this.creatorId
+      },
+
       /**
        * whether or not the disapprove button shoud be displayed
        *
@@ -415,6 +423,43 @@
     },
 
     methods: {
+      directMess(user) {
+        let type = 2;
+        let invited_users = [];
+        invited_users.push(user.id);
+        let name = this.currentUser.name + ', ' + user.name;
+        let payload = {
+          type : type,
+          purpose: 'Direct Messages between ' + name,
+          description: '',
+          name: name,
+          invited_users: invited_users
+        }
+        let url = '/api/channel/create'
+        post(url, payload).then((res) => {
+          console.log('res: ', res);
+          if(res.data.data) {
+            this.$router.push({
+              name: 'ChannelDetail',
+              params: {
+                id: res.data.data.channel_id
+              }
+            })
+            this.$eventHub.$emit('newDirectMessage', res.data.data);
+          }
+        }).catch((err) => {
+          console.log('err: ', err);
+          this.$message({
+            type: 'error',
+            message: 'Something error: ', err
+          })
+        })
+      },
+
+      removeUser(user) {
+
+      },
+
       openOrigin() {
         app.$Progress.start();
 
@@ -450,12 +495,10 @@
       showComment() {
         this.$emit('comment', this.list);
       },
-      showProfile() {
-        this.$emit('showProfile');
+      showProfile(user) {
+        this.$emit('showProfile', user);
       },
-      removeUser() {
-        this.$emit('removeUser');
-      },
+
 
 
       doubleClicked() {

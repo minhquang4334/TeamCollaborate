@@ -38,7 +38,7 @@ let routes = [
     path: '/direct-message', name: 'derectMessage', component: DirectMessage, beforeEnter: middlewares.auth
   },
   {
-    path: '/invite-channel', name: 'inviteToChannel', component: InviteChannel, beforeEnter: middlewares.auth
+    path: '/invite-channel/:channel_id', name: 'inviteToChannel', component: InviteChannel, beforeEnter: middlewares.auth
   },
   {
     path: '/invite-app', name: 'inviteToApp', component: InviteApp, beforeEnter: middlewares.auth

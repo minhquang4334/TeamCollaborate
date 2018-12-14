@@ -53,7 +53,7 @@ Route::group(['namespace' => 'Api'], function () {
             Route::get('list', 'ChannelApiController@getListChannel');
             Route::put('update', 'ChannelApiController@update');
             Route::delete('destroy', 'ChannelApiController@destroy');
-            Route::put('invite', 'ChannelApiController@invite');
+            Route::post('invite', 'ChannelApiController@invite');
             Route::put('leave', 'ChannelApiController@leave');
         });
         Route::group(['prefix' =>'user', 'as' => 'user-info'], function (){

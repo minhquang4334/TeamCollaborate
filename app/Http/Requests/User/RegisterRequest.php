@@ -15,4 +15,14 @@ class RegisterRequest extends JsonFormRequest
             'gender' => 'boolean',
         ];
     }
+
+    public function messages()
+    {
+	    return [
+	    	'name' => 'Name is incorrect',
+	    	'email' => 'Email is incorrect',
+	    	'password' => 'Password failed',
+	    	'gender' => 'Not in type Male or Female',
+	    ];
+    }
 }

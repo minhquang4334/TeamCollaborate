@@ -64,14 +64,16 @@
     },
     methods: {
       asyncFind (query) {
-        this.isLoading = true;
-        let url = '/api/user/list?search_name=' + query
-        get(url).then((response) => {
-          this.options = response.data.data.filter((user) => {
-            return user.id !== this.currentUser.id;
+        if(query) {
+          this.isLoading = true;
+          let url = '/api/user/list?search_name=' + query
+          get(url).then((response) => {
+            this.options = response.data.data.filter((user) => {
+              return user.id !== this.currentUser.id;
+            })
+            this.isLoading = false
           })
-          this.isLoading = false
-        })
+        }
       },
 
       clearAll () {

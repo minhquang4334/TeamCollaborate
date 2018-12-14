@@ -52,7 +52,6 @@ class LoginController extends Controller
 
     public function authenticate(Request $request)
     {
-    	dd($request);
         $email = $request->email;
         $password = $request->password;
         $remember = $request->has('remember_token') ? true : false;

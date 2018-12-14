@@ -36,6 +36,8 @@
               this.$router.push({name: 'PageNotFound'})
             }
           }
+
+          this.$router.push({name: 'homeIndex'});
         });
 
       },    }

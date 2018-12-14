@@ -1,8 +1,5 @@
 <template>
     <form @submit.prevent="register" @keydown="clearErrors($event)">
-        <div :class="{ 'form-group': true, 'has-error': form.errors.has('register-failed') }">
-            <has-error :form="form" field="register-failed"></has-error>
-        </div>
 
         <div :class="{ 'form-group': true, 'has-feedback': true, 'has-error': form.errors.has('name') }">
             <input v-model="form.name"
@@ -50,52 +47,58 @@
     </form>
 </template>
 <script>
-    import Form from 'vform'
+  import Form from 'vform'
 
-    export default {
-        data() {
-            return {
-                form: new Form({
-                    name: '',
-                    email: '',
-                    password: '',
-                    password_confirmation: '',
-                    gender: -1
-                }),
-                loading: false,
-            }
-        },
-        methods: {
-            register() {
-                let self = this;
-                self.loading = true;
+  export default {
+    data() {
+      return {
+        form: new Form({
+          name: '',
+          email: '',
+          password: '',
+          password_confirmation: '',
+          gender: -1,
+        }),
+        loading: false,
+      }
+    },
+    methods: {
+      register() {
+        let self = this;
+        self.loading = true;
 
-                this.form.post(`api/user/auth/register`)
-                    .then(({data}) => {
-                            self.loading = false;
-                            this.$store.dispatch('auth/saveToken', { token: data.data.token });
-                            self.$store.dispatch('auth/fetchUser');
+        this.form.post(`api/user/auth/register`)
+          .then(({data}) => {
+              self.loading = false;
+              this.$store.dispatch('auth/saveToken', {token: data.data.token});
+              self.$store.dispatch('auth/fetchUser');
 
-                            self.$router.push({name: 'homeIndex'});
-                        }
-                    )
-                    .catch(({response}) => {
-                        self.loading = false;
-                    });
-            },
-            clearErrors(event) {
-                this.form.errors.clear('register-failed');
-                this.form.errors.clear(event.target.name);
+              self.$router.push({name: 'homeIndex'});
             }
-        },
-        beforeCreate: function () {
-            let classList = document.body.classList;
-            while (classList.length > 0) {
-                classList.remove(classList.item(0));
-            }
-            document.body.classList.add("hold-transition", "register-page")
-        }
+          )
+          .catch(({response}) => {
+            self.loading = false;
+          });
+      },
+      clearErrors(event) {
+        this.form.errors.clear('register-failed');
+        this.form.errors.clear(event.target.name);
+      }
+    },
+    beforeCreate: function () {
+      let classList = document.body.classList;
+      while (classList.length > 0) {
+        classList.remove(classList.item(0));
+      }
+      document.body.classList.add("hold-transition", "register-page")
     }
+  }
 
-    setNameAndEmail();
+  setNameAndEmail();
 </script>
+
+<style scoped>
+    .invalid-feedback {
+        display: block !important;
+    }
+</style>

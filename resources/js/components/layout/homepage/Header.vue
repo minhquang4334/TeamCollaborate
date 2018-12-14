@@ -256,6 +256,7 @@
               type: 'success',
               message: 'Delete Channel ' + this.channel.name + ' success!!'
             })
+            this.$eventHub.$emit('deleteChannel', this.channel.channel_id);
             this.$router.push({
               name: 'homeIndex'
             })
@@ -281,11 +282,12 @@
               type: 'success',
               message: 'Leave Channel ' + this.channel.name + ' success!!'
             })
+            this.$eventHub.$emit('leaveChannel', this.channel.channel_id);
             this.$router.push({
               name: 'homeIndex'
             })
           }).finally(() => {
-            this.$eventHub.$emit('leaveChannel', this.channel.channel_id);
+
           })
         } else {
           this.$message({

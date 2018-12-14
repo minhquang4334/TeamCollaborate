@@ -30,23 +30,25 @@ class InviteToAppController extends ApiController
      */
     public function create(Request $request){
         try{
-            $data = [];
-            $emails = $request->get('emails');
-            $names = $request->get('names');
-            foreach ($emails as $key=>$email){
-                if (!$this->user->isRegistered($email)){
-                    // When email is not in app
-                    $user = new User();
-                    $link = route('home') .
-                        '/#/register?' . base64_encode($email) .
-                        '---' . base64_encode($names[$key]);
-                    $user->setEmail($email)
-                        ->sendInviteToAppNotification($link);
-                    $data[] = ['email'=> $email, 'name' => $names[$key], 'link' => $link];
-                }
-            }
+        	$invited_users = $request->get('invited_users');
+        	if($invited_users) {
+		        $data = [];
+		        foreach ($invited_users as $key => $invite){
+			        if (!$this->user->isRegistered($invite['email'])){
+				        // When email is not in app
+				        $user = new User();
+				        $link = route('home') .
+					        '/#/register?' . base64_encode($invite['email']) .
+					        '---' . base64_encode($invite['name']);
+				        $user->setEmail($invite['email'])
+					        ->sendInviteToAppNotification($link);
+				        $data[] = ['email'=> $invite['email'], 'name' => $invite['name'], 'link' => $link];
+			        }
+		        }
+		        return response()->json(['status' => true, 'data' => $data], self::CODE_CREATE_SUCCESS);
+	        }
+            return $this->response->withNoContent();
             /** @var array $data */
-            return response()->json(['status' => true, 'data' => $data], self::CODE_CREATE_SUCCESS);
         }catch (\Exception $e){
             return $this->response->withInternalServer($e->getMessage());
         }

@@ -24,7 +24,7 @@
                     </div>
                     <div class="d-flex flex-row">
                         <div class="p-2 bd-highlight">
-                            <input type="radio"  value="toApp" v-model="inviteSelect">
+                            <input type="radio" value="toApp" v-model="inviteSelect">
                         </div>
                         <div class="p-2 bd-highlight">
                             <strong>Invite to this app</strong>
@@ -37,7 +37,8 @@
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" @click.prevent="nextStep">Next <i class="fas fa-arrow-right"></i></button>
+                    <button type="button" class="btn btn-primary" @click.prevent="nextStep">Next <i
+                            class="fas fa-arrow-right"></i></button>
 
                 </div>
 
@@ -47,28 +48,29 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                inviteSelect: 'toChannel'
-            }
-        },
+  export default {
+    data() {
+      return {
+        inviteSelect: 'toChannel',
+        channel_id: this.$route.params.id ? this.$route.params.id : 0
+      }
+    },
 
-        components: {
+    components: {},
 
-        },
-
-        methods: {
-            nextStep(){
-                if(this.inviteSelect === "toChannel") {
-                    this.$router.push({name:'inviteToChannel'});
-                }
-                else{
-                    this.$router.push({name:'inviteToApp'});
-                }
-                $("#inviteModal").modal('hide');
-            }
+    methods: {
+      nextStep() {
+        if (this.inviteSelect === "toChannel") {
+          this.$router.push({name: 'inviteToChannel', params: {
+            channel_id: this.channel_id
+            }});
         }
+        else {
+          this.$router.push({name: 'inviteToApp'});
+        }
+        $("#inviteModal").modal('hide');
+      }
     }
+  }
 
 </script>
