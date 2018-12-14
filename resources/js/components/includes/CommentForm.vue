@@ -264,7 +264,12 @@
     watch: {
       $route() {
         this.clear();
+      },
+
+      '$route.params.id': function() {
+        this.channel_id = this.$route.params.id ? this.$route.params.id : 0
       }
+
     },
 
     computed: {
