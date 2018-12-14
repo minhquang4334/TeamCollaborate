@@ -16,7 +16,9 @@
             />
         </div>
         <div class="col-md-5 h-100 d-none d-md-block">
-            <about-channel v-if="rightBox === 1" :channelDetail="channelDetail" @showProfile="showProfile"
+            <about-channel v-if="rightBox === 1"
+                           :channelDetail="channelDetail"
+                           @showProfile="showProfile"
                            @removeUser="removeUser"/>
             <div v-else-if="rightBox === 2" class="border-right">
                 <thread class="h-80 max-h550 overflow-auto"
@@ -30,7 +32,9 @@
                         :parent_id="threadDetail.id"
                         :comment_form_textarea="`comment-form-textarea`"/>
             </div>
-            <profile v-else/>
+            <profile
+                    :profileUser="profileUser"
+                    v-else/>
 
         </div>
         <div id="removeUser" class="modal fade" role="dialog">
@@ -68,7 +72,7 @@
   import {get} from "../../../helper/request"
 
   export default {
-    props: ['channel', 'rightBox'],
+    props: ['channel', 'rightBox', 'profileUser'],
 
     data() {
       return {
@@ -194,8 +198,8 @@
         this.threadDetail = list;
       },
 
-      showProfile() {
-        this.$emit('showProfile');
+      showProfile(user) {
+        this.$emit('showProfile', user);
       },
       removeUser() {
         $("#removeUser").modal("show");

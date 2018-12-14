@@ -50,9 +50,9 @@
                                     <i class="fas fa-ellipsis-v"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" @click="showProfile" href="#">View Profile</a>
-                                    <a class="dropdown-item" href="#">Direct Message</a>
-                                    <a class="dropdown-item" @click="removeUser" href="#">Remove User</a>
+                                    <span class="dropdown-item" @click="showProfile(user)" href="#">View Profile</span>
+                                    <span class="dropdown-item">Direct Message</span>
+                                    <span class="dropdown-item" @click="removeUser">Remove User</span>
                                 </div>
                             </span>
                             <img :src="user.avatar" class="rounded-circle mr-2" style="width: 30px;height:30px" alt="profile-img">
@@ -198,14 +198,17 @@
         }
       },
 
+      computed: {
+      },
+
       mounted() {
         $('#channeldetail').collapse('toggle');
       },
 
       methods:{
 
-        showProfile(){
-          this.$emit('showProfile');
+        showProfile(user){
+          this.$emit('showProfile', user);
         },
         removeUser(){
           this.$emit('removeUser');
