@@ -75,6 +75,7 @@ Route::group(['namespace' => 'Api'], function () {
             Route::delete('unfollow', 'PostApiController@unFollow');
             Route::post('follow', 'PostApiController@follow');
             Route::post('report', 'PostApiController@report');
+            Route::get('list-comment', 'PostApiController@getListComment');
 
         });
 	});

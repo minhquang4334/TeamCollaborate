@@ -60,6 +60,40 @@ class PostApiController extends ApiController
         }
     }
 
+	/**
+	 * Method GET
+	 * @usage http://localhost:8000/api/post/:id/list-comment?channel_id=1&limit=2&number_items=2
+	 * get List Thread in Specific channel
+	 * $number_items is number of threads loaded
+	 * @param Request $request * $channel_id, $number_items, $limit = number_post_limit
+	 * @return \Illuminate\Http\JsonResponse response($data, status_code) response($data, status_code)
+	 * @example response([status: true, data: [user_id: 1, user_name: hajau]], HTTP_OK)
+	 */
+	public function getListComment(Request $request) {
+		try{
+			$channel_id = $request->get('channel_id');
+			if(!$channel_id) {
+				$channel_id = Channel::GENERAL_CHANNEL_ID;
+			}
+			$post_id = $request->get('post_id');
+			if($post_id) {
+				$channel = $this->channel->getChannelById($channel_id);
+				$user = $this->currentUser();
+				if($user->channels->contains($channel)) {
+					$posts = $this->post->listComment($post_id);
+					return $this->response->withArray(Post::hydrate($posts));
+				}else{
+					return $this->response->withForbidden(trans('messages.user.not_in_channel'));
+				}
+			} else {
+				return $this->response->withForbidden(trans('messages.user.post_not_exist'));
+			}
+
+		}catch (\Exception $e){
+			return $this->response->withInternalServer($e->getMessage());
+		}
+	}
+
     /**
      * Method GET
      *
@@ -99,30 +133,58 @@ class PostApiController extends ApiController
     public function add(Request $request) {
         try {
             $user = $this->currentUser();
-            $channel_id = $request->get('channel_id');
-            if(!$channel_id) {
-            	$channel_id = Channel::GENERAL_CHANNEL_ID;
-            }
-            $channel = $this->channel->getChannelById($channel_id);
-            if($user->channels->contains($channel->id)) {
+	        $is_children = $request->get('parent_id') ? true : false;
+	        $check = true;
+	        $channel_id = Channel::GENERAL_CHANNEL_ID;
+	        if(!$is_children) {
+		        $channel_id = $request->get('channel_id');
+		        if(!$channel_id) {
+			        $channel_id = Channel::GENERAL_CHANNEL_ID;
+		        }
+	        } else {
+		        $channel_id = $this->post->getById($request->get('parent_id'))->channel_id;
+		        $channel = $this->channel->getById($channel_id);
+		        $channel_id = $channel->channel_id;
+	        }
+	        $channel = $this->channel->getChannelById($channel_id);
+
+	        $check = $user->channels->unique()->contains('channel_id', $channel->channel_id);
+            if($check) {
                 $allow = ['content', 'channel_id', 'parent_id'];
                 $input = array_filter(array_intersect_key($request->all(), array_flip($allow)));
-                $is_parent = $request->get('parent_id') ? true : false;
-                $post = $this->post->store(array_merge([], [
-                	'content' => $request->get('content'),
-                	'channel_id' => $channel->id,
-                    'creator' => $this->currentUser()->id,
-                    'status' => Post::ACTIVE,
-                    'is_parent' => $is_parent,
-                ]));
-                if($request->has('tag_users'))
-                    $tag_users = array_merge($request->get('tag_users'), [$this->currentUser()->id]);
-                else
-                    $tag_users = [$this->currentUser()->id];
-                foreach ($tag_users as $u){
-                    $this->post->addFollower($post->id, $u);
+
+
+
+	            $post = new Post();
+                if(!$is_children) {
+	                $post = $this->post->store(array_merge([], [
+		                'content' => $request->get('content'),
+		                'channel_id' => $channel->id,
+		                'creator' => $this->currentUser()->id,
+		                'status' => Post::ACTIVE,
+		                'is_parent' => $is_children,
+	                ]));
+                } else {
+                	if($request->get('parent_id')) {
+		                $post = $this->post->store(array_merge([], [
+			                'content' => $request->get('content'),
+			                'channel_id' => $channel->id,
+			                'creator' => $this->currentUser()->id,
+			                'status' => Post::ACTIVE,
+			                'is_parent' => $is_children,
+			                'parent_id' => $request->get('parent_id')
+		                ]));
+	                }
                 }
-                $post->followers;
+	            $follow_post_id = $is_children ? $request->get('parent_id') : $post->id;
+                if($request->has('tag_users')) {
+	                $tag_users = array_merge($request->get('tag_users'), [$this->currentUser()->id]);
+	                foreach ($tag_users as $u) {
+		                $this->post->addFollower($follow_post_id, $u);
+	                }
+                }
+	            $this->post->addFollower($follow_post_id, $this->currentUser()->id);
+	            $post->followers;
 
                 return $this->response->withCreated($post);
             }else{

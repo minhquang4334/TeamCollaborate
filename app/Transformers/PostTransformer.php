@@ -13,6 +13,7 @@ class PostTransformer extends TransformerAbstract {
     public function transform(Post $post) {
         return [
             'content' => $post->content,
+            'id' => $post->id,
             'is_parent' => $post->is_parent,
             'channel_id' => $post->channel_id,
             'parent_id' => $post->parent_id,
@@ -22,6 +23,7 @@ class PostTransformer extends TransformerAbstract {
             'type' => $post->type,
 	        'created_at' => $post->created_at,
 	        'updated_at' => $post->updated_at,
+	        'number_children_posts' => $post->children()->count()
         ];
     }
 

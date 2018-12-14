@@ -49,4 +49,8 @@ class Post extends Model
 		return $this->hasMany(Follow::class, 'post_id');
     }
 
+    public function scopeParent($query) {
+    	return $query->where('is_parent', false);
+    }
+
 }

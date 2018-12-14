@@ -284,6 +284,8 @@
             this.$router.push({
               name: 'homeIndex'
             })
+          }).finally(() => {
+            this.$eventHub.$emit('leaveChannel', this.channel.channel_id);
           })
         } else {
           this.$message({

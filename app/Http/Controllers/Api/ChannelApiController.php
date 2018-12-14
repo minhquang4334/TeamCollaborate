@@ -53,7 +53,7 @@ class ChannelApiController extends ApiController
             $channel_code = $str_random.$channel->id;
 			      $this->channel->updateColumn($channel->id, ['channel_id' => $channel_code]);
             if($request->has('invited_users')){
-                $members = array_merge($request->get('invited_users'), [$this->currentUser()->id]);
+                $members = array_unique(array_merge($request->get('invited_users'), [$this->currentUser()->id]));
             }else
                 $members = [$this->currentUser()->id];
                 foreach ($members as $id){
@@ -100,6 +100,8 @@ class ChannelApiController extends ApiController
     public function getListChannelOfUser() {
         try {
             $channels = $this->user->takePartInChannels($this->currentUser()->id);
+
+           // dd($channels);
             return $this->response->withArray(Channel::hydrate($channels));
         }catch (\Exception $e){
             return $this->response->withNotFound($e->getMessage());

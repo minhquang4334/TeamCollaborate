@@ -24,5 +24,6 @@ return [
         'pin_success' => 'Pin post thành công',
         'follow_success' => 'Bắt đầu theo dõi post',
         'unfollow_success' => 'Bỏ theo dõi thành công',
+        'post_not_exist' => 'Bài đăng không tồn tại',
     ],
 ];

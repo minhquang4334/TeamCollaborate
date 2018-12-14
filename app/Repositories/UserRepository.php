@@ -32,7 +32,7 @@ class UserRepository {
     }
 
     public function takePartInChannels($id){
-        $channels = $this->getById($id)->channels->toArray();
+        $channels = $this->getById($id)->channels->unique()->toArray();
         $channels = array_filter($channels, function ($channel) {
             return $channel['status'] == Channel::ACTIVE;
         });

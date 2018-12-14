@@ -51,7 +51,12 @@
 
 
     created() {
+      this.$eventHub.$on('leaveChannel', this.leaveChannel);
       this.getListChannel();
+    },
+
+    beforeDestroy() {
+      this.$eventHub.$off('newComment', this.leaveChannel);
     },
 
     computed: {},
@@ -108,6 +113,29 @@
         if ((channel.name === 'General') && !this.channel_id)
           return true;
         return this.channel_id === channel.channel_id;
+      },
+
+      leaveChannel(channel_id) {
+        let leave;
+        this.listChannels.forEach((c) => {
+          if (c.channel_id === channel_id) {
+            leave = c;
+          }
+        })
+        let index = this.listChannels.indexOf(leave);
+        if (index > -1) {
+          this.listChannels.splice(index, 1);
+        } else {
+          this.listDirectMessages.forEach((c) => {
+            if (c.channel_id === channel_id) {
+              leave = c;
+            }
+          })
+          let index = this.listDirectMessages.indexOf(leave);
+          if (index > -1) {
+            this.listDirectMessages.splice(index, 1);
+          }
+        }
       }
 
 
