@@ -1,28 +1,48 @@
 <template>
-    <div class="p-3 bg-white rounded box-shadow message-list overflow-auto">
-        <message-item :list="c" :comments-order="'hot'" :full="true" v-for="c in listMessages" :key="c.id"
-                      @comment="showComment"/>
+    <div class="px-0 py-3 bg-white rounded box-shadow message-list overflow-auto" id="list-message-0">
+        <message-item
+                :list="c"
+                :comments-order="'hot'"
+                :full="true"
+                v-for="c in listMessages"
+                :key="c.id"
+                :is_children="false"
+                @comment="showComment"
+                @showProfile="showProfile"
+                @removeUser="removeUser"/>
     </div>
 </template>
 <script>
-    import MessageItem from "./Message.vue"
-    export default {
-      props: ['listMessages'],
-      data() {
-        return {
+  import MessageItem from "./Message.vue"
 
-        }
+  export default {
+    props: ['listMessages'],
+    data() {
+      return {}
+    },
+
+    components: {
+      MessageItem
+    },
+
+    created() {
+
+    },
+
+    methods: {
+      showComment(list) {
+        this.$emit("showComment", list)
       },
 
-      components: {
-        MessageItem
+      showProfile() {
+        this.$emit("showProfile")
       },
 
-      methods: {
-          showComment(){
-              this.$emit("showComment")
-          }
-      }
+      removeUser() {
+        this.$emit("removeUser")
+      },
+
     }
+  }
 
 </script>

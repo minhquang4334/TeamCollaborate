@@ -53,3 +53,7 @@ html,css{
 #files .nav-link:hover{
     text-decoration: underline;
 }
+
+.comment:hover{
+    background: #f2f2f3;
+}

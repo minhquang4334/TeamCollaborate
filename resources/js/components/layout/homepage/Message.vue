@@ -1,6 +1,5 @@
-
 <template>
-    <transition name="el-fade-in-linear ">
+    <transition name="el-fade-in-linear">
         <div class="comment v-comment-wrapper"
              v-show="visible"
              @mouseover="seen"
@@ -15,65 +14,82 @@
                                          class="avatar user-select">
                                 <img v-bind:src="list.creator.data.avatar">
                             </router-link>
+                            <span class="dropdown" data-toggle="collapse" data-target="">
+                                <a style="cursor: pointer" data-toggle="dropdown">
+                                    <strong class="ml-3">@{{ list.creator.data.name }}</strong>
+                                </a>
+                                <div class="dropdown-menu navbar-dropdown dropdownAnimation p-0" style="width:300px">
+                                    <div class="card">
+                                      <img class="card-img-top" v-bind:src="list.creator.data.avatar"
+                                           alt="Card image cap">
+                                      <div class="card-body">
+                                        <h5 class="card-title">{{ list.creator.data.name }}</h5>
+                                        <ul class="nav flex-column">
+                                            <li class="nav-item" @click="showProfile"><a href="#">View profile</a></li>
+                                            <li class="nav-item"><a href="#">Direct Message</a></li>
+                                            <li class="nav-item"><a href="#" @click="removeUser">Remove User </a></li>
+                                        </ul>
+                                      </div>
+                                    </div>
 
-                            <router-link :to="'/' + '@' + list.creator.data.name"
-                                         class="author user-select">
-                                @{{ list.creator.data.name }}
-                            </router-link>
+                                </div>
+
+                            </span>
 
                             <span class="separator">
 								&#183;
 							</span>
+                            <template v-if="!is_children">
+                                <a class="like-button"
+                                   @click="like">
+                                    <i class="v-icon"
+                                       :class="liked ? 'v-heart-filled go-red animated bounceIn' : 'v-heart go-gray'"></i>
 
-                            <a class="like-button"
-                               @click="like">
-                                <i class="v-icon"
-                                   :class="liked ? 'v-heart-filled go-red animated bounceIn' : 'v-heart go-gray'"></i>
-
-                                <span class="count">{{ points }}</span>
-                            </a>
-
-                            <a class="like-button"
-                               @click.prevent="showComment">
-                                <i class="far fa-comment-dots text-muted"></i>
-                            </a>
-
-                            <el-tooltip :content="bookmarked ? 'Unbookmark' : 'Bookmark'"
-                                        placement="top"
-                                        transition="false"
-                                        :open-delay="500">
-                                <i class="v-icon margin-left-1"
-                                   :class="{ 'go-yellow v-unbookmark': bookmarked, 'v-bookmark': !bookmarked }"
-                                   @click="bookmark"></i>
-                            </el-tooltip>
-
-                            <el-tooltip content="Reply"
-                                        placement="top"
-                                        transition="false"
-                                        :open-delay="500">
-                                <i class="v-icon v-reply margin-left-1"
-                                   @click="commentReply"
-                                   v-if="list.nested_level < 8 && full"></i>
-                            </el-tooltip>
-
-                            <el-tooltip content="Submission"
-                                        placement="top"
-                                        transition="false"
-                                        :open-delay="500">
-                                <a class="reply margin-left-1"
-                                   v-if="!full"
-                                   @click.prevent="openOrigin">
-                                    <i class="v-icon v-link h-purple"></i>
+                                    <span class="count">{{ points }}</span>
                                 </a>
-                            </el-tooltip>
 
-                            <el-button size="mini"
-                                       class="margin-left-1"
-                                       v-if="owns && full"
-                                       @click="edit"
-                                       round>
-                                Edit
-                            </el-button>
+                                <a class="like-button"
+                                   @click.prevent="showComment">
+                                    <i class="far fa-comment-dots text-muted"></i>
+                                </a>
+
+                                <el-tooltip :content="bookmarked ? 'Unbookmark' : 'Bookmark'"
+                                            placement="top"
+                                            transition="false"
+                                            :open-delay="500">
+                                    <i class="v-icon margin-left-1"
+                                       :class="{ 'go-yellow v-unbookmark': bookmarked, 'v-bookmark': !bookmarked }"
+                                       @click="bookmark"></i>
+                                </el-tooltip>
+
+                                <el-tooltip content="Reply"
+                                            placement="top"
+                                            transition="false"
+                                            :open-delay="500">
+                                    <i class="v-icon v-reply margin-left-1"
+                                       @click="commentReply"
+                                       v-if="list.nested_level < 8 && full"></i>
+                                </el-tooltip>
+
+                                <el-tooltip content="Submission"
+                                            placement="top"
+                                            transition="false"
+                                            :open-delay="500">
+                                    <a class="reply margin-left-1"
+                                       v-if="!full"
+                                       @click.prevent="openOrigin">
+                                        <i class="v-icon v-link h-purple"></i>
+                                    </a>
+                                </el-tooltip>
+
+                                <el-button size="mini"
+                                           class="margin-left-1"
+                                           v-if="owns && full"
+                                           @click="edit"
+                                           round>
+                                    Edit
+                                </el-button>
+                            </template>
                         </div>
                     </div>
 
@@ -139,31 +155,32 @@
                     </div>
                 </div>
 
-                <div class="text">
+                <div class="text ml-5">
                     <markdown :text="list.content"></markdown>
 
                 </div>
-                <div class="media cursor-pointer">
+                <div class="media cursor-pointer" v-show="!is_children && list.number_children_posts">
                     <p class="media-body small ml-5" @click.prevent="showComment">
-                        <strong class="d-block text-gray-dark">12 reply <i class="fas fa-reply"></i></strong>
+                        <strong class="d-block text-gray-dark">{{list.number_children_posts}} reply <i class="fas fa-reply"></i></strong>
 
                     </p>
                 </div>
             </div>
-
-            <div class="comments"
-                 v-if="list.children.length">
-                <message :list="c"
-                         v-for="c in sortedComments"
-                         :key="c.id"
-                         :full="full"></message>
-            </div>
-
             <el-button type="text"
                        v-if="hasMoreCommentsToLoad"
                        @click="loadMoreComments">
-                Load More Comments ({{ list.children.length - childrenLimit }} more replies)
+                Load More Comments ({{ children.length - childrenLimit }} more replies)
             </el-button>
+            <div class="comments"
+                 v-if="isShowChild">
+                <message :list="c"
+                         v-for="c in sortedComments"
+                         :is_children="true"
+                         :key="c.id"
+                         :full="full"/>
+            </div>
+
+
         </div>
     </transition>
 </template>
@@ -173,10 +190,11 @@
   import Markdown from '../../includes/Markdown.vue';
   import Helpers from '../../../mixins/Helpers';
   import {get, put, post, del} from '../../../helper/request'
+
   export default {
     name: 'message',
 
-    props: ['list', 'comments-order', 'full'],
+    props: ['list', 'comments-order', 'full', 'is_children'],
 
     components: {
       Markdown
@@ -190,14 +208,15 @@
         body: this.list.content.text,
         visible: true,
         reply: false,
-        childrenLimit: 4,
-        highlighted: false
+        childrenLimit: 6,
+        highlighted: false,
+        children: []
       };
     },
 
     created() {
-      if (_.isUndefined(this.list.children)) {
-        this.list.children = [];
+      if (_.isUndefined(this.children)) {
+        this.children = [];
       }
 
       this.$eventHub.$on('newComment', this.newComment);
@@ -211,15 +230,29 @@
       this.$eventHub.$off('deletedComment', this.deletedComment);
     },
 
+    watch: {
+      'list': function() {
+        this.loadComment();
+      }
+    },
+
     mounted() {
-      this.$nextTick(function() {
+      this.$nextTick(() => {
         this.setHighlighted();
         this.scrollToComment();
+        if(this.is_children) {
+          this.loadComment()
+        }
       });
     },
 
     computed: {
-      url() {},
+      isShowChild: function() {
+        return this.children.length > 0;
+      },
+
+      url() {
+      },
 
       liked: {
         get() {
@@ -244,8 +277,8 @@
         }
       },
 
-      comment(){
-          this.$emit('comment');
+      comment() {
+        this.$emit('comment');
       },
 
       bookmarked: {
@@ -308,7 +341,7 @@
        * @return bool
        */
       hasMoreCommentsToLoad() {
-        return this.list.children.length > this.childrenLimit;
+        return this.children.length > this.childrenLimit;
       },
 
       /**
@@ -331,7 +364,8 @@
         let unique = [];
         let temp = [];
 
-        this.list.children.forEach(function(element, index, self) {
+        this.children.forEach(function (element, index, self) {
+          console.log(122);
           if (temp.indexOf(element.id) === -1) {
             unique.push(element);
             temp.push(element.id);
@@ -343,7 +377,6 @@
 
       date() {
         return moment(this.list.created_at.date)
-          .utc(moment().format('Z'))
           .fromNow(true);
       },
 
@@ -398,9 +431,31 @@
           });
       },
 
-        showComment(){
-            this.$emit('comment');
-        },
+      loadComment() {
+        if(!this.list.is_parent) {
+          let url = '/api/post/list-comment?post_id=' +  + this.list.id
+          get(url).then((res) => {
+            console.log('res: ', res);
+            this.children = res.data.data
+          }).catch((err) => {
+            this.$message({
+              type: 'error',
+              message: 'Something error when get list comment in this thread!!'
+            });
+          })
+        }
+      },
+
+      showComment() {
+        this.$emit('comment', this.list);
+      },
+      showProfile() {
+        this.$emit('showProfile');
+      },
+      removeUser() {
+        this.$emit('removeUser');
+      },
+
 
       doubleClicked() {
         if (this.isGuest) return;
@@ -462,26 +517,34 @@
       },
 
       newComment(comment) {
-        if (comment.parent_id == null) return;
-        if (this.list.id != comment.parent_id) return;
+        console.log('comment: ', comment);
+        // if (comment.parent_id == null) return;
+        // if (this.list.id != comment.parent_id) return;
 
         // owns the comment
-        if (comment.author.id == auth.id) {
-          this.reply = false;
-          this.$store.state.comments.likes.push(comment.id);
-          this.list.children.unshift(comment);
-
-          this.$nextTick(function() {
-            document.getElementById('comment' + comment.id).scrollIntoView();
-          });
-
-          return;
-        }
+        // if (comment.author.id == auth.id) {
+        //   this.reply = false;
+        //   this.$store.state.comments.likes.push(comment.id);
+        //   this.children.unshift(comment);
+        //
+        //   this.$nextTick(function () {
+        //     document.getElementById('comment' + comment.id).scrollIntoView();
+        //   });
+        //
+        //   return;
+        // }
 
         // add broadcasted (used for styling)
-        comment.broadcasted = true;
+        // comment.broadcasted = true;
+        if((comment.parent_id === this.list.id) && this.isShowChild) {
+          this.children.push(comment);
+          this.$nextTick(function () {
+            if(document.getElementById('comment' + comment.id)) {
+              document.getElementById('comment' + comment.id).scrollIntoView();
+            }
+          });
+        }
 
-        this.list.children.unshift(comment);
       },
 
       /**
@@ -527,7 +590,7 @@
       },
 
       bookmark: _.debounce(
-        function() {
+        function () {
           if (this.isGuest) {
             this.mustBeLogin();
             return;
@@ -540,11 +603,11 @@
           });
         },
         200,
-        { leading: true, trailing: false }
+        {leading: true, trailing: false}
       ),
 
       like: _.debounce(
-        function() {
+        function () {
           if (this.isGuest) {
             this.mustBeLogin();
             return;
@@ -557,7 +620,7 @@
           });
         },
         200,
-        { leading: true, trailing: false }
+        {leading: true, trailing: false}
       ),
 
       /**

@@ -28,11 +28,11 @@
                                 />
                         <template slot="tag" slot-scope="{ option, remove }"><span class="custom__tag"><span>{{ option.name }}</span><span class="custom__remove" @click="remove(option)">❌</span></span></template>
                         <template slot="clear" slot-scope="props">
-                            <div class="multiselect__clear" v-if="selectedCountries.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
+                            <div class="multiselect__clear" v-if="selected.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
                         </template>
                     </div>
                     <div class="col-1 px-0">
-                        <button type="button" class="btn btn-success h-100 margin-left-10">Go to</button>
+                        <button type="button" class="btn btn-success h-100 margin-left-10" @click="goToDirectMess">Go to</button>
                     </div>
                 </div>
                 <p class="text-muted">
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import {get} from '../../../helper/request'
+  import {get, post} from '../../../helper/request'
   export default {
     components: {
     },
@@ -67,14 +67,59 @@
         this.isLoading = true;
         let url = '/api/user/list?search_name=' + query
         get(url).then((response) => {
-          console.log(response);
-          this.options = response.data.data
+          this.options = response.data.data.filter((user) => {
+            return user.id !== this.currentUser.id;
+          })
           this.isLoading = false
         })
       },
 
       clearAll () {
         this.selected = []
+      },
+
+      goToDirectMess() {
+        if(!this.selected.length) {
+          this.$message({
+            type: 'error',
+            message: 'Please select user for direct message'
+          })
+        } else {
+          let type = 2;
+          let invited_users = [];
+          this.selected.forEach(user => {
+            invited_users.push(user.id);
+          })
+          let name = this.selected.reduce((a, b) => {
+            return a + b.name + ', ';
+          }, '');
+          name = name.substring(0, name.length - 2);
+          let payload = {
+            type : type,
+            purpose: 'Direct Messages between ' + name,
+            description: '',
+            name: name,
+            invited_users: invited_users
+          }
+          let url = '/api/channel/create'
+          post(url, payload).then((res) => {
+            console.log('res: ', res);
+            if(res.data.data) {
+              this.$router.push({
+                name: 'ChannelDetail',
+                params: {
+                  id: res.data.data.channel_id
+                }
+              })
+            }
+          }).catch((err) => {
+            console.log('err: ', err);
+            this.$message({
+              type: 'error',
+              message: 'Something error: ', err
+            })
+          })
+        }
       }
     }
   }

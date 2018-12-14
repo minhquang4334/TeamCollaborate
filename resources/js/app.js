@@ -34,7 +34,7 @@ window.jQuery = require('jquery');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 window.moment = require('moment-timezone');
-window.moment.tz.setDefault('UTC');
+window.moment.tz.setDefault('Asia/Ho_Chi_Minh');
 
 Vue.use(ElementUI, { locale });
 Vue.use(LocalStorage);

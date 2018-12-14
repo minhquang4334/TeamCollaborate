@@ -13,7 +13,7 @@ class ChannelsTableSeeder extends Seeder
     {
         DB::table('channels')->insert([
             'type' => \App\Model\Channel::PUBLIC,
-            'creator' => '1',
+            'creator' => '0',
             'purpose' => 'This channel is for workspace-wide communication and announcements. All members are in this channel.',
             'description' => 'No description',
             'name' => 'General',
