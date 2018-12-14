@@ -244,6 +244,7 @@
     watch: {
       'list': function() {
         this.loadComment();
+        this.react = this.list.react.data;
       }
     },
 
