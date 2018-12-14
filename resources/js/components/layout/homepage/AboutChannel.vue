@@ -198,15 +198,19 @@
         }
       },
 
-        methods:{
+      mounted() {
+        $('#channeldetail').collapse('toggle');
+      },
 
-            showProfile(){
-                this.$emit('showProfile');
-            },
-            removeUser(){
-                this.$emit('removeUser');
-            },
-        }
+      methods:{
+
+        showProfile(){
+          this.$emit('showProfile');
+        },
+        removeUser(){
+          this.$emit('removeUser');
+        },
+      }
     }
 
 </script>

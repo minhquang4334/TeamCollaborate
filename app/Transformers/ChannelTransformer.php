@@ -14,6 +14,7 @@ class ChannelTransformer extends TransformerAbstract {
     public function transform(Channel $channel) {
         return [
             'type' => $channel->type,
+            'id' => $channel->id,
             'creator' => $channel->creator,
             'purpose' => $channel->purpose,
             'description' => $channel->description,

@@ -24,22 +24,22 @@
                         Notification
                     </p>
                 </a>
-                <a class="dropdown-item" data-toggle="modal" data-target="#inviteModal">
+                <a class="dropdown-item" data-toggle="modal" data-target="#inviteModal" v-show="isShowInvite">
                     <p>
                         <span class="fas fa-hand-holding-heart mr-2"></span>
                         Invite
                     </p>
                 </a>
-                <a class="dropdown-item">
+                <a class="dropdown-item" v-show="isShowLeaveChannel" data-toggle="modal" data-target="#leaveChannel">
                     <p>
                         <span class="fas fa-sign-out-alt mr-2"></span>
                         Leave Channel
                     </p>
                 </a>
-                <a class="dropdown-item">
+                <a class="dropdown-item" v-show="isShowDeleteChannel" data-toggle="modal" data-target="#deleteChannel">
                     <p>
                         <span class="fas fa-trash-alt mr-2"></span>
-                        Remove Channel
+                        Delete Channel
                     </p>
                 </a>
 
@@ -108,10 +108,66 @@
                 </div>
             </span>
         </div>
+        <div class="modal fade" id="deleteChannel" ref="deleteChannel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            Are you want delete this channel?
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click.prevent="deleteChannel">Delete</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="leaveChannel" ref="deleteChannel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h2 class="modal-title">
+                            Leave {{channel.name}}
+                        </h2>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <span>
+                            If you leave the private channel,
+                            you will no longer be able to see any of its messages.
+                            <span v-show="channel.type === 1">
+                                To rejoin the private channel, you will have to be re-invited.
+                            </span>
+                        </span>
+                        <p>
+                            Are you sure you wish to leave?
+                        </p>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" @click.prevent="leaveChannel">Leave</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </nav>
 </template>
 <script>
-  import {get} from '../../../helper/request.js'
+  import {get, del, put} from '../../../helper/request.js'
   import menuList from "./Menu.vue"
 
 
@@ -145,7 +201,26 @@
           this.currentUser.avatar = '/images/default-avatar.png'
         }
         return this.currentUser.avatar;
+      },
+
+      isShowDeleteChannel: function() {
+        if(this.channel.name === 'General') {
+          return false;
+        }
+        return this.currentUser.id === this.channel.creator
+      },
+
+      isShowLeaveChannel: function() {
+        if(this.channel.name === 'General') {
+          return false;
+        }
+        return true;
+      },
+
+      isShowInvite: function() {
+        return this.isShowLeaveChannel;
       }
+
     },
 
       components:{
@@ -171,6 +246,55 @@
       showAboutChannel: function () {
           this.$emit('showAboutChannel');
       },
+
+      deleteChannel() {
+        if(this.channel.name !== 'General') {
+          let url = '/api/channel/destroy?id=' + this.channel.channel_id;
+          del(url).then(res => {
+            console.log('res: ', res);
+            this.$message({
+              type: 'success',
+              message: 'Delete Channel ' + this.channel.name + ' success!!'
+            })
+            this.$router.push({
+              name: 'homeIndex'
+            })
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: 'You cant delete this channel!!'
+          })
+        }
+        $('#deleteChannel').modal('toggle');
+      },
+
+      leaveChannel() {
+        if(this.channel.name !== 'General') {
+          let url = '/api/channel/leave';
+          let payload = {
+            channel_id : this.channel.channel_id
+          }
+          put(url, payload).then(res => {
+            console.log('res: ', res);
+            this.$message({
+              type: 'success',
+              message: 'Leave Channel ' + this.channel.name + ' success!!'
+            })
+            this.$router.push({
+              name: 'homeIndex'
+            })
+          }).finally(() => {
+            this.$eventHub.$emit('leaveChannel', this.channel.channel_id);
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: 'You cant delete this channel!!'
+          })
+        }
+        $('#leaveChannel').modal('toggle');
+      }
 
     },
   }

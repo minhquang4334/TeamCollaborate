@@ -23,7 +23,7 @@
   export default {
     data() {
       return {
-        channel_id: this.$route.params.id ? this.$route.params.id : 0,
+        channel_id: (this.$route.params.id) ? this.$route.params.id : 0,
         channel: {},
         rightBox: 1,
       }
@@ -38,7 +38,7 @@
 
     watch: {
      '$route.params.id' : function() {
-       this.channel_id = this.$route.params.id;
+       this.channel_id = this.$route.params.id ? this.$route.params.id : 0;
        this.getChannelDetail();
      }
     },

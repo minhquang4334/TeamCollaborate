@@ -185,7 +185,7 @@
             this.avatar.errors = error.response.data.errors;
             this.avatar.uploading = false;
               this.$message({
-                  type: 'failed',
+                  type: 'error',
                   message: 'Some thing error'
               });
           });
@@ -223,7 +223,7 @@
             this.sending = false;
             this.errors = error.response.data.errors;
               this.$message({
-                  type: 'failed',
+                  type: 'error',
                   message: 'Some thing error'
               });
           });

@@ -23,8 +23,12 @@ class PostRepository {
     }
 
     public function list($channelId, $number = 10, $limit = 10, $sort = 'desc', $sortColumn = 'created_at'){
-        return $this->model->where('channel_id', $channelId)->orderBy($sortColumn, $sort)->get()->toArray();
+    	return $this->model->where('is_parent', 0)->where('channel_id', $channelId)->orderBy($sortColumn, $sort)->get()->toArray();
     }
+
+	public function listComment($post_id){
+		return $this->getById($post_id)->children()->get()->toArray();
+	}
 
     public function removeFollower($post_id, $user_id){
         $post =  $this->getById($post_id);
@@ -33,7 +37,7 @@ class PostRepository {
 
     public function addFollower($post_id, $user_id){
         $follow = new Follow();
-        if($this->getById($post_id)->is_parent && $follow->where('post_id', $post_id)->where('user_id', $user_id)->count() == 0) {
+        if($this->getById($post_id)->is_parent && ($follow->where('post_id', $post_id)->where('user_id', $user_id)->count() == 0)) {
             $follow->fill(['post_id' => $post_id,
                 'user_id' => $user_id]);
             $follow->save();
