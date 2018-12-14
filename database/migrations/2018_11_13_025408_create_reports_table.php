@@ -18,7 +18,8 @@ class CreateReportsTable extends Migration
             $table->integer('report_creator_id');
             $table->integer('channel_id');
             $table->integer('post_id');
-            $table->text('description');
+            $table->text('description')->nullable();
+            $table->text('subject');
             $table->tinyInteger('status')->default(0)->comment('0: incomplete, 1: complete, 2:pending');
             $table->timestamps();
         });

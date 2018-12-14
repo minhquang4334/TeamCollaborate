@@ -13,6 +13,7 @@ class ReportTransformer extends TransformerAbstract {
             'channel_id' => $report->channel_id,
             'post_id' => $report->post_id,
             'description' => $report->description,
+            'subject' => $report->subject,
             'status' => $report->status
         ];
     }
