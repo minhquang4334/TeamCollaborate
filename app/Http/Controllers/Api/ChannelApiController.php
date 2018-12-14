@@ -196,11 +196,15 @@ class ChannelApiController extends ApiController
             if($channelId === Channel::GENERAL_CHANNEL_ID) {
 	            return $this->response->withForbidden(trans('messages.user.permission_deny'));
             }
-            $userId = $request->get('user_id');
-            $channel = $this->channel->getById($channelId);
-            if($this->currentUser()->channels->contains($channel)){
-                $user = $this->user->getById($userId);
-                $channel->users()->attach($userId, ['display_name' => $user->name, 'status' => Channel::ACTIVE ]);
+            $invited_users = $request->get('invited_users');
+            $channel = $this->channel->getChannelById($channelId);
+            if($this->currentUser()->channels->contains($channel) && $invited_users){
+            	foreach ($invited_users as $userId) {
+		            $user = $this->user->getById($userId);
+		            if(!$channel->users->contains('id', $userId)) {
+			            $channel->users()->attach($userId, ['display_name' => $user->name, 'status' => Channel::ACTIVE ]);
+		            }
+	            }
                 return $this->response->withUpdated($channel);
             }else{
                 return $this->response->withForbidden(trans('messages.user.permission_deny'));

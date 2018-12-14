@@ -35,8 +35,8 @@
         this.$emit("showComment", list)
       },
 
-      showProfile() {
-        this.$emit("showProfile")
+      showProfile(user) {
+        this.$emit("showProfile", user)
       },
 
       removeUser() {

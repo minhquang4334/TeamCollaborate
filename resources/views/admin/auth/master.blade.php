@@ -13,7 +13,7 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="/admin/css/ionicons.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="/admin/css/adminlte.min.css">
+    <link rel="stylesheet" href="/css/AdminLTE.min.css">
     <!-- iCheck -->
     <link rel="stylesheet" href="/admin/css/blue.css">
     <link rel="stylesheet" href="{{ mix('admin/css/app.css') }}">
