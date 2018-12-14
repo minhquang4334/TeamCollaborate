@@ -50,7 +50,7 @@ class PostApiController extends ApiController
             $channel = $this->channel->getChannelById($channel_id);
             $user = $this->currentUser();
             if($user->channels->contains($channel)) {
-                $posts = $this->post->list($channel->id, $number, $limit);
+                $posts = $this->post->list($channel->id, $number, $limit, 'asc');
                 return $this->response->withArray(Post::hydrate($posts));
             }else{
                 return $this->response->withForbidden(trans('messages.user.not_in_channel'));
