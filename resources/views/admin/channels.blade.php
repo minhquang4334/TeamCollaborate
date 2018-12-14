@@ -13,6 +13,9 @@ Channel Manager
             <th class="th-sm">ID
                 <i class="fa fa-sort float-right" aria-hidden="true"></i>
             </th>
+            <th class="th-sm">Name
+                <i class="fa fa-sort float-right" aria-hidden="true"></i>
+            </th>
             <th class="th-sm">Creator
                 <i class="fa fa-sort float-right" aria-hidden="true"></i>
             </th>
@@ -33,7 +36,8 @@ Channel Manager
         @foreach($channels as $channel)
         <tr id="row{{$channel->id}}">
             <td>{{$channel->channel_id}}</td>
-            <td>{{$channel->getCreator->name}}</td>
+            <td>{{$channel->name}}</td>
+            <td>{{$channel->creator == '0' ? 'General' : $channel->getCreator->name}}
             <td>{{$channel->type==0?"Public":($channel->type==1?"Private":"Protected")}}</td>
             <td>{{$channel->created_at}}</td>
             <td>
@@ -197,7 +201,7 @@ Channel Manager
                     $("#info-modal").modal("show");
                     $channel=response.data;
                     $("#info-id").html($channel.channel_id);
-                    $("#info-creator").html($channel.get_creator.name);
+                    $("#info-creator").html($channel.creator==0 ? "General" : $channel.get_creator.name);
                     $("#info-time").html($channel.created_at || "None");
                     $("#info-mem").html($channel.members_count);
                     $("#info-post").html($channel.posts_count);
