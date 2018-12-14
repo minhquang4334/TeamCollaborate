@@ -62,11 +62,27 @@
         loading: false,
       }
     },
+
+    mounted() {
+
+      let url = window.location.href;
+      let x = url.split('?');
+      if(x.length < 2){
+        clearInterval(checkExist);
+        return;
+      }
+      let data = x[x.length-1].split('---');
+      this.form.email = atob(data[0]);
+      this.form.name = atob(data[1]);
+    },
+
     methods: {
       register() {
         let self = this;
         self.loading = true;
-
+        console.log(document.getElementById('inputName').value);
+        this.form.name = document.getElementById('inputName').value;
+        this.form.email = document.getElementById('inputEmail').value;
         this.form.post(`api/user/auth/register`)
           .then(({data}) => {
               self.loading = false;
