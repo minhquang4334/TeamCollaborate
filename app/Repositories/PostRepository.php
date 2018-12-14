@@ -27,7 +27,7 @@ class PostRepository {
     }
 
 	public function listComment($post_id){
-		return $this->getById($post_id)->children()->get()->toArray();
+		return $this->getById($post_id)->children()->orderBy('created_at', 'asc')->get()->toArray();
 	}
 
     public function removeFollower($post_id, $user_id){

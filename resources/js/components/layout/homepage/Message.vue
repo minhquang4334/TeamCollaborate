@@ -166,11 +166,6 @@
                     </p>
                 </div>
             </div>
-            <el-button type="text"
-                       v-if="hasMoreCommentsToLoad"
-                       @click="loadMoreComments">
-                Load More Comments ({{ children.length - childrenLimit }} more replies)
-            </el-button>
             <div class="comments"
                  v-if="isShowChild">
                 <message :list="c"
@@ -179,7 +174,11 @@
                          :key="c.id"
                          :full="full"/>
             </div>
-
+            <el-button type="text"
+                       v-if="hasMoreCommentsToLoad"
+                       @click="loadMoreComments">
+                Load More Comments ({{ children.length - childrenLimit }} more replies)
+            </el-button>
 
         </div>
     </transition>
@@ -365,7 +364,6 @@
         let temp = [];
 
         this.children.forEach(function (element, index, self) {
-          console.log(122);
           if (temp.indexOf(element.id) === -1) {
             unique.push(element);
             temp.push(element.id);
@@ -433,10 +431,13 @@
 
       loadComment() {
         if(!this.list.is_parent) {
+          this.children = [];
           let url = '/api/post/list-comment?post_id=' +  + this.list.id
           get(url).then((res) => {
             console.log('res: ', res);
-            this.children = res.data.data
+            res.data.data.forEach((c) => {
+              this.children.unshift(c);
+            })
           }).catch((err) => {
             this.$message({
               type: 'error',
@@ -517,7 +518,6 @@
       },
 
       newComment(comment) {
-        console.log('comment: ', comment);
         // if (comment.parent_id == null) return;
         // if (this.list.id != comment.parent_id) return;
 
@@ -536,8 +536,8 @@
 
         // add broadcasted (used for styling)
         // comment.broadcasted = true;
-        if((comment.parent_id === this.list.id) && this.isShowChild) {
-          this.children.push(comment);
+        if((comment.parent_id === this.list.id) && this.is_children) {
+          this.children.unshift(comment);
           this.$nextTick(function () {
             if(document.getElementById('comment' + comment.id)) {
               document.getElementById('comment' + comment.id).scrollIntoView();
