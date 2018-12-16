@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\ChannelWasDeleted;
+use App\Events\InvitedToChannel;
 use App\Http\Requests\User\CreateChannelRequest;
 use App\Http\Requests\User\UpdateChannelRequest;
 use App\Model\Channel;
@@ -63,6 +65,7 @@ class ChannelApiController extends ApiController
             }
 
             $channel->channel_id = $channel_code;
+	        event(new InvitedToChannel($channel, $this->currentUser()));
             return $this->response->withCreated($channel);
         }catch (\Exception $e){
             return $this->response->withForbidden($e->getMessage());
@@ -170,6 +173,7 @@ class ChannelApiController extends ApiController
 	            $channel = $this->channel->getChannelById($id);
 	            if($channel->creator == $this->currentUser()->id) {
 		            $this->channel->destroy($channel->id);
+		            event(new ChannelWasDeleted($id));
 		            return $this->response->withUpdated($channel);
 	            }else{
 		            return $this->response->withForbidden(trans('messages.user.permission_deny'));
@@ -205,6 +209,8 @@ class ChannelApiController extends ApiController
 			            $channel->users()->attach($userId, ['display_name' => $user->name, 'status' => Channel::ACTIVE ]);
 		            }
 	            }
+	            $channel = $this->channel->getChannelById($channelId);
+	            event(new InvitedToChannel($channel, $this->currentUser()));
                 return $this->response->withUpdated($channel);
             }else{
                 return $this->response->withForbidden(trans('messages.user.permission_deny'));

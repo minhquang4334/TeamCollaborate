@@ -13,7 +13,7 @@ class Channel extends Model
     CONST PROTECTED = 2;
     CONST ACTIVE = 1;
     CONST INACTIVE = 0;
-    CONST GENERAL_CHANNEL_ID = '#ASTEAMK60';
+    CONST GENERAL_CHANNEL_ID = 'ASTEAMK60';
 
     protected $fillable = [
         'type', 'creator', 'purpose', 'description', 'status', 'channel_id', 'name'

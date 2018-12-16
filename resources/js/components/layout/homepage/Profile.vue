@@ -19,13 +19,18 @@
                         <td>{{ profileUser.name }}</td>
                     </tr>
                     <tr>
+                        <td>About me</td>
+                        <td>{{ profileUser.about_me }}</td>
+                    </tr>
+                    <tr>
+                        <td>University</td>
+                        <td>{{ profileUser.university }}</td>
+                    </tr>
+                    <tr>
                         <td>Join At</td>
                         <td>{{ profileUser.created_at.date }}</td>
                     </tr>
-                    <tr>
-                        <td>Role</td>
-                        <td>Owner of ASTeamK60</td>
-                    </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -85,6 +90,6 @@
 
 <style scoped>
     .fixed-image-size {
-        max-height: 350px;
+        max-height: 300px;
     }
 </style>

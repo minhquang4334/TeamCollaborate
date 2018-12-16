@@ -19,6 +19,7 @@
 
           if (err.response.status === 500) {
             this.$router.push({name: 'homeIndex'});
+            this.$router.push({name: 'homeIndex'});
           }
 
           if (err.response.status === 404) {
@@ -36,8 +37,6 @@
               this.$router.push({name: 'PageNotFound'})
             }
           }
-
-          this.$router.push({name: 'homeIndex'});
         });
 
       },    }

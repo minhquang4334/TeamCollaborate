@@ -9,30 +9,20 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-/**
- * Class ChannelWasDeleted
- * @package App\Events
- */
 class ChannelWasDeleted implements ShouldBroadcast
 {
 	use Dispatchable, InteractsWithSockets, SerializesModels;
 
-	public $comment;
-	public $author;
-	public $parentComment;
+	public $channelId;
 
 	/**
 	 * Create a new event instance.
-	 * @param $comment,
-	 * @param $author,
-	 * @param $parentComment
+	 * @param $channelId
 	 * @return void
 	 */
-	public function __construct($comment, $author, $parentComment)
+	public function __construct($channelId)
 	{
-		$this->comment = $comment;
-		$this->author = $author;
-		$this->parentComment = $parentComment;
+		$this->channelId = $channelId;
 
 		$this->dontBroadcastToCurrentUser();
 	}
@@ -44,18 +34,19 @@ class ChannelWasDeleted implements ShouldBroadcast
 	 */
 	public function broadcastOn()
 	{
-
+		return new PrivateChannel('channel.'.\App\Model\Channel::GENERAL_CHANNEL_ID);
 	}
 
-	/**
-	 * Get the data to broadcast.
-	 *
-	 * @return array
-	 */
 	public function broadcastWith()
 	{
-		return [
 
+		return [
+			'data' => $this->channelId
 		];
+	}
+
+	public function broadcastAs()
+	{
+		return 'ChannelWasDeleted';
 	}
 }

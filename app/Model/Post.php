@@ -53,4 +53,8 @@ class Post extends Model
     	return $query->where('is_parent', false);
     }
 
+    public function scopePin($query) {
+    	return $query->where('type', Post::PINNED);
+    }
+
 }

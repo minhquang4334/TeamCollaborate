@@ -79,6 +79,7 @@
         channel_id: this.$route.params.id ? this.$route.params.id : 0,
         commentors: [],
         number_items: 0,
+        EchoChannelAddress: 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60'),
         channelDetail: {
           listUsers: [],
           listFile: [],
@@ -107,15 +108,24 @@
       '$route.params.id': function() {
         this.channel_id = this.$route.params.id ? this.$route.params.id : 0
         this.getListPosts();
+        this.EchoChannelAddress = 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60');
+        this.subscribeToEcho();
       }
     },
 
     created() {
       this.$eventHub.$on('newPost', this.newPost);
+      this.$eventHub.$on('remove-pin-thread', this.removePin);
+      this.subscribeToEcho();
+
+
+
     },
 
     beforeDestroy() {
       this.$eventHub.$off('newPost', this.newPost);
+      this.$eventHub.$off('remove-pin-thread', this.removePin);
+
     },
 
     mounted() {
@@ -124,9 +134,37 @@
     },
 
     methods: {
+      subscribeToEcho() {
+        Echo.private(this.EchoChannelAddress)
+          .listen('.CommentWasDeleted', (e) => {
+            let deletedCommentId = e.data;
+            this.echoDelete(deletedCommentId);
+          })
+          .listen('.CommentWasBookmarked', (e) => {
+            console.log('data: ',e.data.data);
+            let comment = this.listMessages.filter((m) => (m.id == e.data.data.id))[0]
+            if(comment) {
+              comment.type = e.data.data.type;
+            }
+            this.removePin(e.data.data, !e.data.data.type)
+          })
+      },
+
+      echoDelete(id) {
+        console.log(id);
+        let deletedComment = this.listMessages.filter((m) => (m.id == id))[0];
+        if(deletedComment) {
+          if(deletedComment.is_parent === 0) {
+            this.$eventHub.$emit('remove-parent-comment');
+          };
+          this.$eventHub.$emit('deletedComment', deletedComment);
+        }
+      },
+
       initData() {
         this.channelDetail.channelPurpose = this.channel.purpose;
         this.channelDetail.listUsers = this.channel.users.data;
+        this.channelDetail.listPinItems = this.channel.pin_posts.data;
         this.channelDetail.channelName = this.channel.name;
         this.commentors = this.channel.users.data;
 
@@ -193,7 +231,6 @@
       },
 
       showComment(list) {
-        console.log('cotainer: ', list);
         this.$emit('showComment');
         this.threadDetail = list;
       },
@@ -206,13 +243,40 @@
       },
 
       newPost(newPost) {
-        console.log('newPost: ', newPost);
         this.listMessages.push(newPost);
         this.$nextTick(() => {
           if(document.getElementById('comment' + newPost.id)) {
             document.getElementById('comment' + newPost.id).scrollIntoView();
           }
         })
+      },
+
+      removePin(post, type) {
+        if(!type) {
+          if(this.channelDetail.listPinItems.length) {
+            let removePin = this.channelDetail.listPinItems.filter((i) => i.id == post.id)[0];
+            let index = this.channelDetail.listPinItems.indexOf(removePin);
+            if(index > -1) {
+              this.channelDetail.listPinItems.splice(index, 1);
+            }
+          }
+        } else {
+          let check = this.channelDetail.listPinItems.filter((i) => i.id == post.id).length;
+          if(check === 0) {
+            this.channelDetail.listPinItems.push(post);
+          }
+        }
+
+        this.channelDetail.listPinItems.sort(this.compare)
+
+      },
+
+      compare(a, b) {
+        if (a.created_at.date < b.created_at.date)
+          return -1;
+        if (a.created_at.date > b.created_at.date)
+          return 1;
+        return 0;
       }
     }
   }

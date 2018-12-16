@@ -13,22 +13,22 @@ class CommentWasDeleted implements ShouldBroadcast
 {
 	use Dispatchable, InteractsWithSockets, SerializesModels;
 
-	public $comment;
+	public $commentId;
+	public $channelId;
 	public $author;
-	public $parentComment;
 
 	/**
 	 * Create a new event instance.
 	 * @param $comment,
 	 * @param $author,
-	 * @param $parentComment
+	 * @param $channelId
 	 * @return void
 	 */
-	public function __construct($comment, $author, $parentComment)
+	public function __construct($commentId, $author, $channelId)
 	{
-		$this->comment = $comment;
+		$this->commentId = $commentId;
 		$this->author = $author;
-		$this->parentComment = $parentComment;
+		$this->channelId = $channelId;
 
 		$this->dontBroadcastToCurrentUser();
 	}
@@ -40,18 +40,19 @@ class CommentWasDeleted implements ShouldBroadcast
 	 */
 	public function broadcastOn()
 	{
-
+		return new PrivateChannel('channel.'.$this->channelId);
 	}
 
-	/**
-	 * Get the data to broadcast.
-	 *
-	 * @return array
-	 */
 	public function broadcastWith()
 	{
-		return [
 
+		return [
+			'data' => $this->commentId
 		];
+	}
+
+	public function broadcastAs()
+	{
+		return 'CommentWasDeleted';
 	}
 }

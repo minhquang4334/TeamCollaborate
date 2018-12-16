@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use League\Fractal\Manager;
 
-class CommentWasCreated implements ShouldBroadcast
+class CommentWasBookmarked implements ShouldBroadcast
 {
 	use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -64,6 +64,6 @@ class CommentWasCreated implements ShouldBroadcast
 
 	public function broadcastAs()
 	{
-		return 'CommentWasCreated';
+		return 'CommentWasBookmarked';
 	}
 }
