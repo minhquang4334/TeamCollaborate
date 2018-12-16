@@ -25,9 +25,37 @@
                     </button>
                 </h5>
             </div>
-            <div id="pinned" class="collapse" data-parent="#accordion">
-                <div class="card-body">
-                    No items have been pinned yet! Open the context menu on important messages or files and choose Pin to channel to stick them here.                </div>
+            <div id="pinned" class="collapse padding-5" data-parent="#accordion">
+                <div class="pin-item cursor-pointer comment"
+                     @click.prevent="showPinItem(item.id)"
+                     v-for="(item, index) in channelDetail.listPinItems"
+                     :key="item.id + `---` + index"
+                >
+                    <div class="v-comment-info">
+                        <div class="left">
+                            <router-link :to="'/' + '@' + item.creator.data.name"
+                                         class="avatar user-select">
+                                <img v-bind:src="item.creator.data.avatar" class="about-channel-avatar">
+                            </router-link>
+                            <span >{{ item.creator.data.name }}</span>
+                            <el-tooltip :content="'Created: ' + date(item.created_at.date)"
+                                        class="float-right margin-left-15"
+                                        placement="top"
+                                        transition="false"
+                                        :open-delay="500">
+                                <a class="date margin-right-1"
+                                   @click.prevent="openOrigin">
+                                    {{ date(item.created_at.date) }}
+                                </a>
+                            </el-tooltip>
+                        </div>
+                    </div>
+                    <div class="text ml-5">
+                        <markdown :text="item.content"></markdown>
+
+                    </div>
+
+                </div>
             </div>
         </div>
         <div class="card">
@@ -188,7 +216,8 @@
     </div>
 </template>
 <script>
-    import {get} from '../../../helper/request.js'
+  import Markdown from '../../includes/Markdown.vue';
+  import {get} from '../../../helper/request.js'
     export default {
       props: ['channelDetail'],
 
@@ -198,7 +227,12 @@
         }
       },
 
+      components: {
+        Markdown
+      },
+
       computed: {
+
       },
 
       mounted() {
@@ -213,7 +247,45 @@
         removeUser(){
           this.$emit('removeUser');
         },
+
+        date(date) {
+          return moment(date)
+            .fromNow(true);
+        },
+
+        showPinItem(postId) {
+          if(document.getElementById('comment' + postId)) {
+            document.getElementById('comment' + postId).scrollIntoView();
+            let element = document.getElementById('comment' + postId);
+            element.className += ' background-pinned'
+            console.log(element.className);
+            console.log(element.style.backgroundColor);
+            setTimeout(() => {
+              element.classList.remove('background-pinned')
+            }, 3000)
+          }
+        }
       }
     }
 
 </script>
+
+<style>
+    .padding-5 {
+        padding: 5px;
+    }
+    .pin-item {
+        overflow: hidden;
+        border-radius: 4px;
+        padding: 12px;
+        margin: 5px 0;
+        height: 120px;
+        box-sizing: border-box;
+        font-size: 14px;
+        background-color: #b8c2cc;
+        opacity: 0.8;
+    }
+    .background-pinned {
+        background: #f3d19d !important;
+    }
+</style>

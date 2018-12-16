@@ -229,7 +229,6 @@
       if (_.isUndefined(this.children)) {
         this.children = [];
       }
-
       this.$eventHub.$on('newComment', this.newComment);
       this.$eventHub.$on('patchedComment', this.patchedComment);
       this.$eventHub.$on('deletedComment', this.deletedComment);
@@ -245,7 +244,7 @@
       'list': function() {
         this.loadComment();
         this.react = this.list.react.data;
-      }
+      },
     },
 
     mounted() {
@@ -278,8 +277,6 @@
         if(this.react) {
           let check = false;
           this.react.forEach((r) => {
-            console.log('adsd: ',r);
-            console.log('curr: ',this.currentUser);
             if((r.user_id === this.currentUser.id) && (r.react_code === 'like')) {
               check = true;
             }
@@ -423,6 +420,8 @@
     },
 
     methods: {
+
+
       directMess(user) {
         let type = 2;
         let invited_users = [];
@@ -472,6 +471,10 @@
           .catch(error => {
             app.$Progress.fail();
           });
+      },
+
+      echoDelete(id) {
+
       },
 
       loadComment() {
@@ -654,13 +657,17 @@
             type: this.list.type
           }
 
-          post(`/api/post/pin`, payload)
+          post(`/api/post/pin`, payload).then((res) => {
+              this.$eventHub.$emit('remove-pin-thread', this.list, this.list.type);
+            })
             .catch(() => {
               this.list.type = (this.list.type === 1) ? 0 : 1;
           });
+
         },
         200,
         {leading: true, trailing: false}
+
       ),
 
       like: _.debounce(
@@ -780,79 +787,11 @@
 
 <style lang="scss" scoped>
     .background-bookmark {
-        background: #f9f9f9 !important;
+        background: #f9f9f9;
         border: 2px dashed #e9e9e9 !important;
         padding-bottom: 0.7em !important;
         padding-right: 1em !important;
         border-left: 2px dashed #e9e9e9 !important;
-    }
-
-    .comment {
-        .v-comment-info {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .left {
-            display: flex;
-            align-items: center;
-        }
-
-        .actions-right {
-            display: flex;
-        }
-
-        .separator {
-            margin-left: 0.5em;
-            margin-right: 0.5em;
-            color: #979797;
-            font-weight: bold;
-        }
-
-        .date {
-            color: #979797;
-            font-size: 70%;
-            cursor: pointer;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-
-        .like-button {
-            display: inline-flex;
-            align-items: center;
-            cursor: pointer;
-
-            .count {
-                font-weight: bold;
-                font-size: 80%;
-                color: #979797;
-                margin-right: 1em;
-            }
-
-            &:hover {
-                i {
-                    color: #db6e6e !important;
-                }
-
-                .count {
-                    color: #db6e6e;
-                }
-            }
-        }
-
-        .v-bookmark:hover {
-            color: #edb431;
-        }
-
-        .v-reply:hover {
-            color: #78b38a;
-        }
-
-        .el-icon-more-outline:hover {
-            color: #000;
-        }
     }
 </style>
 

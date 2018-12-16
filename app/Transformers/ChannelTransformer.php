@@ -8,7 +8,7 @@ use League\Fractal\TransformerAbstract;
 class ChannelTransformer extends TransformerAbstract {
 
 	protected $defaultIncludes  = [
-		'users'
+		'users', 'pin_posts'
 	];
 
     public function transform(Channel $channel) {
@@ -20,7 +20,7 @@ class ChannelTransformer extends TransformerAbstract {
             'description' => $channel->description,
             'name' => $channel->name,
             'status' => $channel->status,
-            'channel_id' => $channel->channel_id
+            'channel_id' => $channel->channel_id,
         ];
     }
 
@@ -35,6 +35,14 @@ class ChannelTransformer extends TransformerAbstract {
 		if ($users = $channel->users) {
 			//dd("users".$users);
 			return $this->collection($users, new UserTransformer());
+		}
+	}
+
+	public function includePinPosts(Channel $channel)
+	{
+		if ($posts = $channel->posts()->pin()->get()) {
+			//dd("users".$users);
+			return $this->collection($posts, new PostTransformer());
 		}
 	}
 

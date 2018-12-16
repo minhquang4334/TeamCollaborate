@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\CommentWasBookmarked;
+use App\Events\CommentWasCreated;
+use App\Events\CommentWasDeleted;
+use App\Events\CommentWasPatched;
 use App\Model\Channel;
 use App\Model\Post;
 use App\Model\Report;
@@ -189,7 +193,7 @@ class PostApiController extends ApiController
                 }
 	            $this->post->addFollower($follow_post_id, $this->currentUser()->id);
 	            $post->followers;
-
+				event(new CommentWasCreated($post, $this->currentUser(), null));
                 return $this->response->withCreated($post);
             }else{
                 return $this->response->withForbidden(trans('messages.user.not_in_channel'));
@@ -214,13 +218,15 @@ class PostApiController extends ApiController
             $id = $request->get('post_id');
             if($id) {
 	            $post = $this->post->getById($id);
-
-
 	            if($post->creator == $this->currentUser()->id) {
 		            if(!$post->is_parent) {
 			            $post->children()->delete();
 		            }
+		            $channel_id = $post->channel_id;
+		            $channel = new Channel();
+		            $channel = $channel->findOrFail($channel_id);
 		            $this->post->destroy($id);
+		            event(new CommentWasDeleted($id, $this->currentUser(), $channel->channel_id));
 		            return $this->response->withUpdated($post);
 	            }else{
 		            return $this->response->withForbidden(trans('messages.user.permission_deny'));
@@ -298,6 +304,8 @@ class PostApiController extends ApiController
 	            	$type = ($request->get('type') === 1) ? Post::PINNED : Post::NORMAL;
 		            $post = $this->post->updateColumn($post->id,[
 			            'type' => $type,]);
+		            $post = $this->post->getById($request->get('post_id'));
+		            event(new CommentWasBookmarked($post, $user, null));
 		            return $this->response->withMessage(trans('messages.user.pin_success'));
 	            }else{
 		            return $this->response->withForbidden(trans('messages.user.not_in_channel'));
@@ -327,6 +335,7 @@ class PostApiController extends ApiController
                 $update = array_filter(array_intersect_key($request->all(), array_flip($allow)));
                 $this->post->updateColumn($id, $update);
                 $post = $this->post->getById($id);
+                event(new CommentWasPatched($post, $this->currentUser(), null));
                 return $this->response->withUpdated($post);
             }else{
                 return $this->response->withForbidden( trans('messages.user.permission_deny'));
