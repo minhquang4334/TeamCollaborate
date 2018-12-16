@@ -147,6 +147,7 @@
                         if(!response.error)
                         {
                             toastr.success('Processed!');
+                            $(".process-btn").hide();
                             $('#status' + id).html("Resolved");
                         }
                     },
