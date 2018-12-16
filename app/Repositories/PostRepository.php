@@ -35,6 +35,11 @@ class PostRepository {
         return $post->followers()->where('user_id', $user_id)->get();//->each->delete();
     }
 
+    /**
+     * @param $post_id
+     * @param $user_id
+     * @return Follow
+     */
     public function addFollower($post_id, $user_id){
         $follow = new Follow();
         if($this->getById($post_id)->is_parent && ($follow->where('post_id', $post_id)->where('user_id', $user_id)->count() == 0)) {

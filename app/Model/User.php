@@ -3,6 +3,8 @@
 namespace App\Model;
 
 use App\Notifications\InviteToAppNotification;
+use App\Notifications\ReportAcceptedNotification;
+use App\Notifications\ReportedNotification;
 use App\Notifications\UserResetPasswordNotification;
 use App\Notifications\UserVerifyEmail;
 use Carbon\Carbon;
@@ -224,5 +226,19 @@ class User extends AbstractUser implements JWTSubject, MustVerifyEmail
      */
     public function sendInviteToAppNotification($link){
         $this->notify(new InviteToAppNotification($link));
+    }
+
+    /**
+     * send notify to user whose post is reported
+     */
+    public function sendReportedNotification(){
+        $this->notify(new ReportedNotification());
+    }
+
+    /**
+     * send to user, who create report
+     */
+    public function sendReportAcceptedNotification(){
+        $this->notify(new ReportAcceptedNotification());
     }
 }

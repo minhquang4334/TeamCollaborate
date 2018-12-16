@@ -31,7 +31,11 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.', 'prefix' => 'admin'], fu
     });
 
     Route::group(['middleware' => 'admin'], function () {
-        Route::get('dashboard',['as' => 'home', 'uses' => 'UserManagerController@index']);
+
+        Route::get('dashboard',['as' => 'home', 'uses' => 'DashBoardController@index']);
+        Route::get('dashboard/get-chart', 'DashBoardController@getChart');
+
+
         Route::get('/', 'UserManagerController@index');
         Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 
@@ -47,7 +51,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.', 'prefix' => 'admin'], fu
         Route::get('files-manager', ['as' => 'files-manager', 'uses' => "FileManagerController@index"]);
         Route::get('download/{id}', "FileManagerController@download");
         Route::delete('files/{id}', "FileManagerController@delete");
-        //Route::get('reports-manager', ['as' => 'reports-manager', 'uses' => "ReportManagerController@index"]);
+        Route::resource('reports-manager', "ReportManagerController");
     });
 });
 
