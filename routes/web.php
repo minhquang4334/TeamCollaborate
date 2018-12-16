@@ -31,7 +31,11 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.', 'prefix' => 'admin'], fu
     });
 
     Route::group(['middleware' => 'admin'], function () {
-        Route::get('dashboard',['as' => 'home', 'uses' => 'UserManagerController@index']);
+
+        Route::get('dashboard',['as' => 'home', 'uses' => 'DashBoardController@index']);
+        Route::get('dashboard/get-chart', 'DashBoardController@getChart');
+
+
         Route::get('/', 'UserManagerController@index');
         Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\LoginController@logout']);
 
