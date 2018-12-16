@@ -16,6 +16,9 @@
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
             <li>
+                <a href="/admin/dashboard"><span class="fa fa-dashboard"></span>Dashboard</a>
+            </li>
+            <li>
                 <a href="{{config('menubar.users_manager_path')}}"><span class="fa fa-user"></span>{{config('menubar.users')}}</a>
             </li>
             <li>
@@ -25,8 +28,7 @@
                 <a href="{{config('menubar.files_manager_path')}}"><span class="fa fa-file-text"></span>{{config('menubar.files')}}</a>
             </li>
             <li>
-                {{--<a href="{{config('menubar.reports_manager_path')}}"><span class="fa fa-flag"></span>{{config('menubar.reports')}}</a>--}}
-                <a href="#"><span class="fa fa-flag"></span>{{config('menubar.reports')}}</a>
+                <a href="{{config('menubar.reports_manager_path')}}"><span class="fa fa-flag"></span>{{config('menubar.reports')}}</a>
             </li>
         </ul>
     </section>

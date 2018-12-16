@@ -34,7 +34,7 @@
             @foreach($files as $file)
                 <tr id="row{{$file->id}}">
                     <td>{{$file->file_name}}</td>
-                    <td>{{$file->user->name}}</td>
+                    <td>{{($file->user != null)?$file->user->name:""}}</td>
                     <td>{{$file->channel->channel_id}}</td>
                     <td>{{pathinfo($file->file_path, PATHINFO_EXTENSION)}}</td>
                     <td>{{$file->created_at}}</td>

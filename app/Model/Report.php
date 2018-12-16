@@ -13,4 +13,15 @@ class Report extends Model
     ];
 
 
+    public function creator(){
+        return $this->belongsTo(User::class, 'report_creator_id');
+    }
+
+    public function channel(){
+        return $this->belongsTo(Channel::class, 'channel_id');
+    }
+
+    public function post(){
+        return $this->belongsTo(Post::class, 'post_id');
+    }
 }

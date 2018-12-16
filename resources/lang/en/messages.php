@@ -26,4 +26,5 @@ return [
         'unfollow_success' => 'Bỏ theo dõi thành công',
         'post_not_exist' => 'Bài đăng không tồn tại',
     ],
+        'login_failed' => 'Tài khoản hoặc mật khẩu không chính xác.'
 ];
