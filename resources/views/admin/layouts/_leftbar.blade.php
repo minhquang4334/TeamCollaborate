@@ -25,8 +25,7 @@
                 <a href="{{config('menubar.files_manager_path')}}"><span class="fa fa-file-text"></span>{{config('menubar.files')}}</a>
             </li>
             <li>
-                {{--<a href="{{config('menubar.reports_manager_path')}}"><span class="fa fa-flag"></span>{{config('menubar.reports')}}</a>--}}
-                <a href="#"><span class="fa fa-flag"></span>{{config('menubar.reports')}}</a>
+                <a href="{{config('menubar.reports_manager_path')}}"><span class="fa fa-flag"></span>{{config('menubar.reports')}}</a>
             </li>
         </ul>
     </section>
