@@ -78,8 +78,8 @@
                                     <i class="fas fa-ellipsis-v"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <span class="dropdown-item" @click="showProfile(user)" href="#">View Profile</span>
-                                    <span class="dropdown-item">Direct Message</span>
+                                    <span class="dropdown-item" @click.prevent="showProfile(user)">View Profile</span>
+                                    <span class="dropdown-item" v-if="currentUser.id != user.id" @click="directMess(user)">Direct Message</span>
                                     <span class="dropdown-item" @click="removeUser">Remove User</span>
                                 </div>
                             </span>
@@ -217,13 +217,13 @@
 </template>
 <script>
   import Markdown from '../../includes/Markdown.vue';
-  import {get} from '../../../helper/request.js'
+  import {get, post} from '../../../helper/request.js'
     export default {
       props: ['channelDetail'],
 
       data() {
         return {
-
+          currentUser: this.$store.state.auth.user
         }
       },
 
@@ -240,6 +240,38 @@
       },
 
       methods:{
+        directMess(user) {
+          let type = 2;
+          let invited_users = [];
+          invited_users.push(user.id);
+          let name = this.currentUser.name + ', ' + user.name;
+          let payload = {
+            type : type,
+            purpose: 'Direct Messages between ' + name,
+            description: '',
+            name: name,
+            invited_users: invited_users
+          }
+          let url = '/api/channel/create'
+          post(url, payload).then((res) => {
+            console.log('res: ', res);
+            if(res.data.data) {
+              this.$router.push({
+                name: 'ChannelDetail',
+                params: {
+                  id: res.data.data.channel_id
+                }
+              })
+              this.$eventHub.$emit('newDirectMessage', res.data.data);
+            }
+          }).catch((err) => {
+            console.log('err: ', err);
+            this.$message({
+              type: 'error',
+              message: 'Something error: ', err
+            })
+          })
+        },
 
         showProfile(user){
           this.$emit('showProfile', user);
