@@ -31,6 +31,10 @@
                 </span>
             </span>
         </li>
+        <li class="nav-item nav-category">
+            <a class="nav-link" style="cursor:pointer" @click="inviteToApp">Invite To App<span
+                    class="fas fa-plus-circle float-right"></span></a>
+        </li>
     </ul>
 </template>
 <script>
@@ -76,6 +80,10 @@
     computed: {},
 
     methods: {
+      inviteToApp() {
+        this.$router.push({name: 'inviteToApp'});
+      },
+
       subscribeToEcho() {
         Echo.private('channel.ASTEAMK60')
           .listen('.InvitedToChannel', (e) => {
@@ -211,5 +219,9 @@
     .nav-menu {
         max-height: 400px;
         overflow: auto;
+    }
+
+    .fa-plus-circle {
+        padding: 3px;
     }
 </style>

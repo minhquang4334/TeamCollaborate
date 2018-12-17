@@ -80,7 +80,7 @@
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <span class="dropdown-item" @click.prevent="showProfile(user)">View Profile</span>
                                     <span class="dropdown-item" v-if="currentUser.id != user.id" @click="directMess(user)">Direct Message</span>
-                                    <span class="dropdown-item" @click="removeUser">Remove User</span>
+                                    <span class="dropdown-item" v-show="currentUser.id != user.id" @click="removeUser">Remove User</span>
                                 </div>
                             </span>
                             <img :src="user.avatar" class="rounded-circle mr-2" style="width: 30px;height:30px" alt="profile-img">
@@ -286,16 +286,7 @@
         },
 
         showPinItem(postId) {
-          if(document.getElementById('comment' + postId)) {
-            document.getElementById('comment' + postId).scrollIntoView();
-            let element = document.getElementById('comment' + postId);
-            element.className += ' background-pinned'
-            console.log(element.className);
-            console.log(element.style.backgroundColor);
-            setTimeout(() => {
-              element.classList.remove('background-pinned')
-            }, 3000)
-          }
+          this.$eventHub.$emit('showPinItem', postId);
         }
       }
     }

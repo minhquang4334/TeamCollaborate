@@ -24,7 +24,6 @@
                     <p>
                         <span class="fas fa-bell mr-2"></span>
                         Notification
-                        <notification-subscribe/>
                     </p>
                 </a>
                 <a class="dropdown-item" data-toggle="modal" data-target="#inviteModal" v-show="isShowInvite">
@@ -48,30 +47,7 @@
 
                 </div>
             </span>
-            <notification-drop-down v-show="show_drop_down"/>
-            <span class=" dropdown" data-toggle="collapse" data-target="#settingDropdown">
-                <a style="cursor: pointer" data-toggle="dropdown">
-                    <span class="fas fa-bell"></span>
-                </a>
-                <div id="settingDropdown" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation" aria-labelledby="notificationDropdown">
-                    <a class="dropdown-item">
-                        message 1
-                    </a>
-                    <a class="dropdown-item">
-                        message 1
-                    </a>
-                    <a class="dropdown-item">
-                        message 1
-                    </a>
-                    <a class="dropdown-item">
-                        message 1
-                    </a>
-                    <a class="dropdown-item">
-                        message 1
-                    </a>
-                    <p class="text-center mb-0 mt-2 border-top"><a href="">view all</a></p>
-                </div>
-            </span>
+            <!--<notification-drop-down/>-->
 
             <span class="dropdown d-md-none" data-toggle="collapse" data-target="#preferencesDropdown">
                     <a style="cursor: pointer" data-toggle="dropdown">
@@ -198,32 +174,7 @@
 
                 <!-- Modal content-->
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Notification setting</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-
-                    </div>
-                    <div class="modal-body">
-
-                        <div class=" m-auto form-group can-toggle demo-rebrand-2">
-                            <input
-                                id="ispublic"
-                                type="checkbox"
-                                v-model="type"
-                                true-value="On"
-                                false-value="Off"
-                            >
-                            <label for="ispublic">
-                                <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
-                            </label>
-                        </div>
-
-                        If select on notification, you will be notified for every new message!
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
-                    </div>
+                    <notification-subscribe/>
                 </div>
 
             </div>
@@ -243,6 +194,7 @@
     data() {
       return {
         currentUser: this.$store.state.auth.user,
+        type: 'On',
         show_drop_down: false,
         isVertical: false,
         channel_id: this.$route.params.id ? this.$route.params.id : 0,
@@ -295,6 +247,10 @@
     },
 
     methods: {
+      changeNotification() {
+
+      },
+
       logout: function () {
         this.$store.dispatch('auth/logout')
           .then(() => {

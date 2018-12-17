@@ -1,11 +1,11 @@
 <template>
-    <li ref="dropdown" class="dropdown dropdown-notifications notifications-menu">
-        <a class="dropdown-toggle" href="#">
-            <i class="fa fa-bell notification-icon"></i>
+    <span class="dropdown dropdown-notifications notifications-menu" data-target="#notificationDropDown">
+        <a class="dropdown-toggle"  data-toggle="dropdown">
+            <i class="fa fa-bell notification-icon" ></i>
             <span class="label label-danger" v-bind:class="numberNotify ? 'count-active' : 'count-hide'">{{ total }}</span>
         </a>
 
-        <div class="dropdown-container dropdown-menu">
+        <div class="dropdown-container dropdown-menu" id="notificationDropDown">
             <div class="dropdown-toolbar">
                 <div v-show="numberNotify" class="dropdown-toolbar-actions">
                     <a href="#" @click.prevent="markAllRead">Mark all as read</a>
@@ -30,7 +30,7 @@
                 <a href="#" @click.prevent="fetchAll(null)">View More</a>
             </div>
         </div>
-    </li>
+    </span>
 </template>
 
 <script>
@@ -187,3 +187,7 @@
     }
   }
 </script>
+
+<style>
+
+</style>

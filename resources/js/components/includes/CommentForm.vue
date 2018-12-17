@@ -159,9 +159,8 @@
 
                     <!-- Modal body -->
                     <div class="modal-body">
-                        <textarea name="" id="" class="w-100" cols="30" rows="5" style="max-height:300px"></textarea>
-                        <p>Filename</p>
-                        <span class="list-group-item">file.txt</span>
+                        <textarea name="" id="" class="w-100" cols="30" rows="5" style="max-height:300px" v-model="message"></textarea>
+                        <span class="list-group-item">{{fileName}}</span>
                         <img src="#" id="previewImage" alt="preview-image">
                     </div>
 
@@ -169,7 +168,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" @click="clearFile" data-dismiss="modal">Close
                         </button>
-                        <button type="button" class="btn btn-success">Send</button>
+                        <button type="button" class="btn btn-success" @click="submitFile">Send</button>
                     </div>
 
                 </div>
@@ -221,6 +220,7 @@
         isTyping: false,
         preview: false,
         showMarkdownGuide: false,
+        fileName: '',
 
         quickMentioner: {
           show: false,
@@ -299,22 +299,8 @@
     },
 
     methods: {
-      readURL(input) {
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-
-          reader.onload = function (e) {
-            $('#blah')
-              .attr('src', e.target.result);
-          };
-
-          reader.readAsDataURL(input.files[0]);
-        }
-      },
-
       readURL(file) {
         let reader = new FileReader();
-
         reader.onload = function (event) {
           $('#previewImage').attr('src', event.target.result);
         }
@@ -328,11 +314,16 @@
         console.log('file: ', this.files);
         if (this.files.length) {
           this.readURL(this.files[0]);
+          this.fileName = this.files[0].name
         }
       },
 
       clearFile() {
         $("#addFile").val('');
+      },
+
+      submitFile() {
+
       },
 
       typed(string) {
@@ -498,6 +489,7 @@
         this.loading = false;
         this.preview = false;
         this.parent = 0;
+        this.fileName = ''
       },
 
       pick(pickedStr, starterIndex, typedLength, type = '', user = null) {
