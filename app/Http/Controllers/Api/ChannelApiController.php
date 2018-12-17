@@ -245,4 +245,34 @@ class ChannelApiController extends ApiController
 			return $this->response->withBadRequest($e->getMessage());
 		}
 	}
+
+
+    /**
+     * @method DELETE
+     * @usage http://localhost:8000/api/channel/ban?channel_id=1&user_id=2
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removeUserFromChannel(Request $request){
+        $currentUser = $this->currentUser();
+        try{
+            $channel = $this->channel->getById($request->get('channel_id'));
+            if ($channel->creator == $currentUser->id){
+                $userId = $request->get('user_id');
+                if ($userId == $currentUser->id){
+                    return $this->response->withBadRequest('Can not remove yourself!');
+                }
+                $user = $this->user->getById($userId);
+                //remove user from participations table
+                $user->channels->detach();
+                // remove post in this channel
+                $user->post->where('channel_id', $channel->id)->delete();
+                return $this->response->withUpdated($user);
+            }else{
+                return $this->response->withForbidden(trans('messages.user.permission_deny'));
+            }
+        }catch(\Exception $e) {
+            return $this->response->withInternalServer($e->getMessage());
+        }
+    }
 }

@@ -185,14 +185,15 @@ class UserApiController extends ApiController
         }
     }
 
-	/**
-	 * Method post
-	 * usage: http://localhost:8000/api/user/avatar
-	 * change Display name of user in specific channel
-	 * $request has channel_id
-	 * @param Request $request
-	 * @return JsonResponse
-	 */
+    /**
+     * Method post
+     * usage: http://localhost:8000/api/user/avatar
+     * change Display avatar of user in specific channel
+     * $request has channel_id
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function changeUserAvatar(Request $request) {
 	    $this->validate($request, ['photo' => ['required', 'image', Rule::dimensions()->minWidth(250)->minHeight(250)],]);
 	    try {
@@ -228,8 +229,6 @@ class UserApiController extends ApiController
 	    }
 
     }
-
-
 
 
 }
