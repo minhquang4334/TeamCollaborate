@@ -44,10 +44,32 @@ class CreatedComment extends Notification
 
 	public function toArray($notifiable)
 	{
+		$subcontent = $this->comment->content;
+		if(strlen($this->comment->content) > 30) {
+			$subcontent = substr($this->comment->content, 0, 30);
+			$subcontent = $subcontent.'.....';
+		}
+		$channel = new Channel();
+		$channel = $channel->findOrFail($this->comment->channel_id);
+		$action_link = 'http://localhost:8000/#/';
+		$actionContent = '';
+		if(!$this->comment->is_parent) {
+			$actionContent = 'đã đăng một bài viết mới';
+		} else {
+			$actionContent = 'đã trả lời một bài đăng mà bạn đang theo dõi';
+		}
+		if($channel->channel_id == Channel::GENERAL_CHANNEL_ID) {
+			$action_link = $action_link.'general';
+		} else {
+			$action_link = $action_link.'channel/'.$channel->channel_id;
+		}
+		if($channel->type == Channel::PROTECTED) {
+			$actionContent = 'đã gửi cho bạn một tin nhắn mới';
+		}
 		return [
-			'title' => 'Maria Ozawa!',
-			'body' => '痛い、行く、行く',
-			'action_url' => '/',
+			'title' => $this->author->name.' '.$actionContent,
+			'body' => $subcontent,
+			'action_url' => $action_link,
 			'created' => Carbon::now()->toIso8601String(),
 		];
 	}
@@ -61,16 +83,25 @@ class CreatedComment extends Notification
 		}
 		$channel = new Channel();
 		$channel = $channel->findOrFail($this->comment->channel_id);
-		$subcontent = 'to '.$channel->name.' : '.$subcontent;
 		$action_link = 'http://localhost:8000/#/';
+		$actionContent = '';
+		if(!$this->comment->is_parent) {
+			$actionContent = 'đã đăng một bài viết mới';
+		} else {
+			$actionContent = 'đã trả lời một bài đăng mà bạn đang theo dõi';
+		}
 		if($channel->channel_id == Channel::GENERAL_CHANNEL_ID) {
 			$action_link = $action_link.'general';
 		} else {
 			$action_link = $action_link.'channel/'.$channel->channel_id;
 		}
+		if($channel->type == Channel::PROTECTED) {
+			$actionContent = 'đã gửi cho bạn một tin nhắn mới';
+		}
 		return (new WebPushMessage())
-			->title($this->author->name.' đã đăng một bài viết mới ')
+			->title($this->author->name.' '.$actionContent)
 			->icon('/images/logo.jpg')
+			->image('/images/logo.jpg')
 			->body($subcontent)
 			->action('View Post', $action_link)
 			->data(['id' => $notification->id,

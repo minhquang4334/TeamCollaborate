@@ -40,7 +40,7 @@ class PostRepository {
      * @param $user_id
      * @return Follow
      */
-    public function addFollower($post_id, $user_id){
+    public function addFollower($post_id, $user_id) {
         $follow = new Follow();
         if($this->getById($post_id)->is_parent && ($follow->where('post_id', $post_id)->where('user_id', $user_id)->count() == 0)) {
             $follow->fill(['post_id' => $post_id,
@@ -48,6 +48,11 @@ class PostRepository {
             $follow->save();
         }
         return $follow;
+    }
+
+    public function listUserFollowers($post_id) {
+    	dd($this->getById($post_id)->followers);
+    	return $this->getById($post_id)->followers;
     }
 
 }

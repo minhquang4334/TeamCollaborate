@@ -219,7 +219,9 @@
         children: [],
         commentReport: {},
         isReportComment: false,
-        react: []
+        react: [],
+        EchoChannelAddress: 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60'),
+
 
       };
     },
@@ -245,6 +247,12 @@
         this.loadComment();
         this.react = this.list.react.data;
       },
+
+      '$route.params.id': function () {
+        this.EchoChannelAddress = 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60');
+        this.subscribeToEcho();
+
+      }
     },
 
     mounted() {
@@ -420,6 +428,10 @@
     },
 
     methods: {
+
+      subscribeToEcho() {
+
+      },
 
 
       directMess(user) {

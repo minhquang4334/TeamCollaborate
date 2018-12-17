@@ -149,6 +149,13 @@
             }
             this.removePin(e.data.data, !e.data.data.type)
           })
+          .listen('.CommentWasLiked', (e) => {
+            let likedComment = e.data.data;
+            let filter = this.listMessages.filter((m) => m.id == likedComment.id)[0];
+            if(filter) {
+
+            }
+          })
       },
 
       echoDelete(id) {
