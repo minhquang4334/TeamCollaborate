@@ -69,14 +69,17 @@
       },
 
       showAboutChannel(){
+          $("#rightElement").css("z-index","2");
          this.rightBox = 1;
       },
 
       showComment(){
+          $("#rightElement").css("z-index","2");
          this.rightBox = 2;
       },
 
       showProfile(user){
+          $("#rightElement").css("z-index","2");
          this.rightBox = 3;
          this.profileUser = user;
       }

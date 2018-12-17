@@ -134,6 +134,7 @@
       },
 
       toChannelDetail(channel) {
+          $("#rightElement").css("z-index","-1");
         if(channel.name === 'General') {
           this.$router.push({
             name: 'homeIndex',
