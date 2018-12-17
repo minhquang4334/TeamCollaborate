@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Events\CommentWasBookmarked;
 use App\Events\CommentWasCreated;
 use App\Events\CommentWasDeleted;
+use App\Events\CommentWasLiked;
 use App\Events\CommentWasPatched;
 use App\Model\Channel;
 use App\Model\Post;
@@ -194,7 +195,8 @@ class PostApiController extends ApiController
                 }
 	            $this->post->addFollower($follow_post_id, $this->currentUser()->id);
 	            $post->followers;
-	            $subUsers = DB::table('push_subscriptions')->get();
+//	            $subUsers = DB::table('push_subscriptions')->get();
+	            $subUsers = $channel->users;
 	            event(new CommentWasCreated($post, $this->currentUser(), null, $subUsers));
                 return $this->response->withCreated($post);
             }else{
@@ -389,6 +391,7 @@ class PostApiController extends ApiController
     public function like(Request $request) {
 	    try{
 		    $post_id = $request->get('post_id');
+		    $post = $this->post->getById($request->get('post_id'));
 		    $react_code = $request->get('react_code') ? $request->get('react_code') : 'like';
 		    $user_id = $this->currentUser()->id;
 		    if($post_id) {
@@ -403,6 +406,7 @@ class PostApiController extends ApiController
 					    'react_code' => $react_code,
 					    'post_id' => $post_id
 				    ]));
+				    //event(new CommentWasLiked($post, $this->currentUser(), null));
 				    return $this->response->withCreated($react);
 			    }
 		    }

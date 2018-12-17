@@ -1,6 +1,29 @@
 <template>
-    <div class="form-group">
-        <input type="checkbox" class="pull-right notification-turn-off" v-model="isPushEnabled" @click="togglePush">
+    <div>
+        <div class="modal-header">
+            <h4 class="modal-title">Notification Setting</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+        <div class="modal-body">
+
+            <div class=" m-auto form-group can-toggle demo-rebrand-2">
+                <input
+                        id="ispublic"
+                        type="checkbox"
+                        v-model="isPushEnabled"
+                >
+                <label for="ispublic">
+                    <div class="can-toggle__switch" data-checked="On" data-unchecked="Off"></div>
+                </label>
+            </div>
+
+            If select on notification, you will be notified for every new message!
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="togglePush">Save</button>
+        </div>
     </div>
 </template>
 <script>
@@ -153,7 +176,7 @@
       },
 
       togglePush () {
-        if (this.isPushEnabled) {
+        if (!this.isPushEnabled) {
           this.unsubscribe()
           console.log('toogle false')
 

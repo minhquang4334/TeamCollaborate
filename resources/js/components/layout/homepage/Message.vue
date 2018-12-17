@@ -160,7 +160,10 @@
                     <markdown :text="list.content"></markdown>
 
                 </div>
-                <div class="media cursor-pointer" v-show="!is_children && list.number_children_posts">
+                <div class="comment-image m-auto">
+                    <!--<img src="/images/logo.jpg" class="img-fluid">-->
+                </div>
+                <div class="media cursor-pointer margin-top-10" v-show="!is_children && list.number_children_posts">
                     <p class="media-body small ml-5" @click.prevent="showComment">
                         <strong class="d-block text-gray-dark">{{list.number_children_posts}} reply <i class="fas fa-reply"></i></strong>
 
@@ -219,7 +222,9 @@
         children: [],
         commentReport: {},
         isReportComment: false,
-        react: []
+        react: [],
+        EchoChannelAddress: 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60'),
+
 
       };
     },
@@ -245,6 +250,11 @@
         this.loadComment();
         this.react = this.list.react.data;
       },
+
+      '$route.params.id': function () {
+        this.EchoChannelAddress = 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60');
+        this.subscribeToEcho();
+      }
     },
 
     mounted() {
@@ -402,7 +412,7 @@
       },
 
       showDeleteUser() {
-        return this.currentUser.id === this.creatorId
+        return this.currentUser.id !== this.creatorId
       },
 
       /**
@@ -420,6 +430,10 @@
     },
 
     methods: {
+
+      subscribeToEcho() {
+
+      },
 
 
       directMess(user) {
@@ -540,7 +554,7 @@
        * @return void
        */
       loadMoreComments() {
-        this.childrenLimit += 4;
+        this.childrenLimit += 6;
       },
 
       /**
@@ -792,6 +806,18 @@
         padding-bottom: 0.7em !important;
         padding-right: 1em !important;
         border-left: 2px dashed #e9e9e9 !important;
+    }
+
+    .comment-image {
+        display: block;
+        position: relative;
+        overflow: hidden;
+        border-radius: 4px;
+        background-color: #e8e8e8;
+        height: 100%;
+        cursor: zoom-in;
+        max-width: 90%;
+        max-height: 300px;
     }
 </style>
 

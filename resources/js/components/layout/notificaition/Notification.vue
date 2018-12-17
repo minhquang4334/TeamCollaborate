@@ -17,7 +17,7 @@
 
                 <div class="notification-meta">
                     <small class="timestamp">
-                        <el-tooltip :content="'Created: ' + longDate"
+                        <el-tooltip :content="'Created: ' + longDate(notification.created)"
                                     placement="top"
                                     transition="false"
                                     :open-delay="500">
@@ -35,6 +35,7 @@
 
 <script>
   import {post} from '../../../helper/request.js'
+  import Helpers from '../../../mixins/Helpers';
 
   export default {
     props: {
@@ -43,6 +44,7 @@
         required: true
       }
     },
+    mixins: [Helpers],
 
     methods: {
       markAsRead (notification) {
@@ -55,7 +57,11 @@
       date(time) {
           return moment(time)
             .fromNow(true);
-      }
+      },
+
+      longDate(time) {
+        return this.parseFullDate(time);
+      },
     }
   }
 </script>
