@@ -38,5 +38,7 @@
     <script src="{{ mix('js/app.js') }}"></script>
 
 </body>
+<script>
 
+</script>
 </html>
