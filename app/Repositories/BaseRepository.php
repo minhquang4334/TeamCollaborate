@@ -2,8 +2,13 @@
 
 namespace App\Repositories;
 
+use Illuminate\Support\Facades\DB;
+
 trait BaseRepository
 {
+
+
+
     /**
      * Get number of records
      *
@@ -126,5 +131,38 @@ trait BaseRepository
      */
     public function getByLike($field, $val){
         return $this->model->where($field, 'like', '%' . $val . '%');
+    }
+
+    /**
+     * @param $type
+     * @return records for chart
+     *
+     */
+    public function getChart($type){
+
+        $YEARLY = 'yearly';
+        $MONTHLY = 'monthly';
+        $DAILY = 'daily';
+
+        switch ($type){
+            case $YEARLY:
+                return $this->model
+                    ->select(DB::raw('CONCAT(YEAR(created_at), " year" ) AS period , COUNT(*) AS model'))
+                    ->groupBy('period')
+                    ->get();
+            case $MONTHLY:
+                return $this->model
+                    ->select(DB::raw('CONCAT(YEAR(NOW()), "-", MONTH(created_at)) AS period, COUNT(*) AS model'))
+                    ->whereRaw('YEAR(created_at) = YEAR(NOW())')
+                    ->groupBy('period')
+                    ->get();
+            case $DAILY:
+                return $this->model
+                    ->select(DB::raw('CONCAT(YEAR(NOW()), "-", MONTH(NOW()), "-", DAY(created_at)) AS period, COUNT(*) AS model'))
+                    ->whereRaw('YEAR(created_at) = YEAR(NOW()) AND MONTH(created_at) = MONTH(NOW())')
+                    ->groupBy('period')
+                    ->get();
+        }
+        return null;
     }
 }
