@@ -20,10 +20,15 @@
 
 
     <script>
-        window.Laravel = {
-        csrfToken: "{{ csrf_token() }}"
-        }
 
+        window.Laravel = {!! json_encode([
+                'csrfToken' => csrf_token(),
+                'vapidPublicKey' => config('webpush.vapid.public_key'),
+                'pusher' => [
+            'key' => config('broadcasting.connections.pusher.key'),
+                'cluster' => config('broadcasting.connections.pusher.options.cluster'),
+        ],
+        ]) !!};
         window.User = {!! Auth::user() !!}
 
         window.Language = "{{ config('app.locale') }}"

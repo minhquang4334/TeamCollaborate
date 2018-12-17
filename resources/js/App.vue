@@ -10,6 +10,8 @@
 
 
       created() {
+        var width = $(window).width();
+
         interceptors((err) => {
           console.log("err.responese: " ,err.response);
           if (err.response.status === 401) {

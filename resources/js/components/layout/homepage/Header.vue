@@ -5,13 +5,15 @@
         <div class="navbar-brand ml-3">
             <strong id="Channelname" v-if="inChannel">{{channel.name}}</strong>
             <strong v-else>Home</strong>
-            <small><span class="far fa-user mx-2"></span><span id="member-number">{{numberMemberInChannel}}</span></small>
+            <small><span class="far fa-user mx-2"></span><span id="member-number">{{numberMemberInChannel}}</span>
+            </small>
 
             <span class="mx-3 dropdown" data-toggle="collapse" data-target="#settingDropdown">
                 <a style="cursor: pointer" data-toggle="dropdown">
                     <span class="fas fa-cogs"></span>
                 </a>
-                <div id="settingDropdown" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation" aria-labelledby="notificationDropdown">
+                <div id="settingDropdown" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation"
+                     aria-labelledby="notificationDropdown">
                 <a class="dropdown-item" @click.prevent="showAboutChannel">
                     <p>
                         <span class="fas fa-info-circle mr-2"></span>
@@ -22,6 +24,7 @@
                     <p>
                         <span class="fas fa-bell mr-2"></span>
                         Notification
+                        <notification-subscribe/>
                     </p>
                 </a>
                 <a class="dropdown-item" data-toggle="modal" data-target="#inviteModal" v-show="isShowInvite">
@@ -43,8 +46,9 @@
                     </p>
                 </a>
 
-            </div>
+                </div>
             </span>
+            <notification-drop-down v-show="show_drop_down"/>
             <span class=" dropdown" data-toggle="collapse" data-target="#settingDropdown">
                 <a style="cursor: pointer" data-toggle="dropdown">
                     <span class="fas fa-bell"></span>
@@ -107,7 +111,8 @@
             <form class="form-inline p-3 searchForm" action="/action_page.php">
                 <input class="form-control" type="text" placeholder="Search">
             </form>
-            <span class="dropdown ml-auto margin-right-35 d-none d-md-block" data-toggle="collapse" data-target="#preferencesDropdown2">
+            <span class="dropdown ml-auto margin-right-35 d-none d-md-block" data-toggle="collapse"
+                  data-target="#preferencesDropdown2">
                 <a style="cursor: pointer" data-toggle="dropdown">
                     <img :src="userAvatar" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
                     <span class="online-status online bg-success"></span>
@@ -228,6 +233,8 @@
 <script>
   import {get, del, put} from '../../../helper/request.js'
   import menuList from "./Menu.vue"
+  import NotificationSubscribe from "../notificaition/NotificationSubcribe"
+  import NotificationDropDown from "../notificaition/NotificationDropDown"
 
 
   export default {
@@ -236,78 +243,79 @@
     data() {
       return {
         currentUser: this.$store.state.auth.user,
+        show_drop_down: false,
         isVertical: false,
         channel_id: this.$route.params.id ? this.$route.params.id : 0,
       }
     },
 
-
-
     computed: {
-      inChannel: function() {
+      inChannel: function () {
         return this.channel.channel_id;
       },
 
-      numberMemberInChannel: function() {
-        if(this.inChannel) {
+      numberMemberInChannel: function () {
+        if (this.inChannel) {
           return this.channel.users.data.length;
         }
         return 0;
       },
 
-      userAvatar: function() {
-        if(!this.currentUser.avatar) {
+      userAvatar: function () {
+        if (!this.currentUser.avatar) {
           this.currentUser.avatar = '/images/default-avatar.png'
         }
         return this.currentUser.avatar;
       },
 
-      isShowDeleteChannel: function() {
-        if(this.channel.name === 'General') {
+      isShowDeleteChannel: function () {
+        if (this.channel.name === 'General') {
           return false;
         }
         return this.currentUser.id === this.channel.creator
       },
 
-      isShowLeaveChannel: function() {
-        if(this.channel.name === 'General') {
+      isShowLeaveChannel: function () {
+        if (this.channel.name === 'General') {
           return false;
         }
         return true;
       },
 
-      isShowInvite: function() {
+      isShowInvite: function () {
         return this.isShowLeaveChannel;
       }
 
     },
 
-      components:{
-          menuList
-      },
+    components: {
+      menuList,
+      NotificationSubscribe,
+      NotificationDropDown
+    },
 
     methods: {
       logout: function () {
         this.$store.dispatch('auth/logout')
           .then(() => {
-            this.$router.push({ name: 'login' });
+            this.$router.push({name: 'login'});
           });
       },
 
       preferences: function () {
-        this.$router.push({ name: 'preferences' });
+        this.$router.push({name: 'preferences'});
       },
 
       newchannel: function () {
-        this.$router.push({ name: 'channel' });
+        this.$router.push({name: 'channel'});
       },
 
       showAboutChannel: function () {
-          this.$emit('showAboutChannel');
+        this.$emit('showAboutChannel');
       },
 
       deleteChannel() {
-        if(this.channel.name !== 'General') {
+        if (this.channel.name !== 'General') {
           let url = '/api/channel/destroy?id=' + this.channel.channel_id;
           del(url).then(res => {
             console.log('res: ', res);
@@ -330,10 +338,10 @@
       },
 
       leaveChannel() {
-        if(this.channel.name !== 'General') {
+        if (this.channel.name !== 'General') {
           let url = '/api/channel/leave';
           let payload = {
-            channel_id : this.channel.channel_id
+            channel_id: this.channel.channel_id
           }
           put(url, payload).then(res => {
             console.log('res: ', res);

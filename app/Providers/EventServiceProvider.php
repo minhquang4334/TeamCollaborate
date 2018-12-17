@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\CommentWasCreated;
 use App\Events\OauthRegistered;
 use App\Listeners\AddNewOAuthUserToGeneral;
 use App\Listeners\AddNewUsertoGeneral;
+use App\Listeners\SendCommentWasCreatedNotification;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -25,7 +27,9 @@ class EventServiceProvider extends ServiceProvider
 	    OauthRegistered::class => [
 		    AddNewOAuthUserToGeneral::class
 	    ],
-
+	    CommentWasCreated::class => [
+	    	SendCommentWasCreatedNotification::class
+	    ]
     ];
 
     /**

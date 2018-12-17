@@ -19,19 +19,22 @@ class CommentWasCreated implements ShouldBroadcast
 	public $comment;
 	public $author;
 	public $parentComment;
+	public $followUsers;
 
 	/**
 	 * Create a new event instance.
 	 * @param $comment,
 	 * @param $author,
 	 * @param $parentComment
+	 * @param $followUsers
 	 * @return void
 	 */
-	public function __construct($comment, $author, $parentComment)
+	public function __construct($comment, $author, $parentComment, $followUsers)
 	{
 		$this->comment = $comment;
 		$this->author = $author;
 		$this->parentComment = $parentComment;
+		$this->followUsers = $followUsers;
 
 		$this->dontBroadcastToCurrentUser();
 	}

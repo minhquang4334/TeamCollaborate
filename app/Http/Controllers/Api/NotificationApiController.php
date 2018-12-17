@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\User\Notification;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\ApiController;
 use App\Events\NotificationRead;
 use App\Events\NotificationReadAll;
 use App\Events\NotificationToUser;
@@ -15,12 +14,6 @@ use NotificationChannels\WebPush\PushSubscription;
 
 class NotificationApiController extends ApiController
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->middleware('auth')->except('last', 'dismiss');
-    }
-
     /**
      * Get user's notifications.
      *
@@ -53,7 +46,7 @@ class NotificationApiController extends ApiController
     public function store(Request $request)
     {
         $subUsers = DB::table('push_subscriptions')->get();
-        event(new NotificationToUser($subUsers));
+	    event(new NotificationToUser($subUsers));
         return response()->json('Notification sent.', 201);
     }
 

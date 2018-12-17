@@ -14,6 +14,7 @@ use App\Repositories\PostRepository;
 use App\Repositories\ReactRepository;
 use App\Repositories\ReportRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PostApiController extends ApiController
 {
@@ -193,7 +194,8 @@ class PostApiController extends ApiController
                 }
 	            $this->post->addFollower($follow_post_id, $this->currentUser()->id);
 	            $post->followers;
-				event(new CommentWasCreated($post, $this->currentUser(), null));
+	            $subUsers = DB::table('push_subscriptions')->get();
+	            event(new CommentWasCreated($post, $this->currentUser(), null, $subUsers));
                 return $this->response->withCreated($post);
             }else{
                 return $this->response->withForbidden(trans('messages.user.not_in_channel'));
