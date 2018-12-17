@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Repositories\ChannelRepository;
 use App\Repositories\FileRepository;
+use App\Repositories\PostRepository;
 use App\Repositories\ReportRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -16,12 +17,15 @@ class DashBoardController extends Controller
     protected $channel;
     protected $file;
     protected $report;
-    public function __construct(UserRepository $user, ChannelRepository $channel, FileRepository $file, ReportRepository $report)
+    protected $post;
+    public function __construct(UserRepository $user, ChannelRepository $channel,
+                                FileRepository $file, ReportRepository $report, PostRepository $post)
     {
         $this->user = $user;
         $this->channel = $channel;
         $this->file = $file;
         $this->report = $report;
+        $this->post = $post;
     }
 
     /**
@@ -41,7 +45,8 @@ class DashBoardController extends Controller
 
     public function getChart(Request $request){
         $type = $request->get('type');
-        $data = $this->user->getChart($type);
+        $model = $request->get('model');
+        $data = $this->$model->getChart($type);
         return response()->json(['data' => $data], self::CODE_GET_SUCCESS);
     }
 }

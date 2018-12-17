@@ -55,6 +55,7 @@ Route::group(['namespace' => 'Api'], function () {
             Route::delete('destroy', 'ChannelApiController@destroy');
             Route::post('invite', 'ChannelApiController@invite');
             Route::put('leave', 'ChannelApiController@leave');
+            Route::delete('ban', 'ChannelApiController@removeUserFromChannel');
         });
         Route::group(['prefix' =>'user', 'as' => 'user-info'], function (){
             Route::put('update', 'UserApiController@changeUserProfile');

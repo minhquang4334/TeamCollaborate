@@ -6,6 +6,20 @@
         .row{
             font-size: medium;
         }
+        .yearly{
+            width: 100%;
+        }
+        .daily{
+            width: 100%;
+        }
+        .monthly{
+            width: 100%;
+        }
+        .xchart{
+            float: left;
+            width: 100%;
+            margin: auto;
+        }
     </style>
 @endsection
 @section('pagename')
@@ -112,7 +126,7 @@
             </div>
         </div>
         <!-- /.row -->
-        <div class="row">
+        <div class="row xchart">
             <div class="col-lg-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -123,17 +137,131 @@
                                     Chart Type
                                     <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu pull-right" role="menu">
-                                    <li><a href="#" id="yearly">Yearly</a></li>
-                                    <li><a href="#" id="monthly">Monthly this year</a></li>
-                                    <li><a href="#" id="daily">Daily this month</a></li>
+                                <ul data-name="user" class="dropdown-menu pull-right" role="menu">
+                                    <li><button  class="btn btn-default btn-xs yearly">Yearly</button></li>
+                                    <li><button  class="btn btn-default btn-xs monthly">Monthly this year</button></li>
+                                    <li><button  class="btn btn-default btn-xs daily">Daily this month</button></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
-                        <div id="morris-area-chart" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                        <div id="user-area-chart" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+
+
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-8 -->
+            <div class="col-lg-4">
+            </div>
+            <!-- /.col-lg-4 -->
+        </div>
+
+        <!-- /.row -->
+        <div class="row xchart">
+            <div class="col-lg-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i>Channel Count Chart
+                        <div class="pull-right">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    Chart Type
+                                    <span class="caret"></span>
+                                </button>
+                                <ul data-name="channel" class="dropdown-menu pull-right" role="menu">
+                                    <li><button  class="btn btn-default btn-xs yearly">Yearly</button></li>
+                                    <li><button  class="btn btn-default btn-xs monthly">Monthly this year</button></li>
+                                    <li><button  class="btn btn-default btn-xs daily">Daily this month</button></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="channel-area-chart" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+
+
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-8 -->
+            <div class="col-lg-4">
+            </div>
+            <!-- /.col-lg-4 -->
+        </div>
+
+        <!-- /.row -->
+        <div class="row xchart">
+            <div class="col-lg-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i>Post Count Chart
+                        <div class="pull-right">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    Chart Type
+                                    <span class="caret"></span>
+                                </button>
+                                <ul data-name="post" class="dropdown-menu pull-right" role="menu">
+                                    <li><button  class="btn btn-default btn-xs yearly">Yearly</button></li>
+                                    <li><button  class="btn btn-default btn-xs monthly">Monthly this year</button></li>
+                                    <li><button  class="btn btn-default btn-xs daily">Daily this month</button></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="post-area-chart" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+
+                        </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+
+
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-8 -->
+            <div class="col-lg-4">
+            </div>
+            <!-- /.col-lg-4 -->
+        </div>
+
+        <!-- /.row -->
+        <div class="row xchart">
+            <div class="col-lg-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i>Report Count Chart
+                        <div class="pull-right">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    Chart Type
+                                    <span class="caret"></span>
+                                </button>
+                                <ul data-name="report" class="dropdown-menu pull-right" role="menu">
+                                    <li><button  class="btn btn-default btn-xs yearly">Yearly</button></li>
+                                    <li><button  class="btn btn-default btn-xs monthly">Monthly this year</button></li>
+                                    <li><button  class="btn btn-default btn-xs daily">Daily this month</button></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="report-area-chart" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
 
                         </div>
                     </div>
@@ -162,23 +290,24 @@
     <script>
         $(function() {
 
-            function ajaxGetChart(type){
-                $('#morris-area-chart').empty();
+            function ajaxGetChart(chartId, model, type){
+                $('#' + chartId).empty();
                 $.ajax({
                     type:'get',
                     url: '/admin/dashboard/get-chart',
                     data:{
-                        type: type
+                        type: type,
+                        model: model
                     },
                     success: function (response) {
                         if(!response.error)
                         {
                             Morris.Area({
-                                element: 'morris-area-chart',
+                                element: chartId,
                                 data: response.data,
                                 xkey: 'period',
                                 ykeys: ['model'],
-                                labels: ['User count'],
+                                labels: ['Number of ' + model],
                                 pointSize: 2,
                                 hideHover: 'auto',
                                 resize: true
@@ -195,16 +324,22 @@
                     }
                 });
             }
-            $('#yearly').click(function () {
-                ajaxGetChart('yearly');
+            $('.yearly').click(function () {
+                let model = $(this).closest('ul').data('name');
+                ajaxGetChart(model + '-area-chart', model, 'yearly');
             });
-            $('#monthly').click(function () {
-                ajaxGetChart('monthly');
+            $('.monthly').click(function () {
+                let model = $(this).closest('ul').data('name');
+                ajaxGetChart(model + '-area-chart', model, 'monthly');
             });
-            $('#daily').click(function () {
-                ajaxGetChart('daily');
+            $('.daily').click(function () {
+                let model = $(this).closest('ul').data('name');
+                ajaxGetChart(model + '-area-chart', model, 'daily');
             });
-            ajaxGetChart('yearly');
+            let array = ['user', 'channel', 'post', 'report'];
+            for (let i = 0; i < array.length; i++) {
+                ajaxGetChart(array[i] + '-area-chart', array[i], 'yearly');
+            }
         });
     </script>
 @endsection
