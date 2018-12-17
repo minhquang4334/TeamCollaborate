@@ -46,6 +46,15 @@
         listChannels: [],
         listDirectMessages: [],
         listDirectUsers: [],
+        EchoChannelAddress: 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60'),
+
+      }
+    },
+
+    watch: {
+      '$route.params.id': function() {
+        this.EchoChannelAddress = 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60');
+        this.subscribeToEcho();
       }
     },
 
@@ -55,10 +64,11 @@
       this.$eventHub.$on('deleteChannel', this.leaveChannel);
       this.$eventHub.$on('newDirectMessage', this.newChannel);
       this.getListChannel();
+      this.subscribeToEcho();
     },
 
     beforeDestroy() {
-      this.$eventHub.$off('newComment', this.leaveChannel);
+      this.$eventHub.$off('leaveChannel', this.leaveChannel);
       this.$eventHub.$off('newDirectMessage', this.newChannel);
       this.$eventHub.$off('deleteChannel', this.leaveChannel);
     },
@@ -66,6 +76,20 @@
     computed: {},
 
     methods: {
+      subscribeToEcho() {
+        Echo.private('channel.ASTEAMK60')
+          .listen('.InvitedToChannel', (e) => {
+            let channel = e.data.data;
+            this.pushChannel(channel);
+          })
+          .listen('.ChannelWasDeleted', (e) => {
+          console.log('adsadss: ', e.data)
+          let channelId = e.data
+          this.leaveChannel(channelId);
+        })
+
+      },
+
       channelIconClass: function (type) {
         return type === 0 ? "fab fa-slack-hash text-light" : "fas fa-lock text-light";
       },
@@ -152,7 +176,26 @@
             this.listDirectMessages.splice(index, 1);
           }
         }
-      }
+      },
+
+      pushChannel(channel) {
+        let currentUserId = this.$store.state.auth.user.id;
+        if(channel.users.data.filter((u) => u.id == currentUserId).length) {
+          if (channel.type === 2) {
+            if (!this.listDirectMessages.filter((m) => m.id == channel.id).length) {
+              this.listDirectMessages.push(channel);
+              this.message({
+                type: 'success',
+                message: 'You were invited to ' + channel.name
+              })
+            }
+          } else {
+            if (!this.listChannels.filter((m) => m.id == channel.id).length) {
+              this.listChannels.push(channel);
+            }
+          }
+        }
+      },
 
 
     },

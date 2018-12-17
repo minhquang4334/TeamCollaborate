@@ -217,7 +217,7 @@
         message: '',
         temp: '',
         mentioning: false,
-        EchoChannelAddress: 'submission.' + this.$route.params.slug,
+        EchoChannelAddress: 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60'),
         isTyping: false,
         preview: false,
         showMarkdownGuide: false,
@@ -244,12 +244,14 @@
         channel_id: this.$route.params.id ? this.$route.params.id : 0,
         files : null,
         number_file_send: 0,
+        currentUser: this.$store.state.auth.user
       };
     },
 
     created() {
       console.log(Echo);
-      this.subscribeToEcho();
+      this.subscribeToEcho()
+
       this.$eventHub.$on('edit-comment', this.setEditing);
       this.$eventHub.$on('reply-comment', this.setReplying);
       this.$eventHub.$on('pressed-esc', this.handleEscapteKeyup);
@@ -261,10 +263,25 @@
       this.$eventHub.$off('pressed-esc', this.handleEscapteKeyup);
     },
 
+    mounted() {
+      this.$nextTick(function () {
+
+      })
+
+    },
+
     watch: {
       $route() {
         this.clear();
+      },
+
+      '$route.params.id': function() {
+        this.channel_id = this.$route.params.id ? this.$route.params.id : 0;
+        this.EchoChannelAddress = 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60');
+        this.subscribeToEcho();
+
       }
+
     },
 
     computed: {
@@ -370,9 +387,19 @@
        * @return void
        */
       subscribeToEcho() {
-        if (this.isGuest) return;
-
-        Echo.private(this.EchoChannelAddress);
+        Echo.private(this.EchoChannelAddress)
+          .listen('.CommentWasCreated', (e) => {
+            let newComment = e.data.data;
+            if(newComment.is_parent === 0) {
+              this.$eventHub.$emit('newPost', newComment);
+            } else {
+              this.$eventHub.$emit('newComment', newComment);
+            }
+          })
+          .listen('.CommentWasPatched', (e) => {
+            let newComment = e.data.data;
+            this.$eventHub.$emit('patchedComment', newComment)
+          })
       },
 
       /**
@@ -388,7 +415,7 @@
         if (this.editing) return;
 
         Echo.private(this.EchoChannelAddress).whisper('typing', {
-          username: auth.username
+          username: this.currentUser.name
         });
 
         this.isTyping = true;
@@ -403,7 +430,7 @@
         if (this.isGuest) return;
 
         Echo.private(this.EchoChannelAddress).whisper('finished-typing', {
-          username: auth.username
+          username: this.currentUser.name
         });
 
         this.isTyping = false;
@@ -553,6 +580,7 @@
       },
 
       postComment() {
+        this.loading = true;
         let payload = {};
         if(!this.parent_id) {
           payload = {
@@ -582,7 +610,6 @@
             this.loading = false;
             this.message = this.temp;
           });
-        this.clear();
       }
     }
   }

@@ -29,7 +29,7 @@
 
     data() {
       return {
-        EchoChannelAddress: 'submission.' + this.$route.params.slug,
+        EchoChannelAddress: 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60'),
         typers: []
       };
     },
@@ -41,6 +41,13 @@
 
     beforeDestroy() {
       this.$eventHub.$off('finished-typing', this.finishedTyping);
+    },
+
+    watch: {
+      '$route.params.id' : function() {
+        this.EchoChannelAddress = 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60');
+        this.listen();
+      }
     },
 
     methods: {

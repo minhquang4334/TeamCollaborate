@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Support\Transform;
+use App\Transformers\ChannelTransformer;
 use App\Transformers\PostTransformer;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -12,26 +13,24 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use League\Fractal\Manager;
 
-class CommentWasCreated implements ShouldBroadcast
+class InvitedToChannel implements ShouldBroadcast
 {
 	use Dispatchable, InteractsWithSockets, SerializesModels;
 
-	public $comment;
+	public $channel;
 	public $author;
-	public $parentComment;
 
 	/**
 	 * Create a new event instance.
-	 * @param $comment,
+	 * @param $channel,
 	 * @param $author,
 	 * @param $parentComment
 	 * @return void
 	 */
-	public function __construct($comment, $author, $parentComment)
+	public function __construct($channel, $author)
 	{
-		$this->comment = $comment;
+		$this->channel = $channel;
 		$this->author = $author;
-		$this->parentComment = $parentComment;
 
 		$this->dontBroadcastToCurrentUser();
 	}
@@ -43,13 +42,7 @@ class CommentWasCreated implements ShouldBroadcast
 	 */
 	public function broadcastOn()
 	{
-		$channel = new \App\Model\Channel();
-		$channel = $channel->findOrFail($this->comment->channel_id);
-		if($channel) {
-			$channelId = $channel->channel_id;
-			//dd('channel.'.$channelId);
-			return new PrivateChannel('channel.'.$channelId);
-		}
+		return new PrivateChannel('channel.'.\App\Model\Channel::GENERAL_CHANNEL_ID);
 	}
 
 
@@ -58,12 +51,12 @@ class CommentWasCreated implements ShouldBroadcast
 		$manager = new Manager();
 		$transform = new Transform($manager);
 		return [
-			'data' => $transform->item($this->comment, new PostTransformer())
+			'data' => $transform->item($this->channel, new ChannelTransformer())
 		];
 	}
 
 	public function broadcastAs()
 	{
-		return 'CommentWasCreated';
+		return 'InvitedToChannel';
 	}
 }

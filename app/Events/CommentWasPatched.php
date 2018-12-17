@@ -2,12 +2,15 @@
 
 namespace App\Events;
 
+use App\Support\Transform;
+use App\Transformers\PostTransformer;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Tymon\JWTAuth\Manager;
 
 class CommentWasPatched implements ShouldBroadcast
 {
@@ -40,18 +43,27 @@ class CommentWasPatched implements ShouldBroadcast
 	 */
 	public function broadcastOn()
 	{
-
+		$channel = new \App\Model\Channel();
+		$channel = $channel->findOrFail($this->comment->channel_id);
+		if($channel) {
+			$channelId = $channel->channel_id;
+			//dd('channel.'.$channelId);
+			return new PrivateChannel('channel.'.$channelId);
+		}
 	}
 
-	/**
-	 * Get the data to broadcast.
-	 *
-	 * @return array
-	 */
+
 	public function broadcastWith()
 	{
+		$manager = new \League\Fractal\Manager();
+		$transform = new Transform($manager);
 		return [
-
+			'data' => $transform->item($this->comment, new PostTransformer())
 		];
+	}
+
+	public function broadcastAs()
+	{
+		return 'CommentWasPatched';
 	}
 }
