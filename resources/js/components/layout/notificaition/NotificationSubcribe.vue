@@ -1,19 +1,16 @@
 <template>
     <div class="form-group">
-        <label class="control-sidebar-subheading">
-            Turn off notifications
-            <input type="checkbox" class="pull-right notification-turn-off" :checked="isPushEnabled" @click="togglePush">
-            <meta name="csrf-token" content="{!! csrf_field() !!}" aria-disabled="true">
-        </label>
+        <input type="checkbox" class="pull-right notification-turn-off" v-model="isPushEnabled" @click="togglePush">
     </div>
 </template>
 <script>
-  import axios from 'axios'
-  import {post} from '../../helper/request.js'
+  import {get, post, del} from '../../../helper/request.js'
   export default {
-    data: () => ({
-      isPushEnabled: false,
-    }),
+    data () {
+      return {
+        isPushEnabled: false,
+      }
+    },
 
     mounted () {
       this.registerServiceWorker();
@@ -21,7 +18,7 @@
 
     methods: {
       registerServiceWorker() {
-        let myWorker = new Worker('sw.js');
+        let myWorker = new Worker('/service-worker.js');
         //myWorker.addEventListener('message', );
         let data = {
           token: window.localStorage.getItem('token'),
@@ -34,8 +31,10 @@
           return
         }
 
-        navigator.serviceWorker.register('/sw.js')
-          .then(() => this.initialiseServiceWorker())
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(() => {
+            this.initialiseServiceWorker();
+          })
       },
 
       initialiseServiceWorker () {
@@ -57,12 +56,13 @@
         navigator.serviceWorker.ready.then(registration => {
           registration.pushManager.getSubscription()
             .then(subscription => {
+              console.log('subscription: ', subscription);
               if (!subscription) {
                 return
               }
               this.updateSubscription(subscription)
 
-              this.isPushEnabled = true
+              this.isPushEnabled = true;
             })
             .catch(e => {
               console.log('Error during getSubscription()', e)
@@ -86,13 +86,15 @@
               this.updateSubscription(subscription)
             })
             .catch(e => {
+              console.log('error')
               if (Notification.permission === 'denied') {
                 console.log('Permission for Notifications was denied')
               } else {
                 console.log('Unable to subscribe to push.', e)
               }
               this.isPushEnabled = false
-            })
+            }).finally(() => {
+          })
         })
       },
 
@@ -117,14 +119,6 @@
         })
       },
 
-      togglePush () {
-        if (this.isPushEnabled) {
-          this.unsubscribe()
-        } else {
-          this.subscribe()
-        }
-      },
-
       updateSubscription (subscription) {
         const key = subscription.getKey('p256dh')
         const token = subscription.getKey('auth')
@@ -139,7 +133,7 @@
 
       deleteSubscription (subscription) {
 
-        post('/api/user/subscriptions/delete', { endpoint: subscription.endpoint })
+        del('/api/user/subscriptions/delete?endpoint='+ subscription.endpoint)
       },
 
       urlBase64ToUint8Array (base64String) {
@@ -156,6 +150,18 @@
         }
 
         return outputArray
+      },
+
+      togglePush () {
+        if (this.isPushEnabled) {
+          this.unsubscribe()
+          console.log('toogle false')
+
+        } else {
+          this.subscribe()
+          console.log('toogle true')
+
+        }
       },
 
     }

@@ -11,14 +11,17 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends AbstractUser implements JWTSubject, MustVerifyEmail
 {
     use Notifiable;
     use SoftDeletes;
+	use HasPushSubscriptions;
 
-    //use FormAccessible;
+
+	//use FormAccessible;
     //use HasPushSubscriptions;
 
     protected $table = 'users';

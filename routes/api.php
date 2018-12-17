@@ -64,6 +64,14 @@ Route::group(['namespace' => 'Api'], function () {
             Route::get('users', 'UserApiController@getListUserInChannel');
             Route::put('change-name', 'UserApiController@changeDisplayName');
             Route::post('avatar', 'UserApiController@changeUserAvatar');
+	        Route::post('subscriptions', 'PushSubscriptionApiController@update');
+	        Route::delete('subscriptions/delete', 'PushSubscriptionApiController@destroy');
+            Route::get('get-notifications', 'NotificationApiController@index');
+	        Route::post('notifications', 'NotificationApiController@store');
+	        Route::patch('notifications/{id}/read', 'NotificationApiController@markAsRead');
+	        Route::post('notifications/mark-all-read', 'NotificationApiController@markAllRead');
+	        Route::post('notifications/{id}/dismiss', 'NotificationApiController@dismiss');
+
         });
         Route::group(['prefix' => 'post', 'as' => 'post'], function (){
             Route::post('add', 'PostApiController@add');

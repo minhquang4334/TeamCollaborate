@@ -17,7 +17,15 @@
 
                 <div class="notification-meta">
                     <small class="timestamp">
-                        <timeago :since="notification.created" :auto-update="30"></timeago>
+                        <el-tooltip :content="'Created: ' + longDate"
+                                    placement="top"
+                                    transition="false"
+                                    :open-delay="500">
+                            <a class="date margin-right-1"
+                               @click.prevent="openOrigin">
+                                {{ date(notification.created) }}
+                            </a>
+                        </el-tooltip>
                     </small>
                 </div>
             </div>
@@ -26,7 +34,7 @@
 </template>
 
 <script>
-  import {post} from '../../helper/request.js'
+  import {post} from '../../../helper/request.js'
 
   export default {
     props: {
@@ -42,6 +50,11 @@
           this.$emit('read')
         }
         window.open(notification.action_url, '_blank')
+      },
+
+      date(time) {
+          return moment(time)
+            .fromNow(true);
       }
     }
   }

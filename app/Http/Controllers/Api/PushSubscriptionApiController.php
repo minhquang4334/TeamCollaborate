@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User\Notification;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\ApiController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -13,7 +13,6 @@ class PushSubscriptionApiController extends ApiController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('auth');
     }
 
     /**
@@ -33,6 +32,8 @@ class PushSubscriptionApiController extends ApiController
             $request->key,
             $request->token
         );
+
+        return response()->json(['message' => 'ok'], 204);
     }
 
     /**
@@ -47,6 +48,6 @@ class PushSubscriptionApiController extends ApiController
 
         $request->user()->deletePushSubscription($request->endpoint);
 
-        return response()->json(null, 204);
+        return response()->json(['message' => 'ok'], 204);
     }
 }

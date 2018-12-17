@@ -15,11 +15,11 @@
             </div>
 
             <ul class="dropdown-menu">
-                <notification v-for="notification in notifications"
-                              :key="notification.id"
+                <notification v-for="(notification,index) in notifications"
+                              :key="index"
                               :notification="notification"
                               v-on:read="markAsRead(notification)"
-                ></notification>
+                />
 
                 <li v-if="!numberNotify" class="notification">
                     You don't have any unread notifications.
@@ -34,18 +34,19 @@
 </template>
 
 <script>
-  import $ from 'jquery'
-  import axios from 'axios'
   import Notification from './Notification.vue'
-  import {get,post,patch} from '../../helper/request.js'
+  import {get,post,patch} from '../../../helper/request.js'
 
   export default {
     components: { Notification },
 
-    data: () => ({
-      total: 0,
-      notifications: []
-    }),
+    data() {
+      return {
+        total: 0,
+        notifications: [],
+        currentUser: this.$store.state.auth.user
+      }
+    },
 
     mounted () {
       this.fetch()
@@ -87,20 +88,30 @@
        * @param {Number} limit
        */
       fetch (limit = 5) {
-        get('/api/user/get-notifications', { params: { limit }})
+        get('/api/user/get-notifications?limit=' + limit)
           .then(({ data: { total, notifications }}) => {
-            this.total = total
-            this.notifications = notifications.map(({ id, data, created, is_read }) => {
-              return {
-                id: id,
-                title: data.title,
-                body: data.body,
-                created: created,
-                action_url: data.action_url,
-                is_read: is_read,
-              }
+            if(total > 0) {
+              this.total = total
+              this.notifications = notifications.map(({ id, data, created, is_read }) => {
+                return {
+                  id: id,
+                  title: data.title,
+                  body: data.body,
+                  created: created,
+                  action_url: data.action_url,
+                  is_read: is_read,
+                }
+              })
+            }
+            else {
+              this.total = 0;
+            }
+          }).catch(err => {
+            this.$message({
+              type: 'error',
+              message: 'Something error: ', err
             })
-          })
+        })
       },
 
       /**
@@ -137,7 +148,7 @@
        * Listen for Echo push notifications.
        */
       listen () {
-        window.Echo.private(`App.User.${window.Laravel.user.id}`)
+        window.Echo.private(`App.User.${this.currentUser.id}`)
           .notification(notification => {
             this.total++
             this.notifications.unshift(notification)
