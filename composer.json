@@ -15,7 +15,8 @@
         "league/fractal": "^0.17.0",
         "league/html-to-markdown": "^4.8",
         "pusher/pusher-php-server": "^3.2",
-        "tymon/jwt-auth": "dev-develop"
+        "tymon/jwt-auth": "dev-develop",
+        "ext-fileinfo": "*"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

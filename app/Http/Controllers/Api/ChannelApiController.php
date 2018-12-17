@@ -251,7 +251,7 @@ class ChannelApiController extends ApiController
      * @method DELETE
      * @usage http://localhost:8000/api/channel/ban?channel_id=1&user_id=2
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse information of banned user
      */
     public function removeUserFromChannel(Request $request){
         $currentUser = $this->currentUser();
@@ -264,9 +264,9 @@ class ChannelApiController extends ApiController
                 }
                 $user = $this->user->getById($userId);
                 //remove user from participations table
-                $user->channels->detach();
+                $user->channels()->detach();
                 // remove post in this channel
-                $user->post->where('channel_id', $channel->id)->delete();
+                $user->posts()->where('channel_id', $channel->id)->delete();
                 return $this->response->withUpdated($user);
             }else{
                 return $this->response->withForbidden(trans('messages.user.permission_deny'));
