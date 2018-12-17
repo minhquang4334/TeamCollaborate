@@ -53,7 +53,6 @@
                     <a style="cursor: pointer" data-toggle="dropdown">
                         <img :src="userAvatar" class="rounded-circle" style="width: 50px;height:50px" alt="profile-img">
                         <span class="online-status online bg-success"></span>
-                        <strong class="ml-3">{{currentUser.name}}</strong>
                     </a>
                     <div id="preferencesDropdown" class="dropdown-menu navbar-dropdown preview-list  dropdownAnimation">
                         <a class="dropdown-item" @click="preferences()">
@@ -80,7 +79,7 @@
         </button>
 
         <!-- Navbar links -->
-        <div class="collapse navbar-collapse" id="navbarSupportedConten">
+        <div class="collapse navbar-collapse" id="navbarSupportedConten" style="z-index: 1000">
 
 
             <menu-list :channel_id="channel_id" :isVertical="isVertical"/>
