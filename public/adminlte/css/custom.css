@@ -48,6 +48,13 @@ html,css{
     .searchForm input{
         width: 100%;
     }
+
+    #rightElement{
+        position: absolute;
+        z-index: -1;
+        background: white;
+        padding-right: 50px;
+    }
 }
 
 #files .nav-link:hover{

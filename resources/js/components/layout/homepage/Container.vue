@@ -1,5 +1,5 @@
 <template>
-    <div class="row px-3 h-90">
+    <div class="row px-3 h-90 position-relative">
         <div id="leftElement" class="col-md-7 h-100 border-right px-0">
             <message-list
                     :listMessages="listMessages"
@@ -15,7 +15,7 @@
                     :comment_form_textarea="`post-form-textarea`"
             />
         </div>
-        <div id="rightElement" class="col-md-5 h-100 d-none d-md-block">
+        <div id="rightElement" class="col-md-5 h-100 ">
             <about-channel v-if="rightBox === 1"
                            :channelDetail="channelDetail"
                            @showProfile="showProfile"
@@ -233,11 +233,13 @@
 
       showComment(list) {
         this.$emit('showComment');
+        $("#rightElement").css("z-index","1");
         this.threadDetail = list;
       },
 
       showProfile(user) {
         this.$emit('showProfile', user);
+        $("#rightElement").css("z-index","1");
       },
       removeUser() {
         $("#removeUser").modal("show");
