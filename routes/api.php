@@ -89,5 +89,12 @@ Route::group(['namespace' => 'Api'], function () {
             Route::get('list-comment', 'PostApiController@getListComment');
 
         });
+
+        Route::group(['prefix' => 'file', 'as' => 'file'], function (){
+            Route::post('upload', 'FileApiController@upload');
+            Route::get('list', 'FileApiController@getListFile');
+            Route::delete('delete', 'FileApiController@removeFile');
+            Route::get('path', 'FileApiController@getFilePath');
+        });
 	});
 });

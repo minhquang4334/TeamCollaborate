@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\User\ChangeDisplayNameRequest;
 use App\Http\Requests\User\ChangePasswordRequest;
 use App\Http\Requests\User\EditInfoRequest;
-use App\Model\User;
 use App\Repositories\ChannelRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
