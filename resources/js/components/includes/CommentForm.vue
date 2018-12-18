@@ -244,7 +244,8 @@
         channel_id: this.$route.params.id ? this.$route.params.id : 0,
         files : null,
         number_file_send: 0,
-        currentUser: this.$store.state.auth.user
+        currentUser: this.$store.state.auth.user,
+        isSubmitFile: false,
       };
     },
 
@@ -323,7 +324,8 @@
       },
 
       submitFile() {
-
+        this.isSubmitFile = true;
+        this.submit();
       },
 
       typed(string) {
@@ -562,13 +564,18 @@
           .then(() => {
             this.editingComment.content = this.temp;
             this.$eventHub.$emit('patchedComment', this.editingComment);
-
-            this.clear();
+            if(this.isSubmitFile) {
+              this.upload();
+            }
           })
           .catch((error) => {
             this.loading = false;
             this.message = this.temp;
-          });
+
+          }).finally(() => {
+          this.clear();
+        })
+        ;
       },
 
       postComment() {
@@ -595,12 +602,38 @@
             } else {
               this.$eventHub.$emit('newComment', response.data.data);
             }
-
-            this.clear();
+            if(this.isSubmitFile) {
+              this.upload();
+            }
           })
           .catch((error) => {
             this.loading = false;
             this.message = this.temp;
+          }).finally(() => {
+          this.clear();
+        });
+      },
+
+      upload() {
+        let formData = new FormData();
+        formData.append('file', this.files[0]);
+        post('/api/user/avatar', this.avatar.fileUploadFormData)
+          .then((response) => {
+            //location.reload();
+            this.currentUser.avatar = response.data.image_address
+            this.avatar.uploading = false;
+            this.$message({
+              type: 'success',
+              message: 'User Avatar Update Successfully'
+            });
+          })
+          .catch((error) => {
+            this.avatar.errors = error.response.data.errors;
+            this.avatar.uploading = false;
+            this.$message({
+              type: 'error',
+              message: 'Some thing error'
+            });
           });
       }
     }
