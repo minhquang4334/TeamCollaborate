@@ -135,7 +135,7 @@
 
                                 <el-dropdown-item class="go-red"
                                                   @click.native="destroy"
-                                                  v-if="owns">
+                                                  v-if="canDelete">
                                     Delete
                                 </el-dropdown-item>
 
@@ -340,6 +340,9 @@
         return listLike.length;
       },
 
+      canDelete() {
+        return this.owns || !this.showDeleteUser;
+      },
       /**
        * Does the auth user own the submission
        *

@@ -324,3 +324,8 @@
     },
   }
 </script>
+<style>
+    .dropdown-menu {
+        z-index: 2000;
+    }
+</style>
