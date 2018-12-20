@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\FileUploaded;
 use App\Http\Requests\User\FileRequest;
 use App\Repositories\ChannelRepository;
 use App\Repositories\FileRepository;
@@ -38,7 +39,7 @@ class FileApiController extends ApiController
         try{
 
             $channelID = $request->get('channel_id');
-            $channel = $this->channel->getById($channelID);
+            $channel = $this->channel->getChannelById($channelID);
 
             // Check user is in channel
             if($this->currentUser()->channels->contains($channel)) {
@@ -53,13 +54,15 @@ class FileApiController extends ApiController
 
                 // upload it
                 Storage::putFileAs('public/' . $channelID, $file, $filename);
-                $fileAddress = '/' . $channelID . '/' . $filename;
+                $fileAddress = 'storage/' . $channelID . '/' . $filename;
 
                 $stored = $this->file->store(array_merge($request->all(), ['is_image' => $isImage,
                     'file_path' => $fileAddress,
                     'file_name' => $file->getClientOriginalName(),
-                    'creator'   => $this->currentUser()->id
+                    'creator'   => $this->currentUser()->id,
+                    'channel_id'   => $channel->id
                 ]));
+                event(new FileUploaded($stored, $channelID));
                 return $this->response->withCreated($stored);
             }else{
                 return $this->response->withForbidden(trans('messages.user.permission_deny'));

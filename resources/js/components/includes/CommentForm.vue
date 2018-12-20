@@ -515,7 +515,9 @@
       },
 
       submit(event) {
-        event.preventDefault();
+        if(!this.isSubmitFile) {
+          event.preventDefault();
+        }
 
         // ignore if any quick pciking box is open
         if (
@@ -561,11 +563,11 @@
           content: this.temp,
           post_id: this.editingComment.id
         })
-          .then(() => {
+          .then((res) => {
             this.editingComment.content = this.temp;
             this.$eventHub.$emit('patchedComment', this.editingComment);
             if(this.isSubmitFile) {
-              this.upload();
+              this.upload(this.editingComment.id);
             }
           })
           .catch((error) => {
@@ -603,7 +605,9 @@
               this.$eventHub.$emit('newComment', response.data.data);
             }
             if(this.isSubmitFile) {
-              this.upload();
+              if(response.data.data) {
+                this.upload(response.data.data.id);
+              }
             }
           })
           .catch((error) => {
@@ -614,27 +618,28 @@
         });
       },
 
-      upload() {
+      upload(postId) {
+        $('#fileModal').modal('toggle');
         let formData = new FormData();
         formData.append('file', this.files[0]);
-        post('/api/user/avatar', this.avatar.fileUploadFormData)
+        let url = '/api/file/upload'
+        let channel_id = this.$route.params.id ? this.$route.params.id : 'ASTEAMK60';
+        formData.append('channel_id', channel_id)
+        formData.append('post_id', postId);
+        post(url, formData)
           .then((response) => {
             //location.reload();
-            this.currentUser.avatar = response.data.image_address
-            this.avatar.uploading = false;
-            this.$message({
-              type: 'success',
-              message: 'User Avatar Update Successfully'
-            });
+            this.$eventHub.$emit('uploadFile', response.data.data);
           })
           .catch((error) => {
-            this.avatar.errors = error.response.data.errors;
-            this.avatar.uploading = false;
+            console.log(error);
             this.$message({
               type: 'error',
               message: 'Some thing error'
             });
-          });
+          }).finally(() => {
+            this.isSubmitFile = false;
+        });
       }
     }
   }

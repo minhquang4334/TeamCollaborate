@@ -7,7 +7,7 @@ use League\Fractal\TransformerAbstract;
 class PostTransformer extends TransformerAbstract {
 
 	protected $defaultIncludes  = [
-		'creator', 'react'
+		'creator', 'react', 'files'
 	];
 
     public function transform(Post $post) {
@@ -38,6 +38,12 @@ class PostTransformer extends TransformerAbstract {
 	{
 		if ($react = $post->reacts()->get()) {
 			return $this->collection($react, new ReactTransformer());
+		}
+	}
+
+	public function includeFiles(Post $post) {
+		if ($files = $post->files()->get()) {
+			return $this->collection($files, new FileTransformer());
 		}
 	}
 }
