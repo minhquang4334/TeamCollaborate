@@ -222,13 +222,14 @@ class PostApiController extends ApiController
             $id = $request->get('post_id');
             if($id) {
 	            $post = $this->post->getById($id);
-	            if($post->creator == $this->currentUser()->id) {
+	            $channel_id = $post->channel_id;
+	            $channel = new Channel();
+	            $channel = $channel->findOrFail($channel_id);
+	            dd($this->currentUser()->id);
+	            if(($post->creator == $this->currentUser()->id) || ($this->currentUser()->id == $channel->creator)) {
 		            if(!$post->is_parent) {
 			            $post->children()->delete();
 		            }
-		            $channel_id = $post->channel_id;
-		            $channel = new Channel();
-		            $channel = $channel->findOrFail($channel_id);
 		            $this->post->destroy($id);
 		            event(new CommentWasDeleted($id, $this->currentUser(), $channel->channel_id));
 		            return $this->response->withUpdated($post);
