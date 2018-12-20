@@ -43,17 +43,18 @@
         if(start < 0) {
           start = 0;
         }
-        return this.listMessages.slice(start, this.listMessages.length - 1);
+        return this.listMessages.slice(start, this.listMessages.length);
       }
 
     },
 
     created() {
       this.$eventHub.$on('showPinItem', this.showPinnedItem);
+      this.$eventHub.$on('uploadFile', this.uploadFile);
     },
 
     beforeDestroy() {
-      this.$eventHub.$off('showPinItem', this.showPinnedItem);
+      this.$eventHub.$off('uploadFile', this.uploadFile);
     },
 
     methods: {
@@ -82,6 +83,16 @@
           }
         }
       },
+
+      uploadFile(file) {
+        console.log('file: ', file);
+        let upLoadFile = this.listMessages.filter(m => (m.id == file.post_id))[0];
+        console.log('fileUploaded: ', upLoadFile);
+        if(upLoadFile) {
+          upLoadFile.files.data.push(file);
+        }
+      },
+
       loadMoreComments() {
         this.listLimit += 6;
       },

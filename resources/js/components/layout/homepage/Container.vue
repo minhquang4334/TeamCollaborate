@@ -156,6 +156,13 @@
 
             }
           })
+          .listen('.FileUploaded', (e) => {
+            console.log('adasdsd');
+            let file = e.data.data;
+            if(file) {
+              this.$eventHub.$emit('uploadFile', file)
+            }
+          })
       },
 
       echoDelete(id) {

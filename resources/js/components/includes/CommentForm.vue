@@ -244,7 +244,8 @@
         channel_id: this.$route.params.id ? this.$route.params.id : 0,
         files : null,
         number_file_send: 0,
-        currentUser: this.$store.state.auth.user
+        currentUser: this.$store.state.auth.user,
+        isSubmitFile: false,
       };
     },
 
@@ -323,7 +324,8 @@
       },
 
       submitFile() {
-
+        this.isSubmitFile = true;
+        this.submit();
       },
 
       typed(string) {
@@ -513,7 +515,9 @@
       },
 
       submit(event) {
-        event.preventDefault();
+        if(!this.isSubmitFile) {
+          event.preventDefault();
+        }
 
         // ignore if any quick pciking box is open
         if (
@@ -559,16 +563,21 @@
           content: this.temp,
           post_id: this.editingComment.id
         })
-          .then(() => {
+          .then((res) => {
             this.editingComment.content = this.temp;
             this.$eventHub.$emit('patchedComment', this.editingComment);
-
-            this.clear();
+            if(this.isSubmitFile) {
+              this.upload(this.editingComment.id);
+            }
           })
           .catch((error) => {
             this.loading = false;
             this.message = this.temp;
-          });
+
+          }).finally(() => {
+          this.clear();
+        })
+        ;
       },
 
       postComment() {
@@ -595,13 +604,42 @@
             } else {
               this.$eventHub.$emit('newComment', response.data.data);
             }
-
-            this.clear();
+            if(this.isSubmitFile) {
+              if(response.data.data) {
+                this.upload(response.data.data.id);
+              }
+            }
           })
           .catch((error) => {
             this.loading = false;
             this.message = this.temp;
-          });
+          }).finally(() => {
+          this.clear();
+        });
+      },
+
+      upload(postId) {
+        $('#fileModal').modal('toggle');
+        let formData = new FormData();
+        formData.append('file', this.files[0]);
+        let url = '/api/file/upload'
+        let channel_id = this.$route.params.id ? this.$route.params.id : 'ASTEAMK60';
+        formData.append('channel_id', channel_id)
+        formData.append('post_id', postId);
+        post(url, formData)
+          .then((response) => {
+            //location.reload();
+            this.$eventHub.$emit('uploadFile', response.data.data);
+          })
+          .catch((error) => {
+            console.log(error);
+            this.$message({
+              type: 'error',
+              message: 'Some thing error'
+            });
+          }).finally(() => {
+            this.isSubmitFile = false;
+        });
       }
     }
   }

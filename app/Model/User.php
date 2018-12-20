@@ -13,8 +13,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use NotificationChannels\WebPush\HasPushSubscriptions;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Contracts\Auth\CanResetPassword;
 
-class User extends AbstractUser implements JWTSubject, MustVerifyEmail
+class User extends AbstractUser implements JWTSubject, MustVerifyEmail, CanResetPassword
 {
     use Notifiable;
     use SoftDeletes;

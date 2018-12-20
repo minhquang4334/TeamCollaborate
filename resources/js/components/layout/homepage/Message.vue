@@ -160,9 +160,17 @@
                     <markdown :text="list.content"></markdown>
 
                 </div>
-                <div class="comment-image m-auto">
-                    <!--<img src="/images/logo.jpg" class="img-fluid">-->
-                </div>
+                <template v-if="list.files.data.length">
+                    <div class="comment-image m-auto" v-if="list.files.data[0].is_image">
+                        <img :src="list.files.data[0].file_path" class="img-fluid">
+                    </div>
+                    <div v-else>
+                        <span>
+                        {{list.files.data[0].file_name}}
+                        </span>
+                    </div>
+                </template>
+
                 <div class="media cursor-pointer margin-top-10" v-show="!is_children && list.number_children_posts">
                     <p class="media-body small ml-5" @click.prevent="showComment">
                         <strong class="d-block text-gray-dark">{{list.number_children_posts}} reply <i class="fas fa-reply"></i></strong>
@@ -817,7 +825,7 @@
         height: 100%;
         cursor: zoom-in;
         max-width: 90%;
-        max-height: 300px;
+        max-height: 500px;
     }
 </style>
 
