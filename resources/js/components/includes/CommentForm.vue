@@ -635,7 +635,7 @@
             console.log(error);
             this.$message({
               type: 'error',
-              message: 'Some thing error'
+              message: 'Some thing error when uploading file'
             });
           }).finally(() => {
             this.isSubmitFile = false;

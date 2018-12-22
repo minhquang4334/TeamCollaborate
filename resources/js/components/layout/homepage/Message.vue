@@ -161,11 +161,11 @@
 
                 </div>
                 <template v-if="list.files.data.length">
-                    <div class="comment-image m-auto" v-if="list.files.data[0].is_image">
+                    <div class="comment-image m-auto" v-if="list.files.data[0].is_image" @click="showImage(list.files.data[0])">
                         <img :src="list.files.data[0].file_path" class="img-fluid">
                     </div>
                     <div v-else>
-                        <span>
+                        <span class="cursor-pointer link-color" @click="download(list.files.data[0])">
                         {{list.files.data[0].file_name}}
                         </span>
                     </div>
@@ -178,6 +178,11 @@
                     </p>
                 </div>
             </div>
+            <image-show
+                    v-show="isShowImage"
+                    :image="imageShow"
+                    @close="isShowImage = false"
+                    :visible="isShowImage"/>
             <div class="comments"
                  v-if="isShowChild">
                 <message :list="c"
@@ -202,6 +207,7 @@
 
 <script>
   import Markdown from '../../includes/Markdown.vue';
+  import ImageShow from '../../includes/ImageShow.vue';
   import ReportComment from '../../includes/ReportComment.vue';
   import Helpers from '../../../mixins/Helpers';
   import {get, put, post, del} from '../../../helper/request'
@@ -213,13 +219,15 @@
 
     components: {
       Markdown,
-      ReportComment
+      ReportComment,
+      ImageShow
     },
 
     mixins: [Helpers],
 
     data() {
       return {
+        isShowImage: false,
         editing: false,
         body: this.list.content.text,
         visible: true,
@@ -231,6 +239,7 @@
         commentReport: {},
         isReportComment: false,
         react: [],
+        imageShow: {},
         EchoChannelAddress: 'channel.' + (this.$route.params.id ? this.$route.params.id : 'ASTEAMK60'),
 
 
@@ -441,6 +450,11 @@
     },
 
     methods: {
+
+      showImage(image) {
+        this.isShowImage = true;
+        this.imageShow = image;
+      },
 
       subscribeToEcho() {
 

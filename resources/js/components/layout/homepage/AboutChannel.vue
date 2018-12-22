@@ -106,106 +106,25 @@
                 </h5>
             </div>
             <div id="files" class="collapse" data-parent="#accordion">
-                <div class="card-body">
+                <div class="card-body scroll-list-file">
                     <ul class="list-group">
-                        <li class="list-group-item">
+                        <li class="list-group-item" v-for="(file, index) in channelDetail.listFile">
                             <span class="dropdown float-right">
                                 <a href="#" role="button"data-toggle="dropdown" class="text-dark" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="#">Share</a>
-                                    <a class="dropdown-item" href="#">Copy link</a>
-                                    <a class="dropdown-item" href="#">Star file</a>
-                                    <a class="dropdown-item" href="#">View detail</a>
-                                    <a class="dropdown-item" href="#">Download</a>
-                                    <a class="dropdown-item" href="#">Create external link</a>
+                                    <a class="dropdown-item" @click="copy(file.file_path)">Copy link</a>
+                                    <a class="dropdown-item" @click="download(file)">Download</a>
                                 </div>
                             </span>
                             <i class="far fa-file mr-2"></i>
-                            File 1
-                            <p class="text-muted">
-                                <strong class="username">Thanh Binh</strong> <small class="timeOfFile">Sep 30th at 8:40</small>
-                            </p>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="dropdown float-right">
-                                <a href="#" role="button"data-toggle="dropdown" class="text-dark" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="#">Share</a>
-                                    <a class="dropdown-item" href="#">Copy link</a>
-                                    <a class="dropdown-item" href="#">Star file</a>
-                                    <a class="dropdown-item" href="#">View detail</a>
-                                    <a class="dropdown-item" href="#">Download</a>
-                                    <a class="dropdown-item" href="#">Create external link</a>
-                                </div>
+                            <span class="cursor-pointer link-color" @click="download(file)">
+                                {{file.file_name}}
                             </span>
-                            <i class="far fa-file mr-2"></i>
-                            File 1
                             <p class="text-muted">
-                                <strong class="username">Thanh Binh</strong> <small class="timeOfFile">Sep 30th at 8:40</small>
-                            </p>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="dropdown float-right">
-                                <a href="#" role="button"data-toggle="dropdown" class="text-dark" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="#">Share</a>
-                                    <a class="dropdown-item" href="#">Copy link</a>
-                                    <a class="dropdown-item" href="#">Star file</a>
-                                    <a class="dropdown-item" href="#">View detail</a>
-                                    <a class="dropdown-item" href="#">Download</a>
-                                    <a class="dropdown-item" href="#">Create external link</a>
-                                </div>
-                            </span>
-                            <i class="far fa-file mr-2"></i>
-                            File 1
-                            <p class="text-muted">
-                                <strong class="username">Thanh Binh</strong> <small class="timeOfFile">Sep 30th at 8:40</small>
-                            </p>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="dropdown float-right">
-                                <a href="#" role="button"data-toggle="dropdown" class="text-dark" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="#">Share</a>
-                                    <a class="dropdown-item" href="#">Copy link</a>
-                                    <a class="dropdown-item" href="#">Star file</a>
-                                    <a class="dropdown-item" href="#">View detail</a>
-                                    <a class="dropdown-item" href="#">Download</a>
-                                    <a class="dropdown-item" href="#">Create external link</a>
-                                </div>
-                            </span>
-                            <i class="far fa-file mr-2"></i>
-                            File 1
-                            <p class="text-muted">
-                                <strong class="username">Thanh Binh</strong> <small class="timeOfFile">Sep 30th at 8:40</small>
-                            </p>
-                        </li>
-                        <li class="list-group-item">
-                            <span class="dropdown float-right">
-                                <a href="#" role="button"data-toggle="dropdown" class="text-dark" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item" href="#">Share</a>
-                                    <a class="dropdown-item" href="#">Copy link</a>
-                                    <a class="dropdown-item" href="#">Star file</a>
-                                    <a class="dropdown-item" href="#">View detail</a>
-                                    <a class="dropdown-item" href="#">Download</a>
-                                    <a class="dropdown-item" href="#">Create external link</a>
-                                </div>
-                            </span>
-                            <i class="far fa-file mr-2"></i>
-                            File 1
-                            <p class="text-muted">
-                                <strong class="username">Thanh Binh</strong> <small class="timeOfFile">Sep 30th at 8:40</small>
+                                <strong class="username">{{file.creator_name}}</strong>
+                                <small class="timeOfFile" v-if="file.created_at">{{date(file.created_at.date)}}</small>
                             </p>
                         </li>
 
@@ -240,6 +159,11 @@
       },
 
       methods:{
+        date(time) {
+          return moment(time)
+            .fromNow(true);
+        },
+
         directMess(user) {
           let type = 2;
           let invited_users = [];
@@ -310,5 +234,10 @@
     }
     .background-pinned {
         background: #f3d19d !important;
+    }
+
+    .scroll-list-file {
+        max-height: 300px;
+        overflow: auto;
     }
 </style>

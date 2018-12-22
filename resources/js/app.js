@@ -119,6 +119,25 @@ Vue.prototype.setValidateEmail = (email) => {
   return re.test(email);
 };
 
+Vue.prototype.download = (file) => {
+  let link = document.createElement("a");
+  link.download = file.file_name;
+  link.href = file.file_path;
+  link.click();
+  document.body.removeChild(link);
+}
+
+Vue.prototype.copy = (file_path) => {
+  let hostName = window.location.hostname;
+  let url = hostName + '/' + file_path;
+  const el = document.createElement('textarea');
+  el.value = url;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  document.body.removeChild(el);
+}
+
 Vue.mixin({
   data() {
     return {
