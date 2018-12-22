@@ -180,6 +180,7 @@
         this.channelDetail.channelPurpose = this.channel.purpose;
         this.channelDetail.listUsers = this.channel.users.data;
         this.channelDetail.listPinItems = this.channel.pin_posts.data;
+        this.channelDetail.listFile = this.channel.files.data;
         this.channelDetail.channelName = this.channel.name;
         this.commentors = this.channel.users.data;
 
@@ -260,12 +261,14 @@
       },
 
       newPost(newPost) {
-        this.listMessages.push(newPost);
-        this.$nextTick(() => {
-          if(document.getElementById('comment' + newPost.id)) {
-            document.getElementById('comment' + newPost.id).scrollIntoView();
-          }
-        })
+        if(this.channel.id === newPost.channel_id) {
+          this.listMessages.push(newPost);
+          this.$nextTick(() => {
+            if(document.getElementById('comment' + newPost.id)) {
+              document.getElementById('comment' + newPost.id).scrollIntoView();
+            }
+          })
+        }
       },
 
       removePin(post, type) {
